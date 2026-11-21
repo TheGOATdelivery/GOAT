@@ -180,6 +180,7 @@
     }
 
     .btn:active { transform: scale(0.97); }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
     .btn-ghost {
       background: rgba(45, 55, 36, 0.85);
@@ -555,49 +556,6 @@
       color: var(--text-muted);
     }
 
-    .service-highlights {
-      margin-top: 34px;
-      padding-top: 26px;
-      border-top: 1px solid var(--border-subtle);
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 18px;
-      text-align: center;
-    }
-
-    .highlight-card {
-      background: rgba(35, 43, 28, 0.72);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      padding: 20px 16px;
-    }
-
-    .highlight-icon {
-      width: 52px;
-      height: 52px;
-      margin: 0 auto 12px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(200, 90, 50, 0.2);
-      border: 1px solid var(--gold-wood);
-      color: var(--gold-soft);
-    }
-
-    .highlight-title {
-      font-family: 'Cinzel', serif;
-      font-size: 1.02rem;
-      color: var(--gold-soft);
-      text-transform: uppercase;
-      margin-bottom: 6px;
-    }
-
-    .highlight-text {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
     .site-footer {
       text-align: center;
       margin-top: 26px;
@@ -651,7 +609,6 @@
   <div class="marble-veins" aria-hidden="true"></div>
   <div class="particles-layer" id="particlesLayer" aria-hidden="true"></div>
 
-  <!-- Topbar: Logo + THE GOAT + DJERBA DELIVERY stacked -->
   <header class="topbar">
     <div class="topbar-inner">
       <div class="brand-stack" id="brandHomeBtn">
@@ -670,7 +627,6 @@
 
     <section class="pub-section" id="pubSection" aria-label="Offres et publicités"></section>
 
-    <!-- Page 1: Zone Selector -->
     <div class="zone-selector-wrap" id="zoneSelectorWrap">
       <div class="zone-label">Choisissez votre zone</div>
       <div class="zone-tabs" role="tablist" aria-label="Zones de livraison">
@@ -684,7 +640,6 @@
     </div>
 
     <div id="orderFlow">
-      <!-- Page 1: Restaurants -->
       <section id="stepRestaurants">
         <div class="section-heading">
           <span id="restaurantsHeading">RESTAURANTS — AJIM</span>
@@ -693,7 +648,6 @@
         <div class="restaurants-grid" id="restaurantsGrid"></div>
       </section>
 
-      <!-- Page 2: Restaurant Menu -->
       <section id="stepMenu" class="hidden">
         <div class="section-heading">
           <div>
@@ -718,7 +672,6 @@
         <div class="feedback-msg" id="menuFeedback"></div>
       </section>
 
-      <!-- Page 3: Checkout, Delivery & GPS -->
       <section id="stepCheckout" class="panel hidden">
         <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 12px;">
           <h2 style="font-family: 'Cinzel', serif; color: var(--gold-soft); font-size: 1.12rem; text-transform: uppercase;">
@@ -728,16 +681,16 @@
             ← RETOUR AU MENU
           </button>
         </div>
-        
+
         <form id="orderForm" style="margin-top: 16px;">
           <div class="form-grid">
             <div class="input-group">
               <label for="clientName">Nom complet *</label>
               <input class="input" id="clientName" name="clientName" type="text" required placeholder="Votre nom" />
             </div>
-          
+            <div class="input-group">
               <label for="clientPhone">Téléphone *</label>
-             <input class="input" id="clientPhone" name="clientPhone" type="tel" required placeholder="Ex. 20 123 456">
+              <input class="input" id="clientPhone" name="clientPhone" type="tel" required placeholder="Ex. 20 123 456" />
             </div>
             <div class="input-group">
               <label for="clientAddress">Adresse / Repère *</label>
@@ -755,8 +708,11 @@
               ME LOCALISER (GPS)
             </button>
             <span class="gps-status" id="gpsStatus">Position GPS non renseignée.</span>
-       <div id="cartItems" style="margin-top: 14px;"></div>
-          <div style="margin-top: 12px; display: flex; justify-content: space-between; font-size: 0.92rem; color: var(--text-muted, #cbd5e1);">
+          </div>
+
+          <div id="cartItems" style="margin-top: 14px;"></div>
+
+          <div style="margin-top: 12px; display: flex; justify-content: space-between; font-size: 0.92rem; color: var(--text-muted);">
             <span>FRAIS DE LIVRAISON</span>
             <span id="checkoutDeliveryFee">SELON ZONE / GPS</span>
           </div>
@@ -764,6 +720,13 @@
             <span>TOTAL À PAYER</span>
             <span id="cartTotal">0.000 TND</span>
           </div>
+
+          <div style="margin-top: 16px; display: flex; justify-content: flex-end;">
+            <button type="submit" class="btn btn-copper" id="submitOrderBtn">
+              VALIDER LA COMMANDE
+            </button>
+          </div>
+
           <div class="feedback-msg" id="orderFeedback"></div>
         </form>
       </section>
@@ -785,9 +748,19 @@
           nom: "BIG BEN",
           zone: "Houmt Souk",
           specialite: "BURGERS, BOWLS, TACOS & MAKLOUB",
-          frais_livraison: "3.000",
+          lat: 33.8757,
+          lng: 10.8574,
           statut: "ouvert"
         },
+        {
+          id: "ajim-grill",
+          nom: "AJIM GRILL & SNACK",
+          zone: "Ajim",
+          specialite: "SPÉCIALITÉS",
+          lat: 33.7222531,
+          lng: 10.7437356,
+          statut: "ouvert"
+        }
       ],
       menus: [
         {
@@ -872,7 +845,7 @@
 
     function initParticles() {
       const layer = document.getElementById("particlesLayer");
-      if (!layer) return;
+      if (!layer || layer.childElementCount > 0) return;
       const count = 22;
       for (let i = 0; i < count; i++) {
         const dot = document.createElement("span");
@@ -960,18 +933,8 @@
 
     function mergeWithFallback(sheetList, fallbackList, idKeys) {
       const cleanSheet = Array.isArray(sheetList) ? sheetList : [];
-      if (!cleanSheet.length) return [];
-
-      const existingKeys = new Set(
-        cleanSheet.map((item) => normalizeText(getField(item, idKeys, "")))
-      );
-
-      const extras = fallbackList.filter((fb) => {
-        const fbKey = normalizeText(getField(fb, idKeys, ""));
-        return fbKey && !existingKeys.has(fbKey);
-      });
-
-      return [...cleanSheet];
+      if (!cleanSheet.length) return [...fallbackList];
+      return cleanSheet;
     }
 
     function renderPubs() {
@@ -1026,7 +989,6 @@
         const rawName = getField(r, ["nom", "name", "restaurant", "titre"], "RESTAURANT");
         const name = toUpper(rawName);
         const cuisine = getField(r, ["specialite", "spécialité", "categorie", "catégorie", "cuisine", "type"], "");
-        const deliveryFee = "";
         const open = isRestaurantOpen(r);
 
         const card = document.createElement("div");
@@ -1036,8 +998,8 @@
             <div class="resto-name">${escapeHtml(name)}</div>
             <span class="badge ${open ? "badge-open" : "badge-closed"}">${open ? "OUVERT" : "FERMÉ"}</span>
           </div>
-       ${cuisine ? `<div class="resto-meta">${escapeHtml(cuisine)}</div>` : ""}
-`;
+          ${cuisine ? `<div class="resto-meta">${escapeHtml(cuisine)}</div>` : ""}
+        `;
         card.addEventListener("click", () => {
           state.selectedRestaurant = r;
           state.cart = {};
@@ -1054,6 +1016,105 @@
       const rawId = String(getField(item, ["id", "plat_id", "menu_id", "code"], "")).trim();
       const name = String(getField(item, ["nom", "name", "plat", "titre"], "ARTICLE")).trim();
       return rawId ? `${rawId}_${idx}` : `${name}_${idx}`;
+    }
+
+    function getRestaurantMenus() {
+      const resto = state.selectedRestaurant;
+      if (!resto) return [];
+      const restoId = normalizeText(getRestaurantId(resto));
+      const restoName = normalizeText(getField(resto, ["nom", "name", "restaurant", "titre"], ""));
+
+      return (state.menus || []).filter((m) => {
+        const itemRestoId = normalizeText(getField(m, ["restaurant_id", "resto_id", "id_restaurant"], ""));
+        const itemRestoName = normalizeText(getField(m, ["restaurant", "resto", "nom_restaurant"], ""));
+        if (restoId && itemRestoId && itemRestoId === restoId) return true;
+        if (restoName && itemRestoName && itemRestoName === restoName) return true;
+        return !itemRestoId && !itemRestoName;
+      });
+    }
+
+    function setCartQty(itemKey, itemData, nextQty) {
+      const qty = Math.max(0, parseInt(nextQty, 10) || 0);
+      if (qty === 0) {
+        delete state.cart[itemKey];
+      } else {
+        state.cart[itemKey] = {
+          key: itemKey,
+          name: itemData.name,
+          price: itemData.price,
+          qty
+        };
+      }
+      updateStep2Summary();
+    }
+
+    function renderMenus() {
+      const resto = state.selectedRestaurant;
+      const restoName = toUpper(getField(resto, ["nom", "name", "restaurant", "titre"], "MENU"));
+      el.menuHeading.textContent = `MENU — ${restoName}`;
+
+      const items = getRestaurantMenus();
+      if (!items.length) {
+        el.menuGrid.innerHTML = `<p class="empty-state">Aucun plat disponible pour le moment.</p>`;
+        updateStep2Summary();
+        return;
+      }
+
+      el.menuGrid.innerHTML = "";
+      items.forEach((item, idx) => {
+        const key = getMenuItemId(item, idx);
+        const name = toUpper(getField(item, ["nom", "name", "plat", "titre"], "ARTICLE"));
+        const cat = toUpper(getField(item, ["categorie", "catégorie", "category", "type"], "MENU"));
+        const desc = getField(item, ["description", "desc", "details", "détails"], "");
+        const priceNum = parsePriceNum(getField(item, ["prix", "price", "tarif"], 0));
+        const currentQty = state.cart[key]?.qty || 0;
+
+        const card = document.createElement("div");
+        card.className = "menu-card";
+        card.innerHTML = `
+          <div>
+            <div class="menu-cat">${escapeHtml(cat)}</div>
+            <div class="menu-title">${escapeHtml(name)}</div>
+            ${desc ? `<div class="menu-desc" style="margin-top: 4px;">${escapeHtml(desc)}</div>` : ""}
+          </div>
+          <div class="menu-footer">
+            <div class="menu-price">${escapeHtml(formatPrice(priceNum))}</div>
+            <div class="qty-controls">
+              <button type="button" class="qty-btn qty-minus">-</button>
+              <input type="number" min="0" class="qty-input" value="${currentQty}" aria-label="Quantité" />
+              <button type="button" class="qty-btn qty-plus">+</button>
+            </div>
+          </div>
+        `;
+
+        const minusBtn = card.querySelector(".qty-minus");
+        const plusBtn = card.querySelector(".qty-plus");
+        const qtyInput = card.querySelector(".qty-input");
+
+        const itemPayload = { name, price: priceNum };
+
+        minusBtn.addEventListener("click", () => {
+          const next = Math.max(0, (parseInt(qtyInput.value, 10) || 0) - 1);
+          qtyInput.value = String(next);
+          setCartQty(key, itemPayload, next);
+        });
+
+        plusBtn.addEventListener("click", () => {
+          const next = (parseInt(qtyInput.value, 10) || 0) + 1;
+          qtyInput.value = String(next);
+          setCartQty(key, itemPayload, next);
+        });
+
+        qtyInput.addEventListener("change", () => {
+          const next = Math.max(0, parseInt(qtyInput.value, 10) || 0);
+          qtyInput.value = String(next);
+          setCartQty(key, itemPayload, next);
+        });
+
+        el.menuGrid.appendChild(card);
+      });
+
+      updateStep2Summary();
     }
 
     function getCartSummary() {
@@ -1075,126 +1136,161 @@
       el.step2SummaryTotal.textContent = `${total.toFixed(3)} TND`;
     }
 
-    function renderMenus() {
-      const r = state.selectedRestaurant;
-      const rName = getField(r, ["nom", "name", "restaurant", "titre"], "MENU");
-      const rId = normalizeText(getRestaurantId(r));
-      const rNameNorm = normalizeText(rName);
-
-      el.menuHeading.textContent = `MENU — ${toUpper(rName)}`;
-      updateStep2Summary();
-
-      const items = (state.menus || []).filter((m) => {
-        const mResto = normalizeText(
-          getField(m, ["restaurant_id", "resto_id", "id_restaurant", "restaurant", "resto", "nom_restaurant"], "")
-        );
-        if (!mResto) return true;
-        return mResto === rId || mResto === rNameNorm || (rNameNorm && mResto.includes(rNameNorm));
-      });
-
-      if (!items.length) {
-        el.menuGrid.innerHTML = `<p class="empty-state">Aucun plat disponible pour ce restaurant pour le moment.</p>`;
-        return;
+    function computeDeliveryFee(resto, clientLat, clientLng) {
+      const hasGps = Number.isFinite(clientLat) && Number.isFinite(clientLng);
+      if (!hasGps) {
+        return { hasGps: false, fee: 0, distanceKm: null };
       }
 
-      el.menuGrid.innerHTML = "";
-      items.forEach((item, idx) => {
-        const key = getMenuItemId(item, idx);
-        const name = toUpper(getField(item, ["nom", "name", "plat", "titre"], "ARTICLE"));
-        const desc = getField(item, ["description", "desc", "details", "détails", "ingredients"], "");
-        const cat = getField(item, ["categorie", "catégorie", "category", "type"], "");
-        const priceNum = parsePriceNum(getField(item, ["prix", "price", "tarif", "montant"], 0));
-        const currentQty = state.cart[key]?.qty || 0;
+      const restoObj = resto || {};
+      const restoLat = Number(getField(restoObj, ["lat", "latitude"], 33.7222531));
+      const restoLng = Number(getField(restoObj, ["lng", "longitude"], 10.7437356));
 
-        const card = document.createElement("div");
-        card.className = "menu-card";
-        card.innerHTML = `
-          <div>
-            ${cat ? `<div class="menu-cat">${escapeHtml(toUpper(cat))}</div>` : ""}
-            <div class="menu-title">${escapeHtml(name)}</div>
-            ${desc ? `<div class="menu-desc" style="margin-top: 4px;">${escapeHtml(desc)}</div>` : ""}
-          </div>
-          <div class="menu-footer">
-            <div class="menu-price">${priceNum.toFixed(3)} TND</div>
-            <div class="qty-controls">
-              <button type="button" class="qty-btn minus-btn" aria-label="Diminuer">-</button>
-              <input type="number" min="0" max="99" class="qty-input" value="${currentQty}" aria-label="Quantité" />
-              <button type="button" class="qty-btn plus-btn" aria-label="Augmenter">+</button>
-            </div>
-          </div>
-        `;
+      if (!Number.isFinite(restoLat) || !Number.isFinite(restoLng)) {
+        return { hasGps: false, fee: 0, distanceKm: null };
+      }
 
-        const inputEl = card.querySelector(".qty-input");
-        const minusBtn = card.querySelector(".minus-btn");
-        const plusBtn = card.querySelector(".plus-btn");
+      const toRad = (deg) => (deg * Math.PI) / 180;
+      const dLat = toRad(clientLat - restoLat);
+      const dLng = toRad(clientLng - restoLng);
+      const a =
+        Math.sin(dLat / 2) ** 2 +
+        Math.cos(toRad(restoLat)) * Math.cos(toRad(clientLat)) * Math.sin(dLng / 2) ** 2;
+      const distanceKm = 6371 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      const units100m = Math.max(1, Math.ceil(distanceKm * 10));
+      const rawFee = Number((units100m * 0.1).toFixed(3));
 
-        const setQty = (newQty) => {
-          const safeQty = Math.max(0, Math.min(99, parseInt(newQty, 10) || 0));
-          inputEl.value = safeQty;
-          if (safeQty === 0) {
-            delete state.cart[key];
-          } else {
-            state.cart[key] = { name, price: priceNum, qty: safeQty };
-          }
-          updateStep2Summary();
-        };
-
-        minusBtn.addEventListener("click", () => setQty((parseInt(inputEl.value, 10) || 0) - 1));
-        plusBtn.addEventListener("click", () => setQty((parseInt(inputEl.value, 10) || 0) + 1));
-        inputEl.addEventListener("change", () => setQty(inputEl.value));
-
-        el.menuGrid.appendChild(card);
-      }); 
+      return { hasGps: true, fee: rawFee, distanceKm };
     }
 
     function renderCheckoutCart() {
-      const entries = Object.values(state.cart).filter((i) => i.qty > 0);
+      const entries = Object.values(state.cart).filter((i) => (parseInt(i.qty, 10) || 0) > 0);
       if (!entries.length) {
         el.cartItems.innerHTML = `<p class="empty-state">Votre panier est vide.</p>`;
-        el.cartTotal.textContent = "0.000 TND";
         if (el.checkoutDeliveryFee) el.checkoutDeliveryFee.textContent = "0.000 TND";
+        if (el.cartTotal) el.cartTotal.textContent = "0.000 TND";
         return;
       }
 
       let total = 0;
       el.cartItems.innerHTML = entries
         .map((item) => {
-          const lineTotal = item.qty * item.price;
+          const qty = parseInt(item.qty, 10) || 0;
+          const price = parsePriceNum(item.price);
+          const lineTotal = qty * price;
           total += lineTotal;
           return `
             <div class="cart-item">
-              <span>${escapeHtml(item.name)} × <strong>${item.qty}</strong></span>
+              <span>${escapeHtml(item.name)} × <strong>${qty}</strong></span>
               <span style="color: var(--gold-soft); font-weight: 700;">${lineTotal.toFixed(3)} TND</span>
             </div>
           `;
         })
         .join("");
 
-    const resto = state.selectedRestaurant || {};
-      const restoLat = Number(resto.lat ?? resto.latitude ?? 33.7222531);
-      const restoLng = Number(resto.lng ?? resto.longitude ?? 10.7437356);
-      const clientLat = Number(state.gps?.lat ?? state.lat);
-      const clientLng = Number(state.gps?.lng ?? state.lng);
-      const hasGps = Number.isFinite(clientLat) && Number.isFinite(clientLng);
-      let rawFee = 0;
-      if (hasGps && Number.isFinite(restoLat) && Number.isFinite(restoLng)) {
-        const toRad = (deg) => (deg * Math.PI) / 180;
-        const dLat = toRad(clientLat - restoLat);
-        const dLng = toRad(clientLng - restoLng);
-        const a =
-          Math.sin(dLat / 2) ** 2 +
-          Math.cos(toRad(restoLat)) * Math.cos(toRad(clientLat)) * Math.sin(dLng / 2) ** 2;
-        const distanceKm = 6371 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        const units100m = Math.ceil(distanceKm * 10);
-        rawFee = Number((units100m * 0.1).toFixed(3));
-      }
+      const clientLat = Number(state.gps?.lat);
+      const clientLng = Number(state.gps?.lng);
+      const { hasGps, fee: rawFee } = computeDeliveryFee(state.selectedRestaurant, clientLat, clientLng);
+
       const feeText = hasGps ? `${rawFee.toFixed(3)} TND` : "SELON ZONE / GPS";
-      if (el.checkoutDeliveryFee) el.checkoutDeliveryFee.textContent = feeText;
-      el.cartTotal.textContent = `${(total + rawFee).toFixed(3)} TND`;
+      if (el.checkoutDeliveryFee) {
+        el.checkoutDeliveryFee.textContent = feeText;
+      }
+      if (el.cartTotal) {
+        el.cartTotal.textContent = `${(total + rawFee).toFixed(3)} TND`;
+      }
+    }
+
+    function requestGps() {
+      if (!navigator.geolocation) {
+        el.gpsStatus.textContent = "Géolocalisation non prise en charge sur cet appareil.";
+        return;
+      }
+
+      el.gpsStatus.textContent = "Recherche de votre position GPS...";
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const lat = pos.coords.latitude.toFixed(6);
+          const lng = pos.coords.longitude.toFixed(6);
+          const mapUrl = `https://maps.google.com/?q=${lat},${lng}`;
+          state.gps = { lat: Number(lat), lng: Number(lng), mapUrl };
+          el.gpsStatus.innerHTML = `Position enregistrée : <a href="${escapeHtml(mapUrl)}" target="_blank" rel="noopener noreferrer" style="color: var(--gold-soft); text-decoration: underline;">${lat}, ${lng}</a>`;
+          renderCheckoutCart();
+        },
+        () => {
+          el.gpsStatus.textContent = "Impossible d'obtenir la position GPS. Vérifiez les autorisations.";
+        },
+        { enableHighAccuracy: true, timeout: 10000 }
+      );
+    }
 
     function showFeedback(targetEl, message, isOk = true) {
+      if (!targetEl) return;
       targetEl.textContent = message;
       targetEl.className = `feedback-msg show ${isOk ? "feedback-ok" : "feedback-err"}`;
+    }
+
+    async function submitOrder(e) {
+      e.preventDefault();
+      const entries = Object.values(state.cart).filter((i) => (parseInt(i.qty, 10) || 0) > 0);
+      if (!entries.length) {
+        showFeedback(el.orderFeedback, "Votre panier est vide.", false);
+        return;
+      }
+
+      const clientName = (document.getElementById("clientName")?.value || "").trim();
+      const clientPhone = (document.getElementById("clientPhone")?.value || "").trim();
+      const clientAddress = (document.getElementById("clientAddress")?.value || "").trim();
+      const orderNotes = (document.getElementById("orderNotes")?.value || "").trim();
+
+      if (!clientName || !clientPhone || !clientAddress) {
+        showFeedback(el.orderFeedback, "Veuillez remplir tous les champs obligatoires (*).", false);
+        return;
+      }
+
+      const { total } = getCartSummary();
+      const { fee } = computeDeliveryFee(state.selectedRestaurant, Number(state.gps?.lat), Number(state.gps?.lng));
+      const grandTotal = Number((total + fee).toFixed(3));
+
+      const payload = {
+        action: "create_order",
+        zone: state.zone,
+        restaurant: getField(state.selectedRestaurant || {}, ["nom", "name", "restaurant", "titre"], ""),
+        clientName,
+        clientPhone,
+        clientAddress,
+        orderNotes,
+        gpsLat: state.gps.lat || "",
+        gpsLng: state.gps.lng || "",
+        mapUrl: state.gps.mapUrl || "",
+        items: entries,
+        subtotal: total.toFixed(3),
+        deliveryFee: fee.toFixed(3),
+        total: grandTotal.toFixed(3)
+      };
+
+      if (el.submitOrderBtn) el.submitOrderBtn.disabled = true;
+      showFeedback(el.orderFeedback, "Envoi de votre commande en cours...", true);
+
+      try {
+        await fetch(APPS_SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+
+        showFeedback(el.orderFeedback, "Commande envoyée avec succès ! Merci pour votre confiance.", true);
+        state.cart = {};
+        updateStep2Summary();
+        el.orderForm.reset();
+        el.gpsStatus.textContent = "Position GPS non renseignée.";
+        state.gps = { lat: "", lng: "", mapUrl: "" };
+      } catch (err) {
+        showFeedback(el.orderFeedback, "Erreur lors de l'envoi. Veuillez réessayer.", false);
+      } finally {
+        if (el.submitOrderBtn) el.submitOrderBtn.disabled = false;
+      }
     }
 
     async function fetchSheetData() {
@@ -1205,168 +1301,77 @@
 
         const rawRestos = extractArray(data, ["restaurants", "RESTAURANTS", "restaurant"]);
         const rawMenus = extractArray(data, ["menus", "MENUS", "menu"]);
-        const rawPubs = extractArray(data, ["pub", "PUB", "pubs"]);
+        const rawPubs = extractArray(data, ["pubs", "PUBS", "pub", "PUB"]);
 
-        state.restaurants = mergeWithFallback(rawRestos, FALLBACK_DATA.restaurants, ["nom", "name", "id"]);
+        state.restaurants = mergeWithFallback(rawRestos, FALLBACK_DATA.restaurants, ["id", "nom", "name"]);
         state.menus = mergeWithFallback(rawMenus, FALLBACK_DATA.menus, ["nom", "name", "plat"]);
         state.pubs = rawPubs;
       } catch (err) {
         state.restaurants = [...FALLBACK_DATA.restaurants];
         state.menus = [...FALLBACK_DATA.menus];
-        state.pubs = [];
+        state.pubs = [...FALLBACK_DATA.pubs];
       }
 
       renderPubs();
       renderRestaurants();
     }
 
-    function requestGps() {
-      if (!navigator.geolocation) {
-        el.gpsStatus.textContent = "Géolocalisation non prise en charge sur cet appareil.";
-        return;
-      }
-      el.gpsStatus.textContent = "Recherche de votre position GPS...";
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const lat = pos.coords.latitude.toFixed(6);
-          const lng = pos.coords.longitude.toFixed(6);
-          const mapUrl = `https://maps.google.com/?q=${lat},${lng}`;
-          state.gps = { lat, lng, mapUrl };
-          el.gpsStatus.innerHTML = `Position enregistrée : <a href="${escapeHtml(mapUrl)}" target="_blank" rel="noopener" style="color: var(--gold-soft);">${lat}, ${lng}</a>`;
-         state.lat = Number(lat);
-        state.lng = Number(lng);
-        renderCheckoutCart();
-        },
-        () => {
-          el.gpsStatus.textContent = "Position non obtenue. Vous pouvez saisir votre adresse manuellement.";
-        },
-        { enableHighAccuracy: true, timeout: 10000 }
-      );
-    }
-
-    async function submitOrder(e) {
-      e.preventDefault();
-      const entries = Object.values(state.cart).filter((i) => i.qty > 0);
-      if (!entries.length) {
-        showFeedback(el.orderFeedback, "Votre panier est vide.", false);
-        return;
-      }
-
-      const clientName = document.getElementById("clientName").value.trim();
-      const clientPhone = document.getElementById("clientPhone").value.trim();
-      const clientAddress = document.getElementById("clientAddress").value.trim();
-      const orderNotes = document.getElementById("orderNotes").value.trim();
-
-      if (!clientName || !clientPhone || !clientAddress) {
-        showFeedback(el.orderFeedback, "Veuillez remplir les champs obligatoires (*).", false);
-        return;
-      }
-
-      const { total } = getCartSummary();
-      const restoName = toUpper(getField(state.selectedRestaurant, ["nom", "name", "restaurant"], "RESTAURANT"));
-
-      const payload = {
-        action: "createOrder",
-        zone: toUpper(state.zone),
-        restaurant: restoName,
-        items: entries.map((i) => ({ name: i.name, qty: i.qty, price: i.price })),
-        itemsText: entries.map((i) => `${i.name} x${i.qty}`).join(", "),
-        total: total.toFixed(3),
-        clientName,
-        clientPhone,
-        clientAddress,
-        notes: orderNotes,
-        gpsLat: state.gps.lat,
-        gpsLng: state.gps.lng,
-        gpsUrl: state.gps.mapUrl
-      };
-
-      el.submitOrderBtn.disabled = true;
-      el.submitOrderBtn.textContent = "ENVOI EN COURS...";
-      el.orderFeedback.className = "feedback-msg";
-
-      try {
-        const res = await fetch(APPS_SCRIPT_URL, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify(payload)
+    function bindEvents() {
+      if (el.brandHomeBtn) {
+        el.brandHomeBtn.addEventListener("click", () => {
+          state.selectedRestaurant = null;
+          state.cart = {};
+          updateStep2Summary();
+          goToStep(1);
         });
-        const data = await res.json().catch(() => ({}));
-        const ref = data.orderId || data.id || data.reference || "";
+      }
 
-        showFeedback(
-          el.orderFeedback,
-          ref
-            ? `Commande envoyée avec succès ! Référence : ${ref}`
-            : "Commande envoyée avec succès !",
-          true
-        );
+      el.zoneBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const chosenZone = btn.dataset.zone || btn.textContent.trim();
+          state.zone = chosenZone;
+          el.zoneBtns.forEach((b) => b.classList.toggle("active", b === btn));
+          renderRestaurants();
+        });
+      });
 
-        state.cart = {};
-        el.orderForm.reset();
-        state.gps = { lat: "", lng: "", mapUrl: "" };
-        el.gpsStatus.textContent = "Position GPS non renseignée.";
-      } catch (err) {
-        showFeedback(el.orderFeedback, "Erreur lors de l'envoi de la commande. Veuillez réessayer.", false);
-      } finally {
-        el.submitOrderBtn.disabled = false;
-        el.submitOrderBtn.textContent = "CONFIRMER & ENVOYER LA COMMANDE";
+      if (el.reloadDataBtn) {
+        el.reloadDataBtn.addEventListener("click", fetchSheetData);
+      }
+
+      if (el.backToRestaurantsBtn) {
+        el.backToRestaurantsBtn.addEventListener("click", () => goToStep(1));
+      }
+
+      if (el.backToMenuBtn) {
+        el.backToMenuBtn.addEventListener("click", () => goToStep(2));
+      }
+
+      if (el.confirmCartBtn) {
+        el.confirmCartBtn.addEventListener("click", () => {
+          const { count } = getCartSummary();
+          if (count <= 0) {
+            showFeedback(el.menuFeedback, "Veuillez ajouter au moins un article avant de continuer.", false);
+            return;
+          }
+          el.menuFeedback.className = "feedback-msg";
+          el.menuFeedback.textContent = "";
+          goToStep(3);
+        });
+      }
+
+      if (el.gpsBtn) {
+        el.gpsBtn.addEventListener("click", requestGps);
+      }
+
+      if (el.orderForm) {
+        el.orderForm.addEventListener("submit", submitOrder);
       }
     }
-
-    el.brandHomeBtn.addEventListener("click", () => goToStep(1));
-
-    el.zoneBtns.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        el.zoneBtns.forEach((b) => b.classList.remove("active"));
-        btn.classList.add("active");
-        state.zone = btn.dataset.zone;
-        renderRestaurants();
-      });
-    });
-      
-    el.reloadDataBtn.addEventListener("click", fetchSheetData);
-    el.backToRestaurantsBtn.addEventListener("click", () => goToStep(1));
-    el.backToMenuBtn.addEventListener("click", () => goToStep(2));
-
-    el.confirmCartBtn.addEventListener("click", () => {
-      const { count } = getCartSummary();
-      if (count <= 0) {
-        showFeedback(el.menuFeedback, "Veuillez ajouter au moins un article avant de continuer.", false);
-        return;
-      }
-      el.menuFeedback.className = "feedback-msg";
-      goToStep(3);
-    });
-
-    el.gpsBtn.addEventListener("click", requestGps);
-    el.orderForm.addEventListener("submit", submitOrder);
 
     initParticles();
-    fetchSheetData();}
-    async function syncGoatSheet() {
-  try {
-    const res = await fetch(APPS_SCRIPT_URL);
-    const d = await res.json();
-    if (d && d.ok !== false && typeof state !== "undefined") {
-      state.restaurants = d.restaurants || [];
-      state.menus = d.menus || [];
-      state.pubs = d.pubs || [];
-      if (typeof renderRestaurants === "function") renderRestaurants();
-    }
-  } catch (err) {
-    console.error("syncGoatSheet error:", err);
-  }
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  syncGoatSheet();
-  document.querySelectorAll("button").forEach(btn => {
-    if (/actualiser/i.test(btn.textContent || "")) {
-      btn.addEventListener("click", syncGoatSheet);
-    }
-  });
-});
+    bindEvents();
+    fetchSheetData();
   </script>
 </body>
 </html>
