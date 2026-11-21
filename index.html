@@ -1088,7 +1088,7 @@
             <div class="resto-name">${escapeHtml(name)}</div>
             <span class="badge ${open ? "badge-open" : "badge-closed"}">${open ? "OUVERT" : "FERMÉ"}</span>
           </div>
-       ${cuisine ? <div class="resto-meta">${escapeHtml(cuisine)}</div> : ""}
+       ${cuisine ? `<div class="resto-meta">${escapeHtml(cuisine)}</div>` : ""}
 `;
         card.addEventListener("click", () => {
           state.selectedRestaurant = r;
