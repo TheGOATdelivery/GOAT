@@ -1,465 +1,308 @@
 <!doctype html>
-<html lang="fr">
+<html lang="fr" dir="ltr">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>the goat - commande</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>the goat — livraison djerba</title>
   <style>
     :root {
-      --bg: #111312;
-      --card: #1b1f1d;
-      --ink: #f3f1ec;
-      --muted: #a6aba7;
-      --accent: #b86b35;
-      --line: #2d3430;
-      --ok: #2e7d5b;
-      --err: #b83b3b;
+      --bg-olive: #141a13;
+      --bg-card: #1d261b;
+      --bg-elevated: #263224;
+      --gold: #d4af37;
+      --copper: #c87d55;
+      --copper-dark: #9e5d3b;
+      --text-main: #f3efe6;
+      --text-muted: #b7b2a3;
+      --border-subtle: rgba(212, 175, 55, 0.22);
+      --ok: #5cb85c;
+      --warn: #e09f3e;
     }
-    * { box-sizing: border-box; }
-    body {
+
+    * {
+      box-sizing: border-box;
       margin: 0;
-      font-family: system-ui, -apple-system, sans-serif;
-      background: var(--bg);
-      color: var(--ink);
-      line-height: 1.5;
+      padding: 0;
     }
-    .wrap {
-      max-width: 920px;
+
+    body {
+      background: radial-gradient(circle at top, #1f2a1d 0%, var(--bg-olive) 65%);
+      color: var(--text-main);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      min-height: 100vh;
+      line-height: 1.45;
+      padding-bottom: 96px;
+    }
+
+    .container {
+      max-width: 1040px;
       margin: 0 auto;
-      padding: 20px 16px 60px;
+      padding: 18px 16px;
     }
-    h1, h2, h3, p { margin: 0 0 10px; }
-    .muted { color: var(--muted); font-size: 0.92rem; }
-    .card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 16px;
+
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 14px 18px;
       margin-bottom: 16px;
     }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 12px;
-    }
-    label {
-      display: block;
-      font-size: 0.88rem;
-      color: var(--muted);
-      margin-bottom: 4px;
-    }
-    input, select, textarea, button {
-      width: 100%;
-      padding: 10px 12px;
-      border-radius: 10px;
-      border: 1px solid var(--line);
-      background: #131615;
-      color: var(--ink);
-      font-size: 0.95rem;
-    }
-    button {
-      background: var(--accent);
-      border: none;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    button.secondary {
-      background: #252b28;
-      border: 1px solid var(--line);
-    }
-    button:disabled { opacity: 0.55; cursor: not-allowed; }
-    .menu-item {
+
+    .brand_box {
       display: flex;
-      justify-content: space-between;
       align-items: center;
       gap: 12px;
-      padding: 12px;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      margin-bottom: 10px;
-      background: #151917;
     }
-    .qty-box {
+
+    .brand_badge {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--gold), var(--copper));
+      color: #121711;
+      font-weight: 800;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-transform: lowercase;
+    }
+
+    .brand_title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--gold);
+      text-transform: lowercase;
+    }
+
+    .brand_sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: lowercase;
+    }
+
+    .zone_controls {
       display: flex;
       align-items: center;
       gap: 8px;
-      min-width: 120px;
+      flex-wrap: wrap;
     }
-    .qty-box button { width: 36px; padding: 6px; }
-    .qty-val { min-width: 24px; text-align: center; font-weight: 700; }
-    .summary-row {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 6px;
-    }
-    .total-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 1.1rem;
-      font-weight: 700;
-      padding-top: 8px;
-      border-top: 1px solid var(--line);
-      margin-top: 8px;
-    }
-    .msg {
-      padding: 12px;
+
+    .zone_btn, .nav_btn, .btn_primary, .btn_secondary {
+      border: 1px solid var(--border-subtle);
       border-radius: 10px;
-      margin-top: 12px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s ease;
+      text-transform: lowercase;
+    }
+
+    .zone_btn {
+      background: var(--bg-elevated);
+      color: var(--text-main);
+    }
+
+    .zone_btn.active {
+      background: linear-gradient(135deg, var(--gold), var(--copper));
+      color: #141a13;
+      border-color: var(--gold);
+    }
+
+    .nav_tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .nav_btn {
+      background: var(--bg-card);
+      color: var(--text-muted);
+    }
+
+    .nav_btn.active {
+      background: var(--bg-elevated);
+      color: var(--gold);
+      border-color: var(--gold);
+    }
+
+    .pub_banner {
       display: none;
-    }
-    .msg.ok { display: block; background: rgba(46, 125, 91, 0.2); border: 1px solid var(--ok); }
-    .msg.err { display: block; background: rgba(184, 59, 59, 0.2); border: 1px solid var(--err); }
-  </style>
-</head>
-<body>
-  <div class="wrap">
-    <h1>the goat</h1>
-    <p class="muted">commande en ligne — livraison calculée par gps (1.000 dt / km, min 1 km)</p>
-
-    <div class="card">
-      <h2>1. restaurant et zone</h2>
-      <div class="grid">
-        <div>
-          <label for="zone_select">zone</label>
-          <select id="zone_select"></select>
-        </div>
-        <div>
-          <label for="restaurant_select">restaurant</label>
-          <select id="restaurant_select"></select>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>2. menu</h2>
-      <div id="menu_list"><p class="muted">chargement du menu...</p></div>
-    </div>
-
-    <div class="card">
-      <h2>3. informations client et position gps</h2>
-      <div class="grid">
-        <div>
-          <label for="client_nom">nom complet</label>
-          <input id="client_nom" type="text" placeholder="nom du client" required />
-        </div>
-        <div>
-          <label for="client_telephone">telephone</label>
-          <input id="client_telephone" type="tel" placeholder="ex: 20123456" required />
-        </div>
-        <div>
-          <label for="adresse">adresse</label>
-          <input id="adresse" type="text" placeholder="quartier / rue / repere" />
-        </div>
-      </div>
-
-      <div style="margin-top: 12px;">
-        <button id="btn_gps" type="button" class="secondary">activer ma position gps (client)</button>
-        <p id="gps_status" class="muted" style="margin-top: 8px;">position gps non definie</p>
-      </div>
-
-      <div style="margin-top: 12px;">
-        <label for="notes">notes</label>
-        <textarea id="notes" rows="2" placeholder="remarques pour la cuisine ou le livreur"></textarea>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>4. recapitulatif</h2>
-      <div class="summary-row"><span>sous-total</span><span id="sous_total_txt">0.000 dt</span></div>
-      <div class="summary-row"><span>frais de livraison estimes</span><span id="frais_txt">1.000 dt</span></div>
-      <div class="total-row"><span>total estime</span><span id="total_txt">1.000 dt</span></div>
-
-      <div style="margin-top: 14px;">
-        <button id="btn_submit" type="button">confirmer la commande</button>
-      </div>
-      <div id="msg_box" class="msg"></div>
-    </div>
-  </div>
-
-  <script>
-    const api_url = "https://script.google.com/macros/s/AKfycbybbw3yxfctVXCSC5u3xlV0qy1BAxeX0LI1L9qnSkanU0RNW3VhLPcbMZ4QaiG2D4Z7/exec";
-
-    let restaurants_data = [];
-    let menus_data = [];
-    let panier = {};
-    let client_gps = { lat: "", lng: "", lien: "" };
-
-    const zone_select = document.getElementById("zone_select");
-    const restaurant_select = document.getElementById("restaurant_select");
-    const menu_list = document.getElementById("menu_list");
-    const btn_gps = document.getElementById("btn_gps");
-    const gps_status = document.getElementById("gps_status");
-    const btn_submit = document.getElementById("btn_submit");
-    const msg_box = document.getElementById("msg_box");
-
-    function show_msg(text, is_ok) {
-      msg_box.className = "msg " + (is_ok ? "ok" : "err");
-      msg_box.textContent = text;
+      background: linear-gradient(90deg, rgba(200, 125, 85, 0.22), rgba(212, 175, 55, 0.18));
+      border: 1px solid var(--copper);
+      border-radius: 14px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      align-items: center;
+      gap: 12px;
     }
 
-    function to_num(v) {
-      const n = parseFloat(String(v || 0).replace(",", "."));
-      return Number.isFinite(n) ? n : 0;
+    .pub_banner.show {
+      display: flex;
     }
 
-    function haversine_km(lat1, lon1, lat2, lon2) {
-      const r = 6371;
-      const d_lat = (lat2 - lat1) * Math.PI / 180;
-      const d_lon = (lon2 - lon1) * Math.PI / 180;
-      const a =
-        Math.sin(d_lat / 2) * Math.sin(d_lat / 2) +
-        Math.cos(lat1 * Math.PI / 180) *
-        Math.cos(lat2 * Math.PI / 180) *
-        Math.sin(d_lon / 2) * Math.sin(d_lon / 2);
-      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-      return r * c;
+    .pub_banner img {
+      width: 54px;
+      height: 54px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid var(--gold);
     }
 
-    function get_selected_restaurant() {
-      const r_name = restaurant_select.value;
-      const z_name = zone_select.value;
-      return restaurants_data.find(r =>
-        String(r.nom || "").trim() === r_name &&
-        (!z_name || String(r.zone || "").trim() === z_name)
-      ) || null;
+    .section_title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 10px;
+      text-transform: lowercase;
     }
 
-    function calc_frais_estime() {
-      const resto = get_selected_restaurant();
-      if (!resto || !client_gps.lat || !client_gps.lng) return 1.0;
-      const r_lat = to_num(resto.lat);
-      const r_lng = to_num(resto.lng);
-      const c_lat = to_num(client_gps.lat);
-      const c_lng = to_num(client_gps.lng);
-      if (!r_lat || !r_lng || !c_lat || !c_lng) return 1.0;
-      const dist = haversine_km(r_lat, r_lng, c_lat, c_lng);
-      const km_facture = Math.max(1, Math.ceil(dist));
-      return Number((km_facture * 1.0).toFixed(3));
+    .grid_cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 14px;
+      margin-bottom: 22px;
     }
 
-    function update_recap() {
-      let sous_total = 0;
-      Object.values(panier).forEach(item => {
-        sous_total += to_num(item.prix) * item.qty;
-      });
-      sous_total = Number(sous_total.toFixed(3));
-      const frais = calc_frais_estime();
-      const total = Number((sous_total + frais).toFixed(3));
-
-      document.getElementById("sous_total_txt").textContent = sous_total.toFixed(3) + " dt";
-      document.getElementById("frais_txt").textContent = frais.toFixed(3) + " dt";
-      document.getElementById("total_txt").textContent = total.toFixed(3) + " dt";
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 10px;
     }
 
-    function render_menu() {
-      const resto = get_selected_restaurant();
-      const resto_id = resto ? String(resto.id || "").trim() : "";
-      const resto_nom = resto ? String(resto.nom || "").trim() : "";
-
-      const filtered = menus_data.filter(m => {
-        const m_rid = String(m.restaurant_id || "").trim();
-        const m_rnom = String(m.restaurant || "").trim();
-        if (resto_id && m_rid) return m_rid === resto_id;
-        if (resto_nom && m_rnom) return m_rnom === resto_nom;
-        return true;
-      });
-
-      if (!filtered.length) {
-        menu_list.innerHTML = '<p class="muted">aucun article disponible pour ce restaurant.</p>';
-        update_recap();
-        return;
-      }
-
-      menu_list.innerHTML = "";
-      filtered.forEach((m, idx) => {
-        const key = String(m.id || (m.nom + "_" + idx));
-        const nom = String(m.nom || "article");
-        const desc = String(m.description || "");
-        const prix = to_num(m.prix);
-        const qty = panier[key] ? panier[key].qty : 0;
-
-        const row = document.createElement("div");
-        row.className = "menu-item";
-        row.innerHTML = `
-          <div>
-            <strong>${nom}</strong>
-            ${desc ? `<div class="muted">${desc}</div>` : ""}
-            <div style="margin-top:4px; color:#e09b63; font-weight:600;">${prix.toFixed(3)} dt</div>
-          </div>
-          <div class="qty-box">
-            <button type="button" class="secondary minus_btn">-</button>
-            <span class="qty-val">${qty}</span>
-            <button type="button" class="plus_btn">+</button>
-          </div>
-        `;
-
-        const minus_btn = row.querySelector(".minus_btn");
-        const plus_btn = row.querySelector(".plus_btn");
-        const qty_val = row.querySelector(".qty-val");
-
-        minus_btn.addEventListener("click", () => {
-          const cur = panier[key] ? panier[key].qty : 0;
-          const next = Math.max(0, cur - 1);
-          if (next === 0) delete panier[key];
-          else panier[key] = { nom, prix, qty: next };
-          qty_val.textContent = next;
-          update_recap();
-        });
-
-        plus_btn.addEventListener("click", () => {
-          const cur = panier[key] ? panier[key].qty : 0;
-          const next = cur + 1;
-          panier[key] = { nom, prix, qty: next };
-          qty_val.textContent = next;
-          update_recap();
-        });
-
-        menu_list.appendChild(row);
-      });
-
-      update_recap();
+    .card_banner {
+      width: 100%;
+      height: 110px;
+      object-fit: cover;
+      border-radius: 10px;
+      background: var(--bg-elevated);
     }
 
-    function populate_zones_and_restaurants() {
-      const zones = [...new Set(restaurants_data.map(r => String(r.zone || "").trim()).filter(Boolean))];
-      zone_select.innerHTML = zones.length
-        ? zones.map(z => `<option value="${z}">${z}</option>`).join("")
-        : '<option value="houmt souk">houmt souk</option>';
-
-      function refresh_restos() {
-        const z = zone_select.value;
-        const list = restaurants_data.filter(r => !z || String(r.zone || "").trim() === z);
-        const final_list = list.length ? list : restaurants_data;
-        restaurant_select.innerHTML = final_list.map(r => {
-          const nom = String(r.nom || "").trim();
-          return `<option value="${nom}">${nom}</option>`;
-        }).join("");
-        panier = {};
-        render_menu();
-      }
-
-      zone_select.addEventListener("change", refresh_restos);
-      restaurant_select.addEventListener("change", () => {
-        panier = {};
-        render_menu();
-      });
-
-      refresh_restos();
+    .card_header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    async function load_init_data() {
-      try {
-        const res = await fetch(api_url + "?action=init");
-        const data = await res.json();
-        if (!data.ok) throw new Error(data.message || "erreur chargement");
-        restaurants_data = Array.isArray(data.restaurants) ? data.restaurants : [];
-        menus_data = Array.isArray(data.menus) ? data.menus : [];
-        populate_zones_and_restaurants();
-      } catch (err) {
-        menu_list.innerHTML = '<p class="muted">impossible de charger les donnees depuis google sheets.</p>';
-        show_msg("erreur de connexion au serveur : " + err.message, false);
-      }
+    .card_logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
     }
 
-    btn_gps.addEventListener("click", () => {
-      if (!navigator.geolocation) {
-        show_msg("la geolocalisation n'est pas supportee sur cet appareil.", false);
-        return;
-      }
-      btn_gps.disabled = true;
-      gps_status.textContent = "recuperation de la position gps du client...";
+    .card_name {
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--text-main);
+    }
 
-      navigator.geolocation.getCurrentPosition(
-        pos => {
-          const lat = pos.coords.latitude.toFixed(6);
-          const lng = pos.coords.longitude.toFixed(6);
-          client_gps = {
-            lat: lat,
-            lng: lng,
-            lien: "https://www.google.com/maps?q=" + lat + "," + lng
-          };
-          gps_status.textContent = "gps client actif : " + lat + ", " + lng;
-          btn_gps.disabled = false;
-          update_recap();
-        },
-        err => {
-          btn_gps.disabled = false;
-          gps_status.textContent = "echec gps : " + err.message;
-          show_msg("impossible d'obtenir la position gps : " + err.message, false);
-        },
-        { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 }
-      );
-    });
+    .card_meta {
+      font-size: 12px;
+      color: var(--copper);
+      text-transform: lowercase;
+    }
 
-    btn_submit.addEventListener("click", async () => {
-      const client_nom = document.getElementById("client_nom").value.trim();
-      const client_telephone = document.getElementById("client_telephone").value.trim();
-      const adresse = document.getElementById("adresse").value.trim();
-      const notes = document.getElementById("notes").value.trim();
-      const zone = zone_select.value.trim();
-      const restaurant = restaurant_select.value.trim();
-      const items_arr = Object.values(panier).filter(i => i.qty > 0);
+    .card_desc {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
 
-      if (!client_nom || !client_telephone) {
-        show_msg("merci de saisir le nom et le telephone du client.", false);
-        return;
-      }
-      if (!items_arr.length) {
-        show_msg("merci d'ajouter au moins un article au panier.", false);
-        return;
-      }
+    .card_footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 4px;
+    }
 
-      const sous_total = Number(
-        items_arr.reduce((sum, i) => sum + to_num(i.prix) * i.qty, 0).toFixed(3)
-      );
+    .price_tag {
+      font-weight: 700;
+      color: var(--gold);
+      font-size: 14px;
+    }
 
-      const payload = {
-        action: "create_order",
-        zone: zone,
-        restaurant: restaurant,
-        client_nom: client_nom,
-        client_telephone: client_telephone,
-        adresse: adresse,
-        items: items_arr,
-        sous_total: sous_total,
-        gps_lat: client_gps.lat,
-        gps_lng: client_gps.lng,
-        gps_lien: client_gps.lien,
-        notes: notes
-      };
+    .btn_primary {
+      background: linear-gradient(135deg, var(--gold), var(--copper));
+      color: #141a13;
+      border: none;
+    }
 
-      btn_submit.disabled = true;
-      show_msg("envoi de la commande en cours...", true);
+    .btn_secondary {
+      background: var(--bg-elevated);
+      color: var(--text-main);
+    }
 
-      try {
-        const res = await fetch(api_url, {
-          method: "POST",
-          body: JSON.stringify(payload)
-        });
-        const data = await res.json();
-        btn_submit.disabled = false;
+    .panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 18px;
+    }
 
-        if (!data.ok) {
-          show_msg("erreur : " + (data.message || "echec creation commande"), false);
-          return;
-        }
+    .form_grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+    }
 
-        show_msg(
-          "commande enregistree ! ref : " + data.ref +
-          " | livraison : " + Number(data.frais_livraison).toFixed(3) + " dt" +
-          " | total : " + Number(data.total).toFixed(3) + " dt",
-          true
-        );
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
 
-        panier = {};
-        render_menu();
-      } catch (err) {
-        btn_submit.disabled = false;
-        show_msg("erreur reseau : " + err.message, false);
-      }
-    });
+    .field label {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: lowercase;
+    }
 
-    load_init_data();
-  </script>
-</body>
-</html>
+    .field input, .field textarea, .field select {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 9px 11px;
+      color: var(--text-main);
+      font-size: 13px;
+      width: 100%;
+    }
+
+    .cart_item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 13px;
+    }
+
+    .qty_box {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .qty_btn {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      border: 1px solid var(--border-subtle);
+      background: var
