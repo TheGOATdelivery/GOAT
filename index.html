@@ -728,11 +728,11 @@
             ← RETOUR AU MENU
           </button>
         </div>
-
-        <div id="cartItems"></div>
-        <div style="margin-top: 12px; display: flex; justify-content: space-between; font-weight: 700; color: var(--gold-soft); font-size: 1rem;">
-          <span>TOTAL À PAYER (LIVRAISON INCLUSE SELON ZONE)</span>
-          <span id="cartTotal">0.000 TND</span>
+<div id="cartItems"></div>
+          <div style="margin-top: 12px; display: flex; justify-content: space-between; font-weight: 700; color: var(--gold-soft);">
+            <span>TOTAL À PAYER (LIVRAISON INCLUSE SELON ZONE)</span>
+            <span id="cartTotal">0.000 TND</span>
+          </div>
         </div>
 
         <form id="orderForm" style="margin-top: 16px;">
@@ -761,6 +761,14 @@
               ME LOCALISER (GPS)
             </button>
             <span class="gps-status" id="gpsStatus">Position GPS non renseignée.</span>
+         <div id="cartItems" style="margin-top: 14px;"></div>
+          <div style="margin-top: 10px; display: flex; justify-content: space-between; font-size: 0.92rem; color: var(--text-muted, #cbd5e1);">
+            <span>FRAIS DE LIVRAISON</span>
+            <span id="checkoutDeliveryFee">SELON ZONE / GPS</span>
+          </div>
+          <div style="margin-top: 10px; display: flex; justify-content: space-between; font-weight: 700; color: var(--gold-soft);">
+            <span>TOTAL À PAYER</span>
+            <span id="cartTotal">0.000 TND</span>
           </div>
 
           <div style="margin-top: 16px;">
@@ -810,7 +818,7 @@
         <h3 class="highlight-title">TOUJOURS À VOTRE SERVICE</h3>
         <p class="highlight-text">
           Localisation GPS précise pour une livraison rapide et sans accroc.
-        </p>
+        </p> 
       </div>
     </section>
 
