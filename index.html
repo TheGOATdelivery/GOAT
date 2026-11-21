@@ -281,961 +281,12 @@
     }
 
     .pub-img {
-      width: 74px;
-      height: 74px;
+      width: 92px;
+      height: 92px;
       border-radius: var(--radius-md);
       object-fit: cover;
       border: 1px solid var(--gold-wood);
-    }
-
-    .zone-selector-wrap {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 26px;
-    }
-
-    .zone-label {
-      font-size: 0.82rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--gold-soft);
-      font-weight: 700;
-    }
-
-    .zone-tabs {
-      display: inline-flex;
-      gap: 8px;
-      background: rgba(20, 26, 15, 0.9);
-      padding: 7px;
-      border-radius: 999px;
-      border: 1.5px solid var(--gold-wood);
-      box-shadow: var(--shadow-card);
-    }
-
-    .zone-btn {
-      padding: 11px 24px;
-      border-radius: 999px;
-      border: none;
-      background: transparent;
-      color: var(--text-muted);
-      font-weight: 700;
-      font-size: 0.95rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .zone-btn.active {
-      background: var(--copper-vivid);
-      color: #ffffff;
-      box-shadow: 0 4px 14px rgba(200, 90, 50, 0.45);
-    }
-
-    .category-group {
-      margin-bottom: 26px;
-    }
-
-    .section-heading {
-      font-family: 'Cinzel', serif;
-      font-size: 1.18rem;
-      color: var(--gold-soft);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-bottom: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .menu-header-bar {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 14px;
-      flex-wrap: wrap;
-    }
-
-    .menu-resto-title {
-      font-family: 'Cinzel', serif;
-      font-size: 1.32rem;
-      color: var(--gold-soft);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    .menu-cat-pills {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 20px;
-    }
-
-    .menu-pill-btn {
-      padding: 7px 14px;
-      border-radius: 999px;
-      border: 1px solid var(--border-subtle);
-      background: rgba(24, 31, 19, 0.82);
-      color: var(--text-muted);
-      font-size: 0.8rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      cursor: pointer;
-      transition: all 0.16s ease;
-    }
-
-    .menu-pill-btn.active {
-      background: var(--copper-vivid);
-      color: #fff;
-      border-color: var(--copper-bright);
-      box-shadow: 0 4px 12px rgba(200, 90, 50, 0.35);
-    }
-
-    .menu-category-block {
-      margin-bottom: 26px;
-    }
-
-    .menu-category-title {
-      font-family: 'Cinzel', serif;
-      font-size: 1.12rem;
-      color: var(--wood-resto);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      padding-bottom: 7px;
-      margin-bottom: 13px;
-      border-bottom: 1px solid var(--border-subtle);
-    }
-
-    .restaurants-grid, .menu-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(265px, 1fr));
-      gap: 15px;
-    }
-
-    .resto-card, .menu-card {
-      background: var(--surface-olive);
-      backdrop-filter: blur(8px);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 16px;
-      box-shadow: var(--shadow-card);
-    }
-
-    .resto-card {
-      cursor: pointer;
-      transition: transform 0.16s ease, border-color 0.2s ease;
-    }
-
-    .resto-card:hover {
-      transform: translateY(-3px);
-      border-color: var(--gold-wood);
-    }
-
-    .resto-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 6px;
-    }
-
-    .resto-name {
-      font-size: 1.08rem;
-      font-weight: 700;
-      color: var(--wood-resto);
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-    }
-
-    .badge {
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 3px 9px;
-      border-radius: 999px;
-      white-space: nowrap;
-      text-transform: uppercase;
-    }
-
-    .badge-open {
-      background: rgba(82, 148, 99, 0.24);
-      color: #8ee0a3;
-      border: 1px solid rgba(82, 148, 99, 0.55);
-    }
-
-    .badge-closed {
-      background: rgba(184, 67, 53, 0.24);
-      color: #f39b90;
-      border: 1px solid rgba(184, 67, 53, 0.55);
-    }
-
-    .resto-meta, .menu-desc {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
-    .menu-card {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .menu-title {
-      font-size: 1.02rem;
-      font-weight: 700;
-      color: var(--text-main);
-      text-transform: uppercase;
-    }
-
-    .menu-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding-top: 10px;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      flex-wrap: wrap;
-    }
-
-    .menu-price {
-      font-weight: 700;
-      color: var(--gold-soft);
-      font-size: 0.98rem;
-    }
-
-    .qty-controls {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .qty-btn {
-      width: 30px;
-      height: 30px;
-      border-radius: 8px;
-      border: 1px solid var(--gold-wood);
-      background: var(--bg-olive-deep);
-      color: var(--gold-soft);
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .qty-input {
-      width: 48px;
-      height: 30px;
-      text-align: center;
-      border-radius: 8px;
-      border: 1px solid var(--border-subtle);
-      background: var(--bg-olive-deep);
-      color: var(--text-main);
-      font-weight: 700;
-      font-size: 0.88rem;
-    }
-
-    .panel {
-      background: var(--surface-olive);
-      backdrop-filter: blur(8px);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      padding: 18px;
-      box-shadow: var(--shadow-card);
-      margin-bottom: 24px;
-    }
-
-    .cart-summary-bar {
-      background: rgba(24, 31, 19, 0.95);
-      border: 1.5px solid var(--copper-bright);
-      border-radius: var(--radius-md);
-      padding: 14px 16px;
-      margin-top: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-      position: sticky;
-      bottom: 12px;
-      z-index: 90;
-      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55);
-    }
-
-    .cart-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 9px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      font-size: 0.9rem;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 12px;
-      margin-top: 14px;
-    }
-
-    .input-group {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-
-    .input-group label {
-      font-size: 0.82rem;
-      color: var(--gold-soft);
-      font-weight: 600;
-    }
-
-    .input, textarea {
-      background: rgba(20, 26, 15, 0.9);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
-      padding: 10px 12px;
-      color: var(--text-main);
-      font-family: inherit;
-      font-size: 0.9rem;
-      width: 100%;
-    }
-
-    .input:focus, textarea:focus {
-      outline: none;
-      border-color: var(--copper-bright);
-    }
-
-    .gps-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 12px;
-    }
-
-    .gps-status {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-    }
-
-    .highlights-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 26px;
-    }
-
-    .highlight-card {
-      background: var(--surface-olive);
-      backdrop-filter: blur(8px);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 12px 8px;
-      text-align: center;
-      box-shadow: var(--shadow-card);
-      transition: transform 0.16s ease, border-color 0.2s ease;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-    }
-
-    .highlight-card:hover {
-      transform: translateY(-2px);
-      border-color: var(--gold-wood);
-    }
-
-    .highlight-icon {
-      width: 32px;
-      height: 32px;
-      margin: 0 auto 7px;
-      border-radius: 50%;
-      background: rgba(200, 90, 50, 0.18);
-      border: 1px solid rgba(227, 197, 139, 0.45);
-      color: var(--gold-soft);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.95rem;
-    }
-
-    .highlight-title {
-      font-family: 'Cinzel', serif;
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: var(--gold-soft);
-      margin-bottom: 4px;
-      text-transform: uppercase;
-      line-height: 1.25;
-    }
-
-    .highlight-desc {
-      font-size: 0.68rem;
-      color: var(--text-muted);
-      line-height: 1.35;
-    }
-
-    .site-footer {
-      text-align: center;
-      margin-top: 24px;
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    .feedback-msg {
-      margin-top: 12px;
-      padding: 11px 14px;
-      border-radius: var(--radius-sm);
-      font-size: 0.88rem;
-      display: none;
-    }
-
-    .feedback-msg.show { display: block; }
-
-    .feedback-ok {
-      background: rgba(82, 148, 99, 0.22);
-      border: 1px solid var(--ok-green);
-      color: #b7f0c5;
-    }
-
-    .feedback-err {
-      background: rgba(200, 90, 50, 0.24);
-      border: 1px solid var(--copper-bright);
-      color: #ffd0be;
-    }
-
-    .empty-state {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      padding: 12px 0;
-    }
-
-    .hidden { display: none !important; }
-
-    @media (max-width: 600px) {
-      .zone-btn {
-        padding: 10px 18px;
-        font-size: 0.9rem;
-      }
-      .highlights-grid {
-        gap: 7px;
-      }
-      .highlight-card {
-        padding: 10px 6px;
-        border-radius: 12px;
-      }
-      .highlight-title {
-        font-size: 0.64rem;
-      }
-      .highlight-desc {
-        font-size: 0.6rem;
-        line-height: 1.3;
-      }
-    }
-  </style>
-</head>
-<body>
-
-  <div class="marble-bg" aria-hidden="true"></div>
-  <div class="marble-veins" aria-hidden="true"></div>
-  <div class="particles-layer" id="particlesLayer" aria-hidden="true"></div>
-
-  <header class="topbar">
-    <div class="topbar-inner">
-      <div class="brand-stack" id="brandHomeBtn">
-        <img src="./logo.png" alt="Logo THE GOAT" class="brand-logo" />
-        <div class="brand-text-wrap">
-          <div class="brand-name">THE GOAT</div>
-          <div class="brand-sub">DJERBA DELIVERY</div>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <main class="container">
-    <section class="hero-section">
-      <h1 class="hero-title">MORE THAN JUST FOOD</h1>
-      <p class="hero-subtitle">Vos établissements préférés livrés rapidement à Djerba</p>
-    </section>
-
-    <section class="pub-section" id="pubSection" aria-label="Offres et publicités"></section>
-
-    <div class="zone-selector-wrap" id="zoneSelectorWrap">
-      <div class="zone-label">Choisissez votre zone</div>
-      <div class="zone-tabs" role="tablist" aria-label="Zones de livraison">
-        <button class="zone-btn active" data-zone="Ajim" id="zoneAjim" type="button">
-          AJIM
-        </button>
-        <button class="zone-btn" data-zone="Houmt Souk" id="zoneHoumtSouk" type="button">
-          HOUMT SOUK
-        </button>
-      </div>
-    </div>
-
-    <div id="orderFlow">
-      <section id="stepRestaurants">
-        <div style="display: flex; justify-content: flex-end; margin-bottom: 14px;">
-          <button class="btn btn-gold-outline" id="reloadDataBtn" type="button">ACTUALISER</button>
-        </div>
-        <div id="dynamicCategoriesContainer"></div>
-      </section>
-
-      <section id="stepMenu" class="hidden">
-        <div class="menu-header-bar">
-          <button class="btn btn-ghost" id="backToRestaurantsBtn" type="button">
-            ← RETOUR
-          </button>
-          <h2 class="menu-resto-title" id="menuHeading">MENU</h2>
-        </div>
-
-        <div class="menu-cat-pills" id="menuCatPills" aria-label="Catégories du menu"></div>
-        <div id="menuCategoriesContainer"></div>
-
-        <div class="cart-summary-bar">
-          <div>
-            <div style="font-size: 0.82rem; color: var(--text-muted);" id="step2SummaryCount">0 ARTICLE(S) DANS LE PANIER</div>
-            <div style="font-weight: 700; color: var(--gold-soft); font-size: 1.04rem;" id="step2SummaryTotal">0.000 TND</div>
-          </div>
-          <button class="btn btn-copper" id="confirmCartBtn" type="button">
-            CONTINUER VERS LA LIVRAISON →
-          </button>
-        </div>
-        <div class="feedback-msg" id="menuFeedback"></div>
-      </section>
-
-      <section id="stepCheckout" class="panel hidden">
-        <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 12px;">
-          <h2 style="font-family: 'Cinzel', serif; color: var(--gold-soft); font-size: 1.12rem; text-transform: uppercase;">
-            LIVRAISON, GPS &amp; VALIDATION
-          </h2>
-          <button class="btn btn-ghost" id="backToMenuBtn" type="button">
-            ← RETOUR AU MENU
-          </button>
-        </div>
-
-        <form id="orderForm" style="margin-top: 16px;">
-          <div class="form-grid">
-            <div class="input-group">
-              <label for="clientName">Nom complet *</label>
-              <input class="input" id="clientName" name="clientName" type="text" required placeholder="Votre nom" />
-            </div>
-            <div class="input-group">
-              <label for="clientPhone">Téléphone *</label>
-              <input class="input" id="clientPhone" name="clientPhone" type="tel" required placeholder="Ex. 20 123 456" />
-            </div>
-            <div class="input-group">
-              <label for="clientAddress">Adresse / Repère *</label>
-              <input class="input" id="clientAddress" name="clientAddress" type="text" required placeholder="Rue, quartier ou point de repère" />
-            </div>
-          </div>
-
-          <div class="input-group" style="margin-top: 12px;">
-            <label for="orderNotes">Notes de commande / Paiement (optionnel)</label>
-            <textarea id="orderNotes" name="orderNotes" rows="2" placeholder="Paiement à la livraison, sans piment, appeler à l'arrivée..."></textarea>
-          </div>
-
-          <div class="gps-row">
-            <button type="button" class="btn btn-gold-outline" id="gpsBtn">
-              ME LOCALISER (GPS)
-            </button>
-            <span class="gps-status" id="gpsStatus">Position GPS non renseignée.</span>
-          </div>
-
-          <div id="cartItems" style="margin-top: 14px;"></div>
-
-          <div style="margin-top: 12px; display: flex; justify-content: space-between; font-size: 0.92rem; color: var(--text-muted);">
-            <span>FRAIS DE LIVRAISON</span>
-            <span id="checkoutDeliveryFee">SELON ZONE / GPS</span>
-          </div>
-          <div style="margin-top: 10px; display: flex; justify-content: space-between; font-weight: 700; color: var(--gold-soft);">
-            <span>TOTAL À PAYER</span>
-            <span id="cartTotal">0.000 TND</span>
-          </div>
-
-          <div style="margin-top: 16px; display: flex; justify-content: flex-end;">
-            <button type="submit" class="btn btn-copper" id="submitOrderBtn">
-              VALIDER LA COMMANDE
-            </button>
-          </div>
-
-          <div class="feedback-msg" id="orderFeedback"></div>
-        </form>
-      </section>
-    </div>
-
-    <section class="highlights-grid" aria-label="Points forts du service">
-      <div class="highlight-card">
-        <div class="highlight-icon" aria-hidden="true">🍽️</div>
-        <div class="highlight-title">CHOIX VARIÉ</div>
-        <div class="highlight-desc">Restaurants, cafés et adresses locales à Ajim &amp; Houmt Souk.</div>
-      </div>
-      <div class="highlight-card">
-        <div class="highlight-icon" aria-hidden="true">⚡</div>
-        <div class="highlight-title">LIVRAISON RAPIDE</div>
-        <div class="highlight-desc">Prise en charge directe avec calcul GPS jusqu'à vous.</div>
-      </div>
-      <div class="highlight-card">
-        <div class="highlight-icon" aria-hidden="true">📍</div>
-        <div class="highlight-title">SERVICE DE PROXIMITÉ</div>
-        <div class="highlight-desc">Service local fiable et attentif à Djerba.</div>
-      </div>
-    </section>
-
-    <footer class="site-footer">
-      THE GOAT — DJERBA DELIVERY • AJIM &amp; HOUMT SOUK
-    </footer>
-  </main>
-
-  <script>
-    const APPS_SCRIPT_URL =
-      "https://script.google.com/macros/s/AKfycbybbw3yxfctVXCSC5u3xlV0qy1BAxeX0LI1L9qnSkanU0RNW3VhLPcbMZ4QaiG2D4Z7/exec";
-
-    const MAX_DELIVERY_KM = 12;
-    const OUT_OF_ZONE_MSG =
-      "Désolé, votre localisation est hors de notre secteur de livraison actuel (Ajim / Houmt Souk).";
-
-    const FALLBACK_DATA = {
-      restaurants: [
-        {
-          id: "big-ben",
-          nom: "LA FAMEUSE BIG BEN",
-          zone: "Ajim",
-          type: "restaurant",
-          specialite: "BURGERS, BOWLS, TACOS & CIABATTA",
-          lat: 33.7222531,
-          lng: 10.7437356,
-          statut: "ouvert"
-        },
-        {
-          id: "the-smile",
-          nom: "THE SMILE",
-          zone: "Ajim",
-          type: "café",
-          specialite: "CAFÉ & BOISSONS",
-          lat: 33.7222531,
-          lng: 10.7437356,
-          statut: "ouvert"
-        },
-        {
-          id: "cafe-ben-yedder",
-          nom: "CAFE BEN YEDDER",
-          zone: "Houmt Souk",
-          type: "café",
-          specialite: "CAFÉ & BOISSONS",
-          lat: 33.8757,
-          lng: 10.8574,
-          statut: "ouvert"
-        },
-        {
-          id: "pizza-gambour",
-          nom: "PIZZA GAMBOUR",
-          zone: "Houmt Souk",
-          type: "restaurant",
-          specialite: "PIZZA & FAST FOOD",
-          lat: 33.8757,
-          lng: 10.8574,
-          statut: "ouvert"
-        }
-      ],
-      menus: [],
-      pubs: []
-    };
-
-    <!DOCTYPE html>
-<html lang="fr" dir="ltr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>THE GOAT — Djerba Delivery</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --bg-olive: #232b1c;
-      --bg-olive-deep: #181f13;
-      --surface-olive: rgba(45, 55, 36, 0.88);
-      --border-subtle: rgba(197, 155, 82, 0.28);
-      --gold-wood: #c59b52;
-      --gold-soft: #e3c58b;
-      --wood-resto: #d4a06a;
-      --copper-vivid: #c85a32;
-      --copper-bright: #df6d43;
-      --text-main: #f4f0e6;
-      --text-muted: #c6c1b1;
-      --ok-green: #529463;
-      --closed-red: #b84335;
-      --shadow-card: 0 12px 30px rgba(8, 12, 6, 0.42);
-      --radius-lg: 18px;
-      --radius-md: 14px;
-      --radius-sm: 10px;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      background-color: var(--bg-olive-deep);
-      color: var(--text-main);
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      line-height: 1.5;
-      min-height: 100vh;
-      overflow-x: hidden;
-      position: relative;
-    }
-
-    .marble-bg {
-      position: fixed;
-      inset: -15%;
-      z-index: -2;
-      background:
-        radial-gradient(ellipse at 20% 25%, rgba(197, 155, 82, 0.12) 0%, transparent 48%),
-        radial-gradient(ellipse at 80% 70%, rgba(200, 90, 50, 0.11) 0%, transparent 52%),
-        radial-gradient(ellipse at 55% 15%, rgba(58, 72, 44, 0.65) 0%, transparent 60%),
-        linear-gradient(135deg, #171d12 0%, #232b1c 45%, #192014 100%);
-      animation: marbleDrift 22s ease-in-out infinite alternate;
-      pointer-events: none;
-    }
-
-    .marble-veins {
-      position: fixed;
-      inset: -10%;
-      z-index: -2;
-      opacity: 0.24;
-      background-image:
-        repeating-linear-gradient(
-          118deg,
-          transparent 0px,
-          transparent 90px,
-          rgba(197, 155, 82, 0.18) 92px,
-          transparent 95px,
-          transparent 210px,
-          rgba(200, 90, 50, 0.14) 212px,
-          transparent 215px
-        );
-      filter: blur(1.2px);
-      animation: veinFlow 28s linear infinite alternate;
-      pointer-events: none;
-    }
-
-    @keyframes marbleDrift {
-      0% { transform: translate3d(-2%, -2%, 0) scale(1.02); }
-      100% { transform: translate3d(2%, 2%, 0) scale(1.07); }
-    }
-
-    @keyframes veinFlow {
-      0% { transform: translate3d(0, 0, 0) rotate(0deg); }
-      100% { transform: translate3d(-2.5%, 1.5%, 0) rotate(1.5deg); }
-    }
-
-    .particles-layer {
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-      overflow: hidden;
-      pointer-events: none;
-    }
-
-    .particle {
-      position: absolute;
-      bottom: -16px;
-      border-radius: 50%;
-      opacity: 0;
-      animation: floatSpark linear infinite;
-    }
-
-    @keyframes floatSpark {
-      0% { transform: translateY(0) translateX(0) scale(0.7); opacity: 0; }
-      15% { opacity: 0.75; }
-      85% { opacity: 0.55; }
-      100% { transform: translateY(-108vh) translateX(26px) scale(1.15); opacity: 0; }
-    }
-
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(22, 28, 17, 0.94);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-bottom: 1px solid var(--border-subtle);
-      padding: 8px 16px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
-    }
-
-    .topbar-inner {
-      max-width: 1040px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-    }
-
-    .brand-stack {
-      display: inline-flex;
-      flex-direction: row;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-    }
-
-    .brand-logo {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 1.5px solid var(--gold-wood);
       background: #12160e;
-      box-shadow: 0 0 12px rgba(197, 155, 82, 0.25);
-      flex-shrink: 0;
-    }
-
-    .brand-text-wrap {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 1px;
-    }
-
-    .brand-name {
-      font-family: 'Cinzel', serif;
-      font-weight: 800;
-      font-size: 1.05rem;
-      letter-spacing: 0.08em;
-      color: var(--gold-wood);
-      line-height: 1.05;
-      text-transform: uppercase;
-    }
-
-    .brand-sub {
-      font-size: 0.68rem;
-      font-weight: 700;
-      color: var(--gold-soft);
-      letter-spacing: 0.05em;
-      line-height: 1.1;
-      text-transform: uppercase;
-    }
-
-    .btn {
-      border: none;
-      border-radius: 999px;
-      padding: 9px 16px;
-      font-family: inherit;
-      font-weight: 700;
-      font-size: 0.84rem;
-      cursor: pointer;
-      transition: transform 0.14s ease, background-color 0.2s ease, border-color 0.2s ease;
-    }
-
-    .btn:active { transform: scale(0.97); }
-    .btn:disabled { opacity: 0.55; cursor: not-allowed; }
-
-    .btn-ghost {
-      background: rgba(45, 55, 36, 0.85);
-      color: var(--text-main);
-      border: 1px solid var(--border-subtle);
-    }
-
-    .btn-copper {
-      background: var(--copper-vivid);
-      color: #fff;
-      box-shadow: 0 6px 18px rgba(200, 90, 50, 0.35);
-    }
-
-    .btn-copper:hover:not(:disabled) { background: var(--copper-bright); }
-
-    .btn-gold-outline {
-      background: rgba(24, 31, 19, 0.7);
-      color: var(--gold-soft);
-      border: 1px solid var(--gold-wood);
-    }
-
-    .container {
-      max-width: 1040px;
-      margin: 0 auto;
-      padding: 20px 16px 36px;
-    }
-
-    .hero-section {
-      text-align: center;
-      padding: 12px 8px 20px;
-    }
-
-    .hero-title {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: clamp(1.9rem, 5vw, 2.95rem);
-      font-weight: 700;
-      color: var(--gold-soft);
-      letter-spacing: 0.04em;
-      line-height: 1.15;
-      text-transform: uppercase;
-      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
-    }
-
-    .hero-subtitle {
-      margin-top: 8px;
-      font-size: 0.96rem;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-
-    .pub-section { margin-bottom: 22px; }
-
-    .pub-card {
-      background: linear-gradient(125deg, rgba(200, 90, 50, 0.3), rgba(45, 55, 36, 0.9));
-      border: 1.5px solid rgba(223, 109, 67, 0.65);
-      border-radius: var(--radius-lg);
-      padding: 16px 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      box-shadow: var(--shadow-card);
-      flex-wrap: wrap;
-    }
-
-    .pub-tag {
-      display: inline-block;
-      background: var(--copper-vivid);
-      color: #fff;
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      padding: 3px 10px;
-      border-radius: 999px;
-      margin-bottom: 6px;
-    }
-
-    .pub-title {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--text-main);
-      text-transform: uppercase;
-    }
-
-    .pub-desc {
-      font-size: 0.87rem;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    .pub-img {
-      width: 74px;
-      height: 74px;
-      border-radius: var(--radius-md);
-      object-fit: cover;
-      border: 1px solid var(--gold-wood);
       flex-shrink: 0;
     }
 
@@ -1404,12 +455,28 @@
     }
 
     .resto-logo {
-      width: 44px;
-      height: 44px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
       object-fit: cover;
       border: 1.5px solid var(--gold-wood);
       background: #12160e;
+      flex-shrink: 0;
+    }
+
+    .resto-logo-placeholder {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1px dashed rgba(197, 155, 82, 0.5);
+      background: rgba(18, 22, 14, 0.75);
+      color: var(--gold-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: 0.95rem;
       flex-shrink: 0;
     }
 
@@ -1456,12 +523,29 @@
 
     .menu-img {
       width: 100%;
-      height: 150px;
+      height: 165px;
       object-fit: cover;
       border-radius: var(--radius-sm);
       border: 1px solid var(--border-subtle);
+      background: #12160e;
       margin-bottom: 10px;
       display: block;
+    }
+
+    .menu-img-placeholder {
+      width: 100%;
+      height: 120px;
+      border-radius: var(--radius-sm);
+      border: 1px dashed rgba(197, 155, 82, 0.35);
+      background: rgba(18, 22, 14, 0.55);
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
 
     .menu-title {
@@ -1728,7 +812,7 @@
   <header class="topbar">
     <div class="topbar-inner">
       <div class="brand-stack" id="brandHomeBtn">
-        <img src="./logo.png" alt="Logo THE GOAT" class="brand-logo" />
+        <img src="./logo.png" alt="Logo THE GOAT" class="brand-logo" onerror="this.style.display='none'" />
         <div class="brand-text-wrap">
           <div class="brand-name">THE GOAT</div>
           <div class="brand-sub">DJERBA DELIVERY</div>
@@ -1887,6 +971,7 @@
           zone: "Ajim",
           type: "restaurant",
           specialite: "BURGERS, BOWLS, TACOS & CIABATTA",
+          logo: "./logo.png",
           lat: 33.7222531,
           lng: 10.7437356,
           statut: "ouvert"
@@ -1897,6 +982,7 @@
           zone: "Ajim",
           type: "café",
           specialite: "CAFÉ & BOISSONS",
+          logo: "",
           lat: 33.7222531,
           lng: 10.7437356,
           statut: "ouvert"
@@ -1907,6 +993,7 @@
           zone: "Houmt Souk",
           type: "café",
           specialite: "CAFÉ & BOISSONS",
+          logo: "",
           lat: 33.8757,
           lng: 10.8574,
           statut: "ouvert"
@@ -1917,6 +1004,7 @@
           zone: "Houmt Souk",
           type: "restaurant",
           specialite: "PIZZA & FAST FOOD",
+          logo: "",
           lat: 33.8757,
           lng: 10.8574,
           statut: "ouvert"
@@ -1979,12 +1067,32 @@
       return String(str ?? "").trim().toLocaleUpperCase("fr-FR");
     }
 
-    function getSafeImageUrl(val) {
-      const cleaned = String(val ?? "").trim();
+    function normalizeImageUrl(val) {
+      let cleaned = String(val ?? "").trim();
       if (!cleaned) return "";
+
+      const driveFileMatch = cleaned.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+      if (driveFileMatch && driveFileMatch[1]) {
+        return `https://drive.google.com/uc?export=view&id=${driveFileMatch[1]}`;
+      }
+
+      const driveOpenMatch = cleaned.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+      if (cleaned.includes("drive.google.com") && driveOpenMatch && driveOpenMatch[1]) {
+        return `https://drive.google.com/uc?export=view&id=${driveOpenMatch[1]}`;
+      }
+
+      if (cleaned.includes("dropbox.com")) {
+        cleaned = cleaned.replace("www.dropbox.com", "dl.dropboxusercontent.com").replace(/[?&]dl=0\b/, "");
+      }
+
       if (/^https?:\/\//i.test(cleaned) || cleaned.startsWith("./") || cleaned.startsWith("/")) {
         return cleaned;
       }
+
+      if (/^[a-zA-Z0-9_./-]+\.(png|jpe?g|webp|gif|svg)$/i.test(cleaned)) {
+        return cleaned.startsWith(".") ? cleaned : `./${cleaned}`;
+      }
+
       return "";
     }
 
@@ -2173,8 +1281,8 @@
           const title = escapeHtml(toUpper(getField(p, ["titre", "title", "nom", "offre"], "OFFRE SPÉCIALE")));
           const desc = escapeHtml(getField(p, ["description", "desc", "texte", "message"], ""));
           const tag = escapeHtml(toUpper(getField(p, ["badge", "tag", "categorie", "catégorie"], "PUB")));
-          const rawImg = getField(p, ["image", "img", "photo", "url", "image_url", "photo_url"], "");
-          const safeImg = getSafeImageUrl(rawImg);
+          const rawImg = getField(p, ["image", "img", "photo", "url", "image_url", "photo_url", "visuel"], "");
+          const safeImg = normalizeImageUrl(rawImg);
 
           return `
             <div class="pub-card">
@@ -2183,7 +1291,7 @@
                 <div class="pub-title">${title}</div>
                 ${desc ? `<div class="pub-desc">${desc}</div>` : ""}
               </div>
-              ${safeImg ? `<img src="${escapeHtml(safeImg)}" alt="${title}" class="pub-img" loading="lazy" />` : ""}
+              ${safeImg ? `<img src="${escapeHtml(safeImg)}" alt="${title}" class="pub-img" loading="lazy" onerror="this.style.display='none'" />` : ""}
             </div>
           `;
         })
@@ -2197,17 +1305,22 @@
     function buildPlaceCard(r) {
       const rawName = getField(r, ["nom", "name", "restaurant", "titre"], "ÉTABLISSEMENT");
       const name = toUpper(rawName);
+      const initial = escapeHtml(name.charAt(0) || "G");
       const subLabel = getField(r, ["specialite", "spécialité", "cuisine", "type", "categorie", "catégorie"], "");
       const open = isRestaurantOpen(r);
       const rawLogo = getField(r, ["logo", "photo", "image", "img", "logo_url", "image_url", "photo_url"], "");
-      const safeLogo = getSafeImageUrl(rawLogo);
+      const safeLogo = normalizeImageUrl(rawLogo);
+
+      const logoHtml = safeLogo
+        ? `<img src="${escapeHtml(safeLogo)}" alt="${escapeHtml(name)}" class="resto-logo" loading="lazy" onerror="this.outerHTML='<div class=\\'resto-logo-placeholder\\'>${initial}</div>'" />`
+        : `<div class="resto-logo-placeholder">${initial}</div>`;
 
       const card = document.createElement("div");
       card.className = "resto-card";
       card.innerHTML = `
         <div class="resto-top">
           <div class="resto-header-left">
-            ${safeLogo ? `<img src="${escapeHtml(safeLogo)}" alt="${escapeHtml(name)}" class="resto-logo" loading="lazy" />` : ""}
+            ${logoHtml}
             <div class="resto-name">${escapeHtml(name)}</div>
           </div>
           <span class="badge ${open ? "badge-open" : "badge-closed"}">${open ? "OUVERT" : "FERMÉ"}</span>
@@ -2325,15 +1438,19 @@
       const name = toUpper(getField(item, ["nom", "name", "plat", "titre"], "ARTICLE"));
       const desc = getField(item, ["description", "desc", "details", "détails"], "");
       const priceNum = parsePriceNum(getField(item, ["prix", "price", "tarif"], 0));
-      const rawPhoto = getField(item, ["photo", "image", "img", "photo_url", "image_url"], "");
-      const safePhoto = getSafeImageUrl(rawPhoto);
+      const rawPhoto = getField(item, ["photo", "image", "img", "photo_url", "image_url", "visuel"], "");
+      const safePhoto = normalizeImageUrl(rawPhoto);
       const currentQty = state.cart[itemKey]?.qty || 0;
+
+      const imgHtml = safePhoto
+        ? `<img src="${escapeHtml(safePhoto)}" alt="${escapeHtml(name)}" class="menu-img" loading="lazy" onerror="this.outerHTML='<div class=\\'menu-img-placeholder\\'>PHOTO INDISPONIBLE</div>'" />`
+        : "";
 
       const card = document.createElement("div");
       card.className = "menu-card";
       card.innerHTML = `
         <div>
-          ${safePhoto ? `<img src="${escapeHtml(safePhoto)}" alt="${escapeHtml(name)}" class="menu-img" loading="lazy" />` : ""}
+          ${imgHtml}
           <div class="menu-title">${escapeHtml(name)}</div>
           ${desc ? `<div class="menu-desc" style="margin-top: 4px;">${escapeHtml(desc)}</div>` : ""}
         </div>
