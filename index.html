@@ -1234,7 +1234,7 @@
     async function fetchSheetData() {
       el.restaurantsGrid.innerHTML = `<p class="empty-state">Chargement des restaurants...</p>`;
       try {
-        const res = await fetch(`${APPS_SCRIPT_URL}?action=init`, { cache: "no-store" });
+        const res = await fetch(`${APPS_SCRIPT_URL}?action=get_init`, { cache: "no-store" });
         const data = await res.json();
 
         const rawRestos = extractArray(data, ["restaurants", "RESTAURANTS", "restaurant"]);
