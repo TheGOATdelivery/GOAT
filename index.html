@@ -111,7 +111,6 @@
       100% { transform: translateY(-108vh) translateX(26px) scale(1.15); opacity: 0; }
     }
 
-    /* البار الفوقانية المدمجة: اللوغو على اليسار وبجنبه الاسم والوصف */
     .topbar {
       position: sticky;
       top: 0;
@@ -353,6 +352,66 @@
       flex-wrap: wrap;
     }
 
+    .menu-header-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .menu-resto-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.32rem;
+      color: var(--gold-soft);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .menu-cat-pills {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .menu-pill-btn {
+      padding: 7px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: rgba(24, 31, 19, 0.82);
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+
+    .menu-pill-btn.active {
+      background: var(--copper-vivid);
+      color: #fff;
+      border-color: var(--copper-bright);
+      box-shadow: 0 4px 12px rgba(200, 90, 50, 0.35);
+    }
+
+    .menu-category-block {
+      margin-bottom: 26px;
+    }
+
+    .menu-category-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.12rem;
+      color: var(--wood-resto);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding-bottom: 7px;
+      margin-bottom: 13px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
     .restaurants-grid, .menu-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(265px, 1fr));
@@ -427,19 +486,10 @@
       gap: 12px;
     }
 
-    .menu-cat {
-      font-size: 0.73rem;
-      color: var(--copper-bright);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
     .menu-title {
       font-size: 1.02rem;
       font-weight: 700;
       color: var(--text-main);
-      margin-top: 2px;
       text-transform: uppercase;
     }
 
@@ -499,7 +549,7 @@
     }
 
     .cart-summary-bar {
-      background: rgba(24, 31, 19, 0.92);
+      background: rgba(24, 31, 19, 0.95);
       border: 1.5px solid var(--copper-bright);
       border-radius: var(--radius-md);
       padding: 14px 16px;
@@ -509,6 +559,10 @@
       justify-content: space-between;
       gap: 12px;
       flex-wrap: wrap;
+      position: sticky;
+      bottom: 12px;
+      z-index: 90;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55);
     }
 
     .cart-item {
@@ -569,7 +623,6 @@
       color: var(--text-muted);
     }
 
-    /* مربعات صغيرة بجنب بعضهم في الأسفل */
     .highlights-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -735,16 +788,15 @@
       </section>
 
       <section id="stepMenu" class="hidden">
-        <div class="section-heading">
-          <div>
-            <button class="btn btn-ghost" id="backToRestaurantsBtn" type="button" style="margin-right: 10px;">
-              ← RETOUR
-            </button>
-            <span id="menuHeading">MENU</span>
-          </div>
+        <div class="menu-header-bar">
+          <button class="btn btn-ghost" id="backToRestaurantsBtn" type="button">
+            ← RETOUR
+          </button>
+          <h2 class="menu-resto-title" id="menuHeading">MENU</h2>
         </div>
 
-        <div class="menu-grid" id="menuGrid"></div>
+        <div class="menu-cat-pills" id="menuCatPills" aria-label="Catégories du menu"></div>
+        <div id="menuCategoriesContainer"></div>
 
         <div class="cart-summary-bar">
           <div>
@@ -903,6 +955,7 @@
       menus: [],
       pubs: [],
       selectedRestaurant: null,
+      selectedMenuCategory: "ALL",
       cart: {},
       gps: { lat: "", lng: "", mapUrl: "" }
     };
@@ -919,7 +972,8 @@
       dynamicCategoriesContainer: document.getElementById("dynamicCategoriesContainer"),
       backToRestaurantsBtn: document.getElementById("backToRestaurantsBtn"),
       menuHeading: document.getElementById("menuHeading"),
-      menuGrid: document.getElementById("menuGrid"),
+      menuCatPills: document.getElementById("menuCatPills"),
+      menuCategoriesContainer: document.getElementById("menuCategoriesContainer"),
       step2SummaryCount: document.getElementById("step2SummaryCount"),
       step2SummaryTotal: document.getElementById("step2SummaryTotal"),
       confirmCartBtn: document.getElementById("confirmCartBtn"),
@@ -1054,6 +1108,34 @@
       return `${label} — ${zoneUpper}`;
     }
 
+    function getMenuItemCategoryKey(item) {
+      const rawCat = String(getField(item, ["categorie", "catégorie", "category", "type", "famille"], "")).trim();
+      const norm = normalizeText(rawCat);
+      if (!norm) return "autres";
+      if (norm === "pizza" || norm === "pizzas") return "pizza";
+      if (norm === "tabouna" || norm === "tabounas") return "tabouna";
+      if (norm === "tacos") return "tacos";
+      if (norm === "burger" || norm === "burgers") return "burger";
+      if (norm === "bowl" || norm === "bowls") return "bowl";
+      if (norm === "ciabatta" || norm === "ciabattas") return "ciabatta";
+      return norm;
+    }
+
+    function getMenuItemCategoryLabel(catKey, sampleItem) {
+      const rawCat = String(getField(sampleItem, ["categorie", "catégorie", "category", "type", "famille"], "")).trim();
+      const map = {
+        pizza: "PIZZAS",
+        tabouna: "TABOUNA",
+        tacos: "TACOS",
+        burger: "BURGERS",
+        bowl: "BOWLS",
+        ciabatta: "CIABATTA",
+        autres: "AUTRES"
+      };
+      if (map[catKey]) return map[catKey];
+      return toUpper(rawCat || catKey);
+    }
+
     function formatPrice(val) {
       const cleaned = String(val ?? "0").replace(",", ".").replace(/[^\d.-]/g, "");
       const num = parseFloat(cleaned) || 0;
@@ -1142,6 +1224,7 @@
       `;
       card.addEventListener("click", () => {
         state.selectedRestaurant = r;
+        state.selectedMenuCategory = "ALL";
         state.cart = {};
         el.menuFeedback.className = "feedback-msg";
         el.menuFeedback.textContent = "";
@@ -1245,62 +1328,126 @@
       updateStep2Summary();
     }
 
+    function buildMenuCard(item, idx) {
+      const itemKey = getMenuItemId(item, idx);
+      const name = toUpper(getField(item, ["nom", "name", "plat", "titre"], "ARTICLE"));
+      const desc = getField(item, ["description", "desc", "details", "détails"], "");
+      const priceNum = parsePriceNum(getField(item, ["prix", "price", "tarif"], 0));
+      const currentQty = state.cart[itemKey]?.qty || 0;
+
+      const card = document.createElement("div");
+      card.className = "menu-card";
+      card.innerHTML = `
+        <div>
+          <div class="menu-title">${escapeHtml(name)}</div>
+          ${desc ? `<div class="menu-desc" style="margin-top: 4px;">${escapeHtml(desc)}</div>` : ""}
+        </div>
+        <div class="menu-footer">
+          <div class="menu-price">${formatPrice(priceNum)}</div>
+          <div class="qty-controls">
+            <button type="button" class="qty-btn qty-minus" aria-label="Diminuer">-</button>
+            <input type="number" min="0" class="qty-input" value="${currentQty}" aria-label="Quantité" />
+            <button type="button" class="qty-btn qty-plus" aria-label="Augmenter">+</button>
+          </div>
+        </div>
+      `;
+
+      const minusBtn = card.querySelector(".qty-minus");
+      const plusBtn = card.querySelector(".qty-plus");
+      const qtyInput = card.querySelector(".qty-input");
+
+      const syncInput = (val) => {
+        const safe = Math.max(0, parseInt(val, 10) || 0);
+        qtyInput.value = safe;
+        setCartQty(itemKey, { name, price: priceNum }, safe);
+      };
+
+      minusBtn.addEventListener("click", () => syncInput((parseInt(qtyInput.value, 10) || 0) - 1));
+      plusBtn.addEventListener("click", () => syncInput((parseInt(qtyInput.value, 10) || 0) + 1));
+      qtyInput.addEventListener("change", () => syncInput(qtyInput.value));
+
+      return card;
+    }
+
     function renderMenus() {
       const resto = state.selectedRestaurant;
       if (!resto) return;
 
       const restoName = toUpper(getField(resto, ["nom", "name", "restaurant", "titre"], "MENU"));
-      el.menuHeading.textContent = `MENU — ${restoName}`;
+      el.menuHeading.textContent = restoName;
       updateStep2Summary();
 
       const items = getRestaurantMenus();
       if (!items.length) {
-        el.menuGrid.innerHTML = `<p class="empty-state">Aucun article disponible pour ${escapeHtml(restoName)} pour le moment.</p>`;
+        el.menuCatPills.innerHTML = "";
+        el.menuCategoriesContainer.innerHTML = `<p class="empty-state">Aucun article disponible pour ${escapeHtml(restoName)} pour le moment.</p>`;
         return;
       }
 
-      el.menuGrid.innerHTML = "";
+      const catMap = new Map();
       items.forEach((item, idx) => {
-        const itemKey = getMenuItemId(item, idx);
-        const name = toUpper(getField(item, ["nom", "name", "plat", "titre"], "ARTICLE"));
-        const desc = getField(item, ["description", "desc", "details", "détails"], "");
-        const cat = toUpper(getField(item, ["categorie", "catégorie", "type", "famille"], "MENU"));
-        const priceNum = parsePriceNum(getField(item, ["prix", "price", "tarif"], 0));
-        const currentQty = state.cart[itemKey]?.qty || 0;
+        const catKey = getMenuItemCategoryKey(item);
+        if (!catMap.has(catKey)) {
+          catMap.set(catKey, {
+            key: catKey,
+            label: getMenuItemCategoryLabel(catKey, item),
+            entries: []
+          });
+        }
+        catMap.get(catKey).entries.push({ item, idx });
+      });
 
-        const card = document.createElement("div");
-        card.className = "menu-card";
-        card.innerHTML = `
-          <div>
-            <div class="menu-cat">${escapeHtml(cat)}</div>
-            <div class="menu-title">${escapeHtml(name)}</div>
-            ${desc ? `<div class="menu-desc" style="margin-top: 4px;">${escapeHtml(desc)}</div>` : ""}
-          </div>
-          <div class="menu-footer">
-            <div class="menu-price">${formatPrice(priceNum)}</div>
-            <div class="qty-controls">
-              <button type="button" class="qty-btn qty-minus" aria-label="Diminuer">-</button>
-              <input type="number" min="0" class="qty-input" value="${currentQty}" aria-label="Quantité" />
-              <button type="button" class="qty-btn qty-plus" aria-label="Augmenter">+</button>
-            </div>
-          </div>
-        `;
+      const allCategories = Array.from(catMap.values());
+      if (state.selectedMenuCategory !== "ALL" && !catMap.has(state.selectedMenuCategory)) {
+        state.selectedMenuCategory = "ALL";
+      }
 
-        const minusBtn = card.querySelector(".qty-minus");
-        const plusBtn = card.querySelector(".qty-plus");
-        const qtyInput = card.querySelector(".qty-input");
+      el.menuCatPills.innerHTML = "";
+      const allBtn = document.createElement("button");
+      allBtn.type = "button";
+      allBtn.className = `menu-pill-btn ${state.selectedMenuCategory === "ALL" ? "active" : ""}`;
+      allBtn.textContent = "TOUT";
+      allBtn.addEventListener("click", () => {
+        state.selectedMenuCategory = "ALL";
+        renderMenus();
+      });
+      el.menuCatPills.appendChild(allBtn);
 
-        const syncInput = (val) => {
-          const safe = Math.max(0, parseInt(val, 10) || 0);
-          qtyInput.value = safe;
-          setCartQty(itemKey, { name, price: priceNum }, safe);
-        };
+      allCategories.forEach((catObj) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = `menu-pill-btn ${state.selectedMenuCategory === catObj.key ? "active" : ""}`;
+        btn.textContent = catObj.label;
+        btn.addEventListener("click", () => {
+          state.selectedMenuCategory = catObj.key;
+          renderMenus();
+        });
+        el.menuCatPills.appendChild(btn);
+      });
 
-        minusBtn.addEventListener("click", () => syncInput((parseInt(qtyInput.value, 10) || 0) - 1));
-        plusBtn.addEventListener("click", () => syncInput((parseInt(qtyInput.value, 10) || 0) + 1));
-        qtyInput.addEventListener("change", () => syncInput(qtyInput.value));
+      const visibleCategories =
+        state.selectedMenuCategory === "ALL"
+          ? allCategories
+          : allCategories.filter((c) => c.key === state.selectedMenuCategory);
 
-        el.menuGrid.appendChild(card);
+      el.menuCategoriesContainer.innerHTML = "";
+      visibleCategories.forEach((catObj) => {
+        const block = document.createElement("div");
+        block.className = "menu-category-block";
+
+        const titleEl = document.createElement("div");
+        titleEl.className = "menu-category-title";
+        titleEl.textContent = catObj.label;
+
+        const gridEl = document.createElement("div");
+        gridEl.className = "menu-grid";
+        catObj.entries.forEach(({ item, idx }) => {
+          gridEl.appendChild(buildMenuCard(item, idx));
+        });
+
+        block.appendChild(titleEl);
+        block.appendChild(gridEl);
+        el.menuCategoriesContainer.appendChild(block);
       });
     }
 
@@ -1414,6 +1561,7 @@
     function bindEvents() {
       el.brandHomeBtn.addEventListener("click", () => {
         state.selectedRestaurant = null;
+        state.selectedMenuCategory = "ALL";
         state.cart = {};
         goToStep(1);
       });
@@ -1436,6 +1584,7 @@
       });
 
       el.backToRestaurantsBtn.addEventListener("click", () => {
+        state.selectedMenuCategory = "ALL";
         state.cart = {};
         goToStep(1);
       });
