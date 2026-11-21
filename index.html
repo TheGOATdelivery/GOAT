@@ -81,24 +81,15 @@
     }
 
     @keyframes marbleDrift {
-      0% {
-        transform: translate3d(-2%, -2%, 0) scale(1.02);
-      }
-      100% {
-        transform: translate3d(2%, 2%, 0) scale(1.07);
-      }
+      0% { transform: translate3d(-2%, -2%, 0) scale(1.02); }
+      100% { transform: translate3d(2%, 2%, 0) scale(1.07); }
     }
 
     @keyframes veinFlow {
-      0% {
-        transform: translate3d(0, 0, 0) rotate(0deg);
-      }
-      100% {
-        transform: translate3d(-2.5%, 1.5%, 0) rotate(1.5deg);
-      }
+      0% { transform: translate3d(0, 0, 0) rotate(0deg); }
+      100% { transform: translate3d(-2.5%, 1.5%, 0) rotate(1.5deg); }
     }
 
-    /* Floating Gold & Copper Dust Particles */
     .particles-layer {
       position: fixed;
       inset: 0;
@@ -116,23 +107,13 @@
     }
 
     @keyframes floatSpark {
-      0% {
-        transform: translateY(0) translateX(0) scale(0.7);
-        opacity: 0;
-      }
-      15% {
-        opacity: 0.75;
-      }
-      85% {
-        opacity: 0.55;
-      }
-      100% {
-        transform: translateY(-108vh) translateX(26px) scale(1.15);
-        opacity: 0;
-      }
+      0% { transform: translateY(0) translateX(0) scale(0.7); opacity: 0; }
+      15% { opacity: 0.75; }
+      85% { opacity: 0.55; }
+      100% { transform: translateY(-108vh) translateX(26px) scale(1.15); opacity: 0; }
     }
 
-    /* Sticky Topbar (Always visible while scrolling) */
+    /* Sticky Topbar */
     .topbar {
       position: sticky;
       top: 0;
@@ -189,12 +170,6 @@
       text-transform: uppercase;
     }
 
-    .nav-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
     .btn {
       border: none;
       border-radius: 999px;
@@ -206,20 +181,12 @@
       transition: transform 0.14s ease, background-color 0.2s ease, border-color 0.2s ease;
     }
 
-    .btn:active {
-      transform: scale(0.97);
-    }
+    .btn:active { transform: scale(0.97); }
 
     .btn-ghost {
       background: rgba(45, 55, 36, 0.85);
       color: var(--text-main);
       border: 1px solid var(--border-subtle);
-    }
-
-    .btn-ghost.active {
-      background: var(--copper-vivid);
-      color: #fff;
-      border-color: var(--copper-vivid);
     }
 
     .btn-copper {
@@ -228,9 +195,7 @@
       box-shadow: 0 6px 18px rgba(200, 90, 50, 0.35);
     }
 
-    .btn-copper:hover {
-      background: var(--copper-bright);
-    }
+    .btn-copper:hover { background: var(--copper-bright); }
 
     .btn-gold-outline {
       background: rgba(24, 31, 19, 0.7);
@@ -244,7 +209,7 @@
       padding: 22px 18px 40px;
     }
 
-    /* Hero Slogan ("MORE THAN JUST FOOD") */
+    /* Hero Slogan */
     .hero-section {
       text-align: center;
       padding: 14px 10px 22px;
@@ -268,10 +233,8 @@
       font-weight: 500;
     }
 
-    /* PUB Banner right below Hero */
-    .pub-section {
-      margin-bottom: 22px;
-    }
+    /* PUB Banner */
+    .pub-section { margin-bottom: 22px; }
 
     .pub-card {
       background: linear-gradient(125deg, rgba(200, 90, 50, 0.3), rgba(45, 55, 36, 0.9));
@@ -320,7 +283,7 @@
       border: 1px solid var(--gold-wood);
     }
 
-    /* Zone Switcher (AJIM first, HOUMT SOUK second) */
+    /* Zone Switcher */
     .zone-selector-wrap {
       display: flex;
       flex-direction: column;
@@ -365,30 +328,6 @@
       background: var(--copper-vivid);
       color: #ffffff;
       box-shadow: 0 4px 14px rgba(200, 90, 50, 0.45);
-    }
-
-    .stepper {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
-
-    .step-pill {
-      padding: 6px 13px;
-      border-radius: 999px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      background: rgba(24, 31, 19, 0.85);
-      color: var(--text-muted);
-      border: 1px solid var(--border-subtle);
-    }
-
-    .step-pill.active {
-      background: var(--copper-vivid);
-      color: #fff;
-      border-color: var(--copper-vivid);
     }
 
     .section-heading {
@@ -621,7 +560,6 @@
       color: var(--text-muted);
     }
 
-    /* Bottom Service Highlights */
     .service-highlights {
       margin-top: 34px;
       padding-top: 26px;
@@ -674,31 +612,6 @@
       letter-spacing: 0.04em;
     }
 
-    .steps-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      margin-top: 14px;
-    }
-
-    .step-item {
-      background: var(--bg-olive-deep);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
-      padding: 10px 8px;
-      text-align: center;
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-    }
-
-    .step-item.done {
-      border-color: var(--copper-bright);
-      background: rgba(200, 90, 50, 0.24);
-      color: var(--text-main);
-      font-weight: 700;
-    }
-
     .feedback-msg {
       margin-top: 12px;
       padding: 11px 14px;
@@ -707,9 +620,7 @@
       display: none;
     }
 
-    .feedback-msg.show {
-      display: block;
-    }
+    .feedback-msg.show { display: block; }
 
     .feedback-ok {
       background: rgba(82, 148, 99, 0.22);
@@ -729,14 +640,9 @@
       padding: 12px 0;
     }
 
-    .hidden {
-      display: none !important;
-    }
+    .hidden { display: none !important; }
 
     @media (max-width: 600px) {
-      .steps-row {
-        grid-template-columns: repeat(2, 1fr);
-      }
       .zone-btn {
         padding: 10px 18px;
         font-size: 0.9rem;
@@ -746,40 +652,34 @@
 </head>
 <body>
 
-  <!-- Animated Marble & Gold/Copper Particles -->
   <div class="marble-bg" aria-hidden="true"></div>
   <div class="marble-veins" aria-hidden="true"></div>
   <div class="particles-layer" id="particlesLayer" aria-hidden="true"></div>
 
-  <!-- Sticky Topbar -->
+  <!-- Sticky Topbar (Logo + Brand only) -->
   <header class="topbar">
     <div class="topbar-inner">
       <div class="brand" id="brandHomeBtn">
-        <img src="./logo.jpg" alt="Logo THE GOAT" class="brand-logo" />
+        <img src="./logo.png" alt="Logo THE GOAT" class="brand-logo" />
         <div>
           <div class="brand-name">THE GOAT</div>
           <div class="brand-sub">DJERBA DELIVERY</div>
         </div>
       </div>
-
-      <div class="nav-actions">
-        <button class="btn btn-ghost active" id="navOrderBtn" type="button">COMMANDER</button>
-        <button class="btn btn-ghost" id="navTrackBtn" type="button">SUIVRE</button>
-      </div>
     </div>
   </header>
 
   <main class="container">
-    <!-- Hero Section ("MORE THAN JUST FOOD") -->
+    <!-- Hero Section -->
     <section class="hero-section">
       <h1 class="hero-title">MORE THAN JUST FOOD</h1>
       <p class="hero-subtitle">Vos restaurants préférés livrés rapidement à Djerba</p>
     </section>
 
-    <!-- PUB Banner right below Hero -->
+    <!-- PUB Banner -->
     <section class="pub-section" id="pubSection" aria-label="Offres et publicités"></section>
 
-    <!-- Zone Selector (AJIM first, HOUMT SOUK second) -->
+    <!-- PAGE 1 : Zone Selector & Restaurants -->
     <div class="zone-selector-wrap" id="zoneSelectorWrap">
       <div class="zone-label">Choisissez votre zone</div>
       <div class="zone-tabs" role="tablist" aria-label="Zones de livraison">
@@ -792,25 +692,17 @@
       </div>
     </div>
 
-    <!-- Order Flow -->
     <div id="orderFlow">
-      <div class="stepper">
-        <span class="step-pill active" id="pillStep1">1. RESTAURANTS</span>
-        <span class="step-pill" id="pillStep2">2. MENU &amp; QUANTITÉS</span>
-        <span class="step-pill" id="pillStep3">3. GPS &amp; VALIDATION</span>
-      </div>
-
-      <!-- ÉTAPE 1 : Restaurants -->
+      <!-- ÉTAPE / PAGE 1 : Restaurants -->
       <section id="stepRestaurants">
         <div class="section-heading">
           <span id="restaurantsHeading">RESTAURANTS — AJIM</span>
           <button class="btn btn-gold-outline" id="reloadDataBtn" type="button">ACTUALISER</button>
         </div>
-
         <div class="restaurants-grid" id="restaurantsGrid"></div>
       </section>
 
-      <!-- ÉTAPE 2 : Menu + Quantités -->
+      <!-- ÉTAPE / PAGE 2 : Menu du restaurant -->
       <section id="stepMenu" class="hidden">
         <div class="section-heading">
           <div>
@@ -829,26 +721,26 @@
             <div style="font-weight: 700; color: var(--gold-soft); font-size: 1.04rem;" id="step2SummaryTotal">0.000 TND</div>
           </div>
           <button class="btn btn-copper" id="confirmCartBtn" type="button">
-            CONFIRMER LE PANIER →
+            CONTINUER VERS LA LIVRAISON →
           </button>
         </div>
         <div class="feedback-msg" id="menuFeedback"></div>
       </section>
 
-      <!-- ÉTAPE 3 : Coordonnées, GPS & Validation -->
+      <!-- ÉTAPE / PAGE 3 : Livraison, GPS & Paiement -->
       <section id="stepCheckout" class="panel hidden">
         <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 12px;">
           <h2 style="font-family: 'Cinzel', serif; color: var(--gold-soft); font-size: 1.12rem; text-transform: uppercase;">
-            FINALISER LA COMMANDE
+            LIVRAISON, GPS &amp; VALIDATION
           </h2>
           <button class="btn btn-ghost" id="backToMenuBtn" type="button">
-            ← MODIFIER LE PANIER
+            ← RETOUR AU MENU
           </button>
         </div>
 
         <div id="cartItems"></div>
         <div style="margin-top: 12px; display: flex; justify-content: space-between; font-weight: 700; color: var(--gold-soft); font-size: 1rem;">
-          <span>TOTAL À PAYER</span>
+          <span>TOTAL À PAYER (LIVRAISON INCLUSE SELON ZONE)</span>
           <span id="cartTotal">0.000 TND</span>
         </div>
 
@@ -869,8 +761,8 @@
           </div>
 
           <div class="input-group" style="margin-top: 12px;">
-            <label for="orderNotes">Notes de commande (optionnel)</label>
-            <textarea id="orderNotes" name="orderNotes" rows="2" placeholder="Sans piment, appeler à l'arrivée..."></textarea>
+            <label for="orderNotes">Notes de commande / Paiement (optionnel)</label>
+            <textarea id="orderNotes" name="orderNotes" rows="2" placeholder="Paiement à la livraison, sans piment, appeler à l'arrivée..."></textarea>
           </div>
 
           <div class="gps-row">
@@ -882,7 +774,7 @@
 
           <div style="margin-top: 16px;">
             <button type="submit" class="btn btn-copper" id="submitOrderBtn">
-              VALIDER LA COMMANDE
+              CONFIRMER &amp; ENVOYER LA COMMANDE
             </button>
           </div>
 
@@ -890,23 +782,6 @@
         </form>
       </section>
     </div>
-
-    <!-- Vue Suivi de commande -->
-    <section id="trackView" class="panel hidden" aria-label="Suivi de commande">
-      <h2 style="font-family: 'Cinzel', serif; color: var(--gold-soft); font-size: 1.12rem; text-transform: uppercase; margin-bottom: 8px;">
-        SUIVRE MA COMMANDE
-      </h2>
-      <p style="font-size: 0.86rem; color: var(--text-muted); margin-bottom: 14px;">
-        Saisissez votre numéro de téléphone ou votre référence de commande.
-      </p>
-
-      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-        <input class="input" id="trackQuery" type="text" placeholder="Téléphone ou référence" style="max-width: 320px;" />
-        <button class="btn btn-copper" id="trackSearchBtn" type="button">VÉRIFIER</button>
-      </div>
-
-      <div id="trackResult" style="margin-top: 16px;"></div>
-    </section>
 
     <!-- Bottom Service Highlights -->
     <section class="service-highlights" aria-label="Nos engagements">
@@ -944,7 +819,7 @@
         </div>
         <h3 class="highlight-title">TOUJOURS À VOTRE SERVICE</h3>
         <p class="highlight-text">
-          Localisation GPS précise et suivi simple de l'avancement de votre commande.
+          Localisation GPS précise pour une livraison rapide et sans accroc.
         </p>
       </div>
     </section>
@@ -957,6 +832,54 @@
   <script>
     const APPS_SCRIPT_URL =
       "https://script.google.com/macros/s/AKfycbwyUD3-fSG7Gz9VBdr-6b4EUiGeue5BEv31rtbGDz1Q5VK1j_O3NhwHCjwrRc12Xr9IXQ/exec";
+
+    const FALLBACK_DATA = {
+      restaurants: [
+        {
+          id: "big-ben",
+          nom: "BIG BEN",
+          zone: "Houmt Souk",
+          specialite: "BURGERS, BOWLS, TACOS & MAKLOUB",
+          frais_livraison: "3.000",
+          statut: "ouvert"
+        },
+        {
+          id: "ajim-grill",
+          nom: "AJIM GRILL & SNACK",
+          zone: "Ajim",
+          specialite: "SANDWICHS, GRILLADES & BOWLS",
+          frais_livraison: "2.500",
+          statut: "ouvert"
+        }
+      ],
+      menus: [
+        {
+          restaurant_id: "big-ben",
+          restaurant: "BIG BEN",
+          categorie: "BOWLS",
+          nom: "HEALTHY CHICKEN BOWL",
+          description: "Riz, poulet grillé, légumes frais et sauce maison",
+          prix: "12.500"
+        },
+        {
+          restaurant_id: "big-ben",
+          restaurant: "BIG BEN",
+          categorie: "BURGERS",
+          nom: "BIG BEN SIGNATURE BURGER",
+          description: "Steak ou crispy chicken, cheddar fondant, sauce spéciale",
+          prix: "11.000"
+        },
+        {
+          restaurant_id: "ajim-grill",
+          restaurant: "AJIM GRILL & SNACK",
+          categorie: "SPÉCIALITÉS",
+          nom: "MAKLOUB SPÉCIAL",
+          description: "Pâte maison dorée, garniture au choix et frites",
+          prix: "8.500"
+        }
+      ],
+      pubs: []
+    };
 
     const state = {
       step: 1,
@@ -971,14 +894,7 @@
 
     const el = {
       brandHomeBtn: document.getElementById("brandHomeBtn"),
-      orderFlow: document.getElementById("orderFlow"),
-      trackView: document.getElementById("trackView"),
-      navOrderBtn: document.getElementById("navOrderBtn"),
-      navTrackBtn: document.getElementById("navTrackBtn"),
       zoneSelectorWrap: document.getElementById("zoneSelectorWrap"),
-      pillStep1: document.getElementById("pillStep1"),
-      pillStep2: document.getElementById("pillStep2"),
-      pillStep3: document.getElementById("pillStep3"),
       stepRestaurants: document.getElementById("stepRestaurants"),
       stepMenu: document.getElementById("stepMenu"),
       stepCheckout: document.getElementById("stepCheckout"),
@@ -1001,10 +917,7 @@
       gpsStatus: document.getElementById("gpsStatus"),
       orderForm: document.getElementById("orderForm"),
       submitOrderBtn: document.getElementById("submitOrderBtn"),
-      orderFeedback: document.getElementById("orderFeedback"),
-      trackQuery: document.getElementById("trackQuery"),
-      trackSearchBtn: document.getElementById("trackSearchBtn"),
-      trackResult: document.getElementById("trackResult")
+      orderFeedback: document.getElementById("orderFeedback")
     };
 
     function escapeHtml(str) {
@@ -1041,26 +954,12 @@
       }
     }
 
-    function switchMainView(viewName) {
-      const isOrder = viewName === "order";
-      el.orderFlow.classList.toggle("hidden", !isOrder);
-      el.trackView.classList.toggle("hidden", isOrder);
-      el.zoneSelectorWrap.classList.toggle("hidden", !isOrder || state.step !== 1);
-      el.navOrderBtn.classList.toggle("active", isOrder);
-      el.navTrackBtn.classList.toggle("active", !isOrder);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
     function goToStep(stepNum) {
       state.step = stepNum;
       el.stepRestaurants.classList.toggle("hidden", stepNum !== 1);
       el.stepMenu.classList.toggle("hidden", stepNum !== 2);
       el.stepCheckout.classList.toggle("hidden", stepNum !== 3);
-      el.zoneSelectorWrap.classList.toggle("hidden", stepNum !== 1 || el.orderFlow.classList.contains("hidden"));
-
-      el.pillStep1.classList.toggle("active", stepNum === 1);
-      el.pillStep2.classList.toggle("active", stepNum === 2);
-      el.pillStep3.classList.toggle("active", stepNum === 3);
+      el.zoneSelectorWrap.classList.toggle("hidden", stepNum !== 1);
 
       if (stepNum === 2) renderMenus();
       if (stepNum === 3) renderCheckoutCart();
@@ -1119,6 +1018,22 @@
         if (match && Array.isArray(data[match])) return data[match];
       }
       return [];
+    }
+
+    function mergeWithFallback(sheetList, fallbackList, idKeys) {
+      const cleanSheet = Array.isArray(sheetList) ? sheetList : [];
+      if (!cleanSheet.length) return [...fallbackList];
+
+      const existingKeys = new Set(
+        cleanSheet.map((item) => normalizeText(getField(item, idKeys, "")))
+      );
+
+      const extras = fallbackList.filter((fb) => {
+        const fbKey = normalizeText(getField(fb, idKeys, ""));
+        return fbKey && !existingKeys.has(fbKey);
+      });
+
+      return [...cleanSheet, ...extras];
     }
 
     function renderPubs() {
@@ -1332,15 +1247,21 @@
         const res = await fetch(`${APPS_SCRIPT_URL}?action=init`, { cache: "no-store" });
         const data = await res.json();
 
-        state.restaurants = extractArray(data, ["restaurants", "RESTAURANTS", "restaurant"]);
-        state.menus = extractArray(data, ["menus", "MENUS", "menu"]);
-        state.pubs = extractArray(data, ["pub", "PUB", "pubs"]);
+        const rawRestos = extractArray(data, ["restaurants", "RESTAURANTS", "restaurant"]);
+        const rawMenus = extractArray(data, ["menus", "MENUS", "menu"]);
+        const rawPubs = extractArray(data, ["pub", "PUB", "pubs"]);
 
-        renderPubs();
-        renderRestaurants();
+        state.restaurants = mergeWithFallback(rawRestos, FALLBACK_DATA.restaurants, ["nom", "name", "id"]);
+        state.menus = mergeWithFallback(rawMenus, FALLBACK_DATA.menus, ["nom", "name", "plat"]);
+        state.pubs = rawPubs;
       } catch (err) {
-        el.restaurantsGrid.innerHTML = `<p class="empty-state">Impossible de charger les données pour le moment. Réessayez.</p>`;
+        state.restaurants = [...FALLBACK_DATA.restaurants];
+        state.menus = [...FALLBACK_DATA.menus];
+        state.pubs = [];
       }
+
+      renderPubs();
+      renderRestaurants();
     }
 
     function requestGps() {
@@ -1430,73 +1351,11 @@
         showFeedback(el.orderFeedback, "Erreur lors de l'envoi de la commande. Veuillez réessayer.", false);
       } finally {
         el.submitOrderBtn.disabled = false;
-        el.submitOrderBtn.textContent = "VALIDER LA COMMANDE";
+        el.submitOrderBtn.textContent = "CONFIRMER & ENVOYER LA COMMANDE";
       }
     }
 
-    function getStatusStepIndex(statusRaw) {
-      const s = normalizeText(statusRaw);
-      if (["livre", "livree", "livrée", "delivered", "termine", "terminée", "done"].some((k) => s.includes(k))) return 3;
-      if (["en livraison", "livraison", "route", "out for delivery", "driver"].some((k) => s.includes(k))) return 2;
-      if (["preparation", "préparation", "en cours", "prepare", "preparing", "accepte", "acceptée"].some((k) => s.includes(k))) return 1;
-      return 0;
-    }
-
-    async function searchOrder() {
-      const q = el.trackQuery.value.trim();
-      if (!q) {
-        el.trackResult.innerHTML = `<p class="empty-state">Veuillez saisir un numéro de téléphone ou une référence.</p>`;
-        return;
-      }
-
-      el.trackResult.innerHTML = `<p class="empty-state">Recherche en cours...</p>`;
-      try {
-        const res = await fetch(`${APPS_SCRIPT_URL}?action=track&q=${encodeURIComponent(q)}`, { cache: "no-store" });
-        const data = await res.json();
-        const orders = Array.isArray(data) ? data : extractArray(data, ["orders", "commandes", "results", "data"]);
-
-        if (!orders.length) {
-          el.trackResult.innerHTML = `<p class="empty-state">Aucune commande trouvée pour "${escapeHtml(q)}".</p>`;
-          return;
-        }
-
-        el.trackResult.innerHTML = orders
-          .map((o) => {
-            const ref = toUpper(getField(o, ["id", "reference", "ref", "order_id", "commande_id"], "COMMANDE"));
-            const status = toUpper(getField(o, ["statut", "status", "etat", "état"], "REÇUE"));
-            const resto = toUpper(getField(o, ["restaurant", "resto", "nom_restaurant"], ""));
-            const total = getField(o, ["total", "montant"], "");
-            const activeIdx = getStatusStepIndex(status);
-            const steps = ["REÇUE", "EN PRÉPARATION", "EN LIVRAISON", "LIVRÉE"];
-
-            return `
-              <div class="resto-card" style="cursor: default; margin-bottom: 12px;">
-                <div class="resto-top">
-                  <div class="resto-name">RÉF : ${escapeHtml(ref)}</div>
-                  <span class="badge badge-open">${escapeHtml(status)}</span>
-                </div>
-                ${resto ? `<div class="resto-meta">RESTAURANT : ${escapeHtml(resto)}</div>` : ""}
-                ${total !== "" ? `<div class="resto-meta" style="color: var(--gold-soft); margin-top: 4px;">TOTAL : ${escapeHtml(formatPrice(total))}</div>` : ""}
-                <div class="steps-row">
-                  ${steps.map((st, i) => `<div class="step-item ${i <= activeIdx ? "done" : ""}">${st}</div>`).join("")}
-                </div>
-              </div>
-            `;
-          })
-          .join("");
-      } catch (err) {
-        el.trackResult.innerHTML = `<p class="empty-state">Impossible de vérifier la commande pour le moment.</p>`;
-      }
-    }
-
-    // Event Listeners
-    el.brandHomeBtn.addEventListener("click", () => {
-      switchMainView("order");
-      goToStep(1);
-    });
-
-    el.navOrderBtn.addEventListener("click", () => switchMainView("order"));
-    el.navTrackBtn.addEventListener("click", () => switchMainView("track"));
+    el.brandHomeBtn.addEventListener("click", () => goToStep(1));
 
     el.zoneBtns.forEach((btn) => {
       btn.addEventListener("click", () => {
@@ -1508,7 +1367,6 @@
     });
 
     el.reloadDataBtn.addEventListener("click", fetchSheetData);
-
     el.backToRestaurantsBtn.addEventListener("click", () => goToStep(1));
     el.backToMenuBtn.addEventListener("click", () => goToStep(2));
 
@@ -1524,13 +1382,6 @@
 
     el.gpsBtn.addEventListener("click", requestGps);
     el.orderForm.addEventListener("submit", submitOrder);
-    el.trackSearchBtn.addEventListener("click", searchOrder);
-    el.trackQuery.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        searchOrder();
-      }
-    });
 
     initParticles();
     fetchSheetData();
