@@ -1078,7 +1078,7 @@
         const rawName = getField(r, ["nom", "name", "restaurant", "titre"], "RESTAURANT");
         const name = toUpper(rawName);
         const cuisine = getField(r, ["specialite", "spécialité", "categorie", "catégorie", "cuisine", "type"], "");
-        const deliveryFee = getField(r, ["frais_livraison", "livraison", "delivery_fee", "frais"], "");
+        const deliveryFee = "");
         const open = isRestaurantOpen(r);
 
         const card = document.createElement("div");
@@ -1089,7 +1089,6 @@
             <span class="badge ${open ? "badge-open" : "badge-closed"}">${open ? "OUVERT" : "FERMÉ"}</span>
           </div>
           ${cuisine ? `<div class="resto-meta">${escapeHtml(cuisine)}</div>` : ""}
-          ${deliveryFee !== "" ? `<div class="resto-meta" style="margin-top: 6px; color: var(--gold-soft);">Livraison : ${escapeHtml(formatPrice(deliveryFee))}</div>` : ""}
         `;
 
         card.addEventListener("click", () => {
