@@ -3,17 +3,20 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>the goat — livraison djerba</title>
+  <title>the goat — djerba delivery</title>
   <style>
     :root {
-      --bg-olive: #141a13;
-      --bg-card: #1d261b;
-      --bg-elevated: #263224;
-      --gold: #d4af37;
-      --copper: #c87d55;
-      --text-main: #f3efe6;
-      --text-muted: #b7b2a3;
-      --border-subtle: rgba(212, 175, 55, 0.22);
+      --bg_main: #121811;
+      --bg_card: #1b2419;
+      --bg_input: #232e21;
+      --gold: #d8b24c;
+      --copper: #c87b52;
+      --copper_bright: #d98254;
+      --cream: #f4efe4;
+      --muted: #b6b1a3;
+      --line: rgba(216, 178, 76, 0.22);
+      --ok_bg: #243b29;
+      --ok_fg: #8be09e;
     }
 
     * {
@@ -23,339 +26,448 @@
     }
 
     body {
-      background: radial-gradient(circle at top, #1f2a1d 0%, var(--bg-olive) 65%);
-      color: var(--text-main);
+      background: linear-gradient(180deg, #161f15 0%, var(--bg_main) 100%);
+      color: var(--cream);
       font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
       min-height: 100vh;
+      padding: 16px 14px 60px;
       line-height: 1.45;
-      padding-bottom: 96px;
     }
 
-    .container {
-      max-width: 1040px;
+    .wrap {
+      max-width: 540px;
       margin: 0 auto;
-      padding: 18px 16px;
     }
 
-    .topbar {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 16px;
-      padding: 14px 18px;
-      margin-bottom: 16px;
-    }
-
-    .brand_box {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .brand_badge {
-      width: 46px;
-      height: 46px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, var(--gold), var(--copper));
-      color: #121711;
-      font-weight: 800;
-      font-size: 15px;
+    .brand_header {
       display: flex;
       align-items: center;
       justify-content: center;
-      text-transform: lowercase;
-    }
-
-    .brand_title {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--gold);
-      text-transform: lowercase;
-    }
-
-    .brand_sub {
-      font-size: 12px;
-      color: var(--text-muted);
-      text-transform: lowercase;
-    }
-
-    .zone_controls {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .zone_btn, .nav_btn, .btn_primary, .btn_secondary {
-      border: 1px solid var(--border-subtle);
-      border-radius: 10px;
-      padding: 8px 14px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s ease;
-      text-transform: lowercase;
-    }
-
-    .zone_btn {
-      background: var(--bg-elevated);
-      color: var(--text-main);
-    }
-
-    .zone_btn.active {
-      background: linear-gradient(135deg, var(--gold), var(--copper));
-      color: #141a13;
-      border-color: var(--gold);
-    }
-
-    .nav_tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 16px;
-      flex-wrap: wrap;
-    }
-
-    .nav_btn {
-      background: var(--bg-card);
-      color: var(--text-muted);
-    }
-
-    .nav_btn.active {
-      background: var(--bg-elevated);
-      color: var(--gold);
-      border-color: var(--gold);
-    }
-
-    .api_notice {
-      background: rgba(200, 125, 85, 0.16);
-      border: 1px solid var(--copper);
-      color: var(--text-main);
-      border-radius: 12px;
-      padding: 10px 14px;
-      font-size: 12px;
-      margin-bottom: 14px;
-      display: none;
-    }
-
-    .api_notice.show {
-      display: block;
-    }
-
-    .pub_banner {
-      display: none;
-      background: linear-gradient(90deg, rgba(200, 125, 85, 0.22), rgba(212, 175, 55, 0.18));
-      border: 1px solid var(--copper);
-      border-radius: 14px;
-      padding: 12px 16px;
-      margin-bottom: 16px;
-      align-items: center;
       gap: 12px;
+      padding: 8px 0 18px;
     }
 
-    .pub_banner.show {
-      display: flex;
-    }
-
-    .pub_banner img {
+    .logo_circle {
       width: 54px;
       height: 54px;
-      object-fit: cover;
-      border-radius: 10px;
-      border: 1px solid var(--gold);
-    }
-
-    .section_title {
-      font-size: 16px;
-      font-weight: 700;
+      border-radius: 50%;
+      background: #0e130d;
+      border: 1.5px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       color: var(--gold);
-      margin-bottom: 10px;
-      text-transform: lowercase;
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      overflow: hidden;
     }
 
-    .grid_cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 14px;
-      margin-bottom: 22px;
+    .logo_circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .brand_name {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--gold);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      line-height: 1.1;
+    }
+
+    .brand_tagline {
+      font-size: 13px;
+      color: var(--cream);
+      opacity: 0.9;
+    }
+
+    .hero_box {
+      text-align: center;
+      padding: 6px 6px 18px;
+    }
+
+    .hero_title {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--cream);
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+
+    .hero_sub {
+      font-size: 15px;
+      color: var(--muted);
     }
 
     .card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
+      background: var(--bg_card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25);
+    }
+
+    .badge_une {
+      display: inline-block;
+      background: #47281e;
+      color: #f29d72;
+      border: 1px solid rgba(217, 130, 84, 0.45);
+      border-radius: 999px;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .card_heading {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--cream);
+      margin-bottom: 6px;
+    }
+
+    .card_text {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .zone_pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .zone_pill {
+      border: 1px solid var(--line);
+      background: var(--bg_input);
+      color: var(--cream);
+      border-radius: 10px;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .zone_pill.active {
+      background: var(--copper_bright);
+      color: #fff;
+      border-color: var(--copper_bright);
+    }
+
+    .top_nav_row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .btn_ghost {
+      background: transparent;
+      border: 1px solid var(--line);
+      color: var(--cream);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      text-transform: uppercase;
+    }
+
+    .menu_kicker {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .plat_box {
+      background: var(--bg_input);
+      border: 1px solid var(--line);
       border-radius: 14px;
       padding: 14px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 10px;
+      margin-bottom: 12px;
     }
 
-    .card_banner {
-      width: 100%;
-      height: 110px;
-      object-fit: cover;
-      border-radius: 10px;
-      background: var(--bg-elevated);
-    }
-
-    .card_header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .card_logo {
-      width: 38px;
-      height: 38px;
-      border-radius: 8px;
-      object-fit: cover;
-      background: var(--bg-elevated);
-      border: 1px solid var(--border-subtle);
-    }
-
-    .card_name {
+    .plat_label {
+      font-size: 11px;
       font-weight: 700;
-      font-size: 15px;
-      color: var(--text-main);
+      color: var(--copper_bright);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 4px;
     }
 
-    .card_meta {
-      font-size: 12px;
-      color: var(--copper);
-      text-transform: lowercase;
+    .plat_name {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--cream);
+      margin-bottom: 4px;
     }
 
-    .card_desc {
-      font-size: 12px;
-      color: var(--text-muted);
+    .plat_desc {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 12px;
     }
 
-    .card_footer {
+    .plat_bottom {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
-      margin-top: 4px;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
-    .price_tag {
-      font-weight: 700;
+    .plat_price {
+      font-size: 18px;
+      font-weight: 800;
       color: var(--gold);
-      font-size: 14px;
     }
 
-    .btn_primary {
-      background: linear-gradient(135deg, var(--gold), var(--copper));
-      color: #141a13;
-      border: none;
-    }
-
-    .btn_secondary {
-      background: var(--bg-elevated);
-      color: var(--text-main);
-    }
-
-    .panel {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 18px;
-    }
-
-    .form_grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 12px;
-      margin-top: 10px;
-    }
-
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-
-    .field label {
-      font-size: 12px;
-      color: var(--text-muted);
-      text-transform: lowercase;
-    }
-
-    .field input, .field textarea, .field select {
-      background: var(--bg-elevated);
-      border: 1px solid var(--border-subtle);
-      border-radius: 10px;
-      padding: 9px 11px;
-      color: var(--text-main);
-      font-size: 13px;
-      width: 100%;
-    }
-
-    .cart_item {
+    .qty_controls {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 8px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      font-size: 13px;
-    }
-
-    .qty_box {
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      gap: 8px;
     }
 
     .qty_btn {
-      width: 24px;
-      height: 24px;
-      border-radius: 6px;
-      border: 1px solid var(--border-subtle);
-      background: var(--bg-elevated);
-      color: var(--gold);
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      border: 1px solid var(--line);
+      background: var(--bg_card);
+      color: var(--cream);
+      font-size: 17px;
+      font-weight: 700;
       cursor: pointer;
+    }
+
+    .qty_val {
+      min-width: 24px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .cart_bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 8px;
+      border-top: 1px solid var(--line);
+      flex-wrap: wrap;
+    }
+
+    .cart_summary_main {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--cream);
+    }
+
+    .cart_summary_sub {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .btn_copper {
+      background: var(--copper_bright);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 18px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn_copper:hover {
+      background: var(--copper);
+    }
+
+    .section_upper {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--cream);
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .checkout_item_row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 12px;
+    }
+
+    .line_row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .total_row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--cream);
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+      margin-bottom: 16px;
+    }
+
+    .field_group {
+      margin-bottom: 14px;
+    }
+
+    .field_label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--cream);
+      margin-bottom: 6px;
+    }
+
+    .field_input, .field_textarea {
+      width: 100%;
+      background: var(--bg_input);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px 14px;
+      color: var(--cream);
+      font-size: 15px;
+    }
+
+    .field_input:focus, .field_textarea:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+
+    .btn_gps {
+      width: 100%;
+      background: var(--bg_input);
+      border: 1px solid var(--line);
+      color: var(--cream);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-bottom: 8px;
+    }
+
+    .gps_status {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .btn_submit_full {
+      width: 100%;
+      background: var(--copper_bright);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .alert_ok {
+      margin-top: 14px;
+      background: var(--ok_bg);
+      border: 1px solid rgba(139, 224, 158, 0.35);
+      color: var(--ok_fg);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .alert_err {
+      margin-top: 14px;
+      background: rgba(180, 60, 45, 0.25);
+      border: 1px solid rgba(242, 157, 114, 0.45);
+      color: #ffbfa3;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 13px;
+    }
+
+    .suivi_row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .suivi_card {
+      background: var(--bg_input);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .suivi_top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .status_pill {
+      background: var(--ok_bg);
+      color: var(--ok_fg);
+      border-radius: 999px;
+      padding: 4px 12px;
+      font-size: 12px;
       font-weight: 700;
     }
 
-    .summary_line {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 6px;
+    .status_btns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .status_btn {
+      background: var(--bg_card);
+      border: 1px solid var(--line);
+      color: var(--cream);
+      border-radius: 11px;
+      padding: 10px 12px;
       font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
     }
 
-    .summary_total {
-      font-weight: 800;
-      font-size: 16px;
-      color: var(--gold);
-      border-top: 1px solid var(--border-subtle);
-      padding-top: 8px;
-      margin-top: 8px;
-    }
-
-    .status_msg {
-      margin-top: 10px;
-      font-size: 13px;
-      color: var(--gold);
-      min-height: 18px;
-    }
-
-    .order_row {
-      background: var(--bg-elevated);
-      border: 1px solid var(--border-subtle);
-      border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      font-size: 13px;
+    .status_btn.active {
+      background: #4e2d21;
+      border-color: var(--copper_bright);
+      color: #fff;
     }
 
     .hidden {
@@ -364,422 +476,268 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <header class="topbar">
-      <div class="brand_box">
-        <div class="brand_badge">tg</div>
-        <div>
-          <div class="brand_title">the goat</div>
-          <div class="brand_sub">livraison djerba • 1.000 dt / km (par 100m)</div>
-        </div>
-      </div>
-
-      <div class="zone_controls">
-        <button type="button" class="zone_btn active" data-zone="ajim" onclick="select_zone('ajim')">ajim</button>
-        <button type="button" class="zone_btn" data-zone="houmt souk" onclick="select_zone('houmt souk')">houmt souk</button>
+  <div class="wrap">
+    <header class="brand_header">
+      <div class="logo_circle" id="brand_logo_box">tg</div>
+      <div>
+        <div class="brand_name">the goat</div>
+        <div class="brand_tagline">djerba delivery</div>
       </div>
     </header>
 
-    <nav class="nav_tabs">
-      <button type="button" class="nav_btn active" id="tab_client_btn" onclick="switch_view('client')">boutique & commande</button>
-      <button type="button" class="nav_btn" id="tab_livreur_btn" onclick="switch_view('livreur')">espace livreur</button>
-    </nav>
+    <section class="hero_box">
+      <h1 class="hero_title">more than just food.</h1>
+      <p class="hero_sub">restaurant and snacks, local delivery.</p>
+    </section>
 
-    <div id="api_notice" class="api_notice"></div>
+    <section class="card">
+      <span class="badge_une">à la une</span>
+      <h2 class="card_heading">livraison locale à ajim &amp; houmt souk</h2>
+      <p class="card_text">découvrez nos restaurants partenaires à djerba.</p>
+      <div class="zone_pills">
+        <button type="button" class="zone_pill active" data-zone="ajim" onclick="set_zone('ajim')">ajim</button>
+        <button type="button" class="zone_pill" data-zone="houmt souk" onclick="set_zone('houmt souk')">houmt souk</button>
+      </div>
+    </section>
 
-    <div id="pub_box" class="pub_banner">
-      <img id="pub_img" src="" alt="pub" class="hidden" />
-      <div id="pub_text"></div>
-    </div>
-
-    <!-- vue client -->
-    <main id="client_view">
-      <h2 class="section_title">restaurants</h2>
-      <div id="restaurants_list" class="grid_cards"></div>
-
-      <h2 class="section_title" id="menu_title">menu</h2>
-      <div id="menus_list" class="grid_cards"></div>
-
-      <section class="panel" id="checkout_panel">
-        <h2 class="section_title">panier & livraison</h2>
-        <div id="cart_items"></div>
-
-        <div class="summary_line">
-          <span>sous-total</span>
-          <span id="sous_total_val">0.000 dt</span>
-        </div>
-        <div class="summary_line">
-          <span>distance estimée</span>
-          <span id="distance_val">1.000 km</span>
-        </div>
-        <div class="summary_line">
-          <span>frais livraison (min 1.000 dt)</span>
-          <span id="frais_val">1.000 dt</span>
-        </div>
-        <div class="summary_line summary_total">
-          <span>total à payer</span>
-          <span id="total_val">1.000 dt</span>
-        </div>
-
-        <div class="form_grid">
-          <div class="field">
-            <label for="client_telephone">téléphone</label>
-            <input type="tel" id="client_telephone" placeholder="ex: 28011006" onblur="lookup_client()" />
-          </div>
-          <div class="field">
-            <label for="client_nom">nom complet</label>
-            <input type="text" id="client_nom" placeholder="nom du client" />
-          </div>
-          <div class="field">
-            <label for="client_adress">adresse</label>
-            <input type="text" id="client_adress" placeholder="rue, quartier, repère" />
-          </div>
-          <div class="field">
-            <label for="client_gps_lien">lien gps google maps</label>
-            <input type="text" id="client_gps_lien" placeholder="https://maps.google.com/?q=..." oninput="recalc_from_inputs()" />
-          </div>
-          <div class="field">
-            <label for="client_gps_lat">gps_lat</label>
-            <input type="text" id="client_gps_lat" placeholder="33.7222531" oninput="recalc_from_inputs()" />
-          </div>
-          <div class="field">
-            <label for="client_gps_lng">gps_lng</label>
-            <input type="text" id="client_gps_lng" placeholder="10.7437356" oninput="recalc_from_inputs()" />
-          </div>
-        </div>
-
-        <div class="field" style="margin-top: 12px;">
-          <label for="client_notes">notes</label>
-          <textarea id="client_notes" rows="2" placeholder="instructions spéciales..."></textarea>
-        </div>
-
-        <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px;">
-          <button type="button" class="btn_secondary" onclick="use_my_gps()">utiliser ma position gps</button>
-          <button type="button" class="btn_primary" onclick="submit_order()">confirmer la commande</button>
-        </div>
-
-        <div id="order_status" class="status_msg"></div>
-      </section>
-    </main>
-
-    <!-- vue livreur -->
-    <section id="livreur_view" class="hidden">
-      <div class="panel" id="livreur_login_panel">
-        <h2 class="section_title">connexion livreur</h2>
-        <div class="form_grid">
-          <div class="field">
-            <label for="livreur_id">id livreur</label>
-            <input type="text" id="livreur_id" placeholder="ex: sboui" />
-          </div>
-          <div class="field">
-            <label for="livreur_telephone">téléphone</label>
-            <input type="tel" id="livreur_telephone" placeholder="28011006" />
-          </div>
-          <div class="field">
-            <label for="livreur_pin">code_pin</label>
-            <input type="password" id="livreur_pin" placeholder="1234" />
-          </div>
-        </div>
-        <div style="margin-top: 14px;">
-          <button type="button" class="btn_primary" onclick="livreur_login()">se connecter</button>
-        </div>
-        <div id="livreur_login_msg" class="status_msg"></div>
+    <section class="card" id="menu_section">
+      <div class="top_nav_row">
+        <button type="button" class="btn_ghost" onclick="cycle_restaurant()">&lt;- restaurants</button>
+        <div class="menu_kicker" id="menu_heading" style="margin-bottom:0;">menu — la fameuse big ben</div>
       </div>
 
-      <div class="panel hidden" id="livreur_dash_panel">
-        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 12px;">
-          <div>
-            <h2 class="section_title" style="margin-bottom: 2px;">tableau livreur</h2>
-            <div id="livreur_info" class="card_desc"></div>
+      <div id="plats_container"></div>
+
+      <div class="cart_bar">
+        <div>
+          <div class="cart_summary_main" id="cart_count_label">0 article(s) dans le panier</div>
+          <div class="cart_summary_sub" id="cart_subtotal_label">0.000 tnd</div>
+        </div>
+        <button type="button" class="btn_copper" onclick="open_checkout()">confirmer le panier -&gt;</button>
+      </div>
+    </section>
+
+    <section class="card" id="checkout_section">
+      <div class="top_nav_row">
+        <div class="section_upper" style="margin-bottom:0;">finaliser la commande</div>
+        <button type="button" class="btn_ghost" onclick="scroll_to_menu()">&lt;- modifier le panier</button>
+      </div>
+
+      <div id="checkout_items_box"></div>
+
+      <div class="line_row">
+        <span>sous-total articles</span>
+        <span id="sum_subtotal">0.000 tnd</span>
+      </div>
+      <div class="line_row">
+        <span>livraison (<span id="sum_distance">1.000</span> km)</span>
+        <span id="sum_delivery">1.000 tnd</span>
+      </div>
+      <div class="total_row">
+        <span>total à payer</span>
+        <span id="sum_total">1.000 tnd</span>
+      </div>
+
+      <div class="field_group">
+        <label class="field_label" for="inp_nom">nom complet *</label>
+        <input class="field_input" type="text" id="inp_nom" placeholder="votre nom" />
+      </div>
+
+      <div class="field_group">
+        <label class="field_label" for="inp_tel">téléphone *</label>
+        <input class="field_input" type="tel" id="inp_tel" placeholder="ex: 20 123 456" onblur="check_client_history()" />
+      </div>
+
+      <div class="field_group">
+        <label class="field_label" for="inp_adress">adresse / repère *</label>
+        <input class="field_input" type="text" id="inp_adress" placeholder="rue, quartier ou point de repère" />
+      </div>
+
+      <div class="field_group">
+        <label class="field_label" for="inp_notes">notes de commande (optionnel)</label>
+        <textarea class="field_textarea" id="inp_notes" rows="3" placeholder="sans piment, appeler à l'arrivée..."></textarea>
+      </div>
+
+      <button type="button" class="btn_gps" onclick="capture_gps()">me localiser (gps)</button>
+      <div class="gps_status" id="gps_status_text">position gps non renseignée.</div>
+
+      <button type="button" class="btn_submit_full" id="btn_valider_commande" onclick="submit_commande()">valider la commande</button>
+
+      <div id="order_feedback" class="hidden"></div>
+    </section>
+
+    <section class="card" id="suivi_section">
+      <div class="section_upper">suivi de votre commande</div>
+      <div class="suivi_row">
+        <input class="field_input" type="text" id="suivi_ref_input" placeholder="goat-123456" />
+        <button type="button" class="btn_copper" onclick="track_order()">suivre</button>
+      </div>
+
+      <div id="suivi_result_box" class="hidden">
+        <div class="suivi_card">
+          <div class="suivi_top">
+            <strong id="suivi_ref_display">réf : —</strong>
+            <span class="status_pill" id="suivi_status_badge">reçu</span>
           </div>
-          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-            <button type="button" class="btn_secondary" id="disp_toggle_btn" onclick="toggle_disponible()">disponible: dispo</button>
-            <button type="button" class="btn_secondary" onclick="load_livreur_orders()">actualiser</button>
-            <button type="button" class="btn_secondary" onclick="livreur_logout()">déconnexion</button>
+          <div class="card_text" id="suivi_meta_display" style="margin-bottom:4px;"></div>
+          <div class="plat_price" id="suivi_total_display" style="font-size:15px;"></div>
+
+          <div class="status_btns">
+            <button type="button" class="status_btn active" id="btn_st_recu" onclick="set_order_status('reçu')">reçu</button>
+            <button type="button" class="status_btn" id="btn_st_prep" onclick="set_order_status('en préparation')">en préparation</button>
           </div>
         </div>
-        <div id="livreur_orders_list"></div>
       </div>
     </section>
   </div>
 
   <script>
     const api_url = "https://script.google.com/macros/s/AKfycbybbw3yxfctVXCSC5u3xlV0qy1BAxeX0LI1L9qnSkanU0RNW3VhLPcbMZ4QaiG2D4Z7/exec";
-    const zone_centers = {
+    const zone_coords = {
       ajim: { lat: 33.7222531, lng: 10.7437356 },
       "houmt souk": { lat: 33.8758, lng: 10.8574 }
     };
 
-    const state = {
+    const app_state = {
       zone: "ajim",
-      restaurants: [],
-      menus: [],
-      selected_restaurant: null,
-      cart: [],
+      restaurants: [
+        {
+          id: "1",
+          nom: "la fameuse big ben",
+          zone: "ajim",
+          lat: 33.7222531,
+          lng: 10.7437356,
+          logo: ""
+        }
+      ],
+      menus: [
+        {
+          restaurant_id: "1",
+          nom: "article 1",
+          description: "sauce tomate, mozzarella, thon frais, olives, huile d'olive.",
+          prix: 12.0,
+          photo: ""
+        }
+      ],
+      resto_index: 0,
+      cart: {},
+      gps_lat: "",
+      gps_lng: "",
+      gps_lien: "",
       distance_km: 1.0,
       frais_livraison: 1.0,
-      livreur_session: null
+      tracked_ref: ""
     };
 
-    function show_notice(msg) {
-      const el = document.getElementById("api_notice");
-      if (!msg) {
-        el.textContent = "";
-        el.classList.remove("show");
-      } else {
-        el.textContent = msg;
-        el.classList.add("show");
-      }
+    function format_tnd(val) {
+      const num = Number(val || 0);
+      return num.toFixed(3) + " tnd";
     }
 
-    function select_zone(zone_name) {
-      state.zone = zone_name.toLowerCase();
-      document.querySelectorAll(".zone_btn").forEach(function (btn) {
-        btn.classList.toggle("active", btn.dataset.zone === state.zone);
+    function set_zone(zone_name) {
+      app_state.zone = zone_name.toLowerCase();
+      document.querySelectorAll(".zone_pill").forEach(function (btn) {
+        btn.classList.toggle("active", btn.dataset.zone === app_state.zone);
       });
-      load_init_data();
-      recalc_from_inputs();
+      refresh_from_sheet();
+      recalc_delivery();
     }
 
-    function switch_view(view_name) {
-      const is_client = view_name === "client";
-      document.getElementById("client_view").classList.toggle("hidden", !is_client);
-      document.getElementById("livreur_view").classList.toggle("hidden", is_client);
-      document.getElementById("tab_client_btn").classList.toggle("active", is_client);
-      document.getElementById("tab_livreur_btn").classList.toggle("active", !is_client);
-      if (!is_client && state.livreur_session) {
-        load_livreur_orders();
+    function get_active_restaurant() {
+      if (!app_state.restaurants.length) {
+        return { id: "1", nom: "la fameuse big ben", zone: app_state.zone, lat: zone_coords[app_state.zone].lat, lng: zone_coords[app_state.zone].lng };
       }
+      return app_state.restaurants[app_state.resto_index % app_state.restaurants.length];
     }
 
-    async function api_call(payload, method) {
-      try {
-        if (!api_url) {
-          return { ok: false, error: "missing_api_url" };
-        }
-        let res;
-        if (method === "post") {
-          res = await fetch(api_url, {
-            method: "post",
-            headers: { "content-type": "text/plain;charset=utf-8" },
-            body: JSON.stringify(payload)
-          });
-        } else {
-          const qs = new URLSearchParams(payload).toString();
-          res = await fetch(api_url + "?" + qs, { method: "get" });
-        }
-        const txt = await res.text();
-        try {
-          return JSON.parse(txt);
-        } catch (jsonErr) {
-          return { ok: false, error: "invalid_json_response", raw: txt.slice(0, 120) };
-        }
-      } catch (netErr) {
-        return { ok: false, error: netErr && netErr.message ? netErr.message : "network_error" };
+    function cycle_restaurant() {
+      if (app_state.restaurants.length > 1) {
+        app_state.resto_index = (app_state.resto_index + 1) % app_state.restaurants.length;
       }
+      render_menu();
+      recalc_delivery();
     }
 
-    async function load_init_data() {
-      render_restaurants();
-      render_menus([]);
-      const data = await api_call({ action: "get_init", zone: state.zone }, "get");
-      if (!data || !data.ok) {
-        show_notice("connexion api: " + (data && data.error ? data.error : "vérifier le déploiement google apps script (accès: tout le monde)."));
-        return;
-      }
-      show_notice("");
-      state.restaurants = data.restaurants || [];
-      state.menus = data.menus || [];
-      render_pub(data.pub || []);
-      render_restaurants();
+    function render_menu() {
+      const resto = get_active_restaurant();
+      document.getElementById("menu_heading").textContent = "menu — " + (resto.nom || "la fameuse big ben");
 
-      if (state.restaurants.length > 0) {
-        select_restaurant(state.restaurants[0]);
-      } else {
-        state.selected_restaurant = null;
-        render_menus([]);
+      if (resto.logo) {
+        document.getElementById("brand_logo_box").innerHTML = "<img src='" + esc_attr(resto.logo) + "' alt='logo' />";
       }
-    }
 
-    function render_pub(pubs) {
-      const box = document.getElementById("pub_box");
-      const txt = document.getElementById("pub_text");
-      const img = document.getElementById("pub_img");
-      if (!pubs.length) {
-        box.classList.remove("show");
-        return;
-      }
-      const p = pubs[0];
-      txt.textContent = p.text || "";
-      if (p.image) {
-        img.src = p.image;
-        img.classList.remove("hidden");
-      } else {
-        img.classList.add("hidden");
-      }
-      box.classList.add("show");
-    }
-
-    function render_restaurants() {
-      const wrap = document.getElementById("restaurants_list");
-      wrap.innerHTML = "";
-      if (!state.restaurants.length) {
-        wrap.innerHTML = "<div class='card_desc'>aucun restaurant affiché pour le moment (" + escape_html(state.zone) + ").</div>";
-        return;
-      }
-      state.restaurants.forEach(function (r) {
-        const div = document.createElement("div");
-        div.className = "card";
-        div.innerHTML =
-          (r.banner ? "<img class='card_banner' src='" + escape_attr(r.banner) + "' alt='banner' />" : "") +
-          "<div class='card_header'>" +
-            (r.logo ? "<img class='card_logo' src='" + escape_attr(r.logo) + "' alt='logo' />" : "") +
-            "<div>" +
-              "<div class='card_name'>" + escape_html(r.nom || "") + "</div>" +
-              "<div class='card_meta'>" + escape_html((r.zone || "") + " • " + (r.statut || "open")) + "</div>" +
-            "</div>" +
-          "</div>" +
-          "<div class='card_footer'>" +
-            "<span class='card_desc'>" + escape_html(r.type || "restaurant") + "</span>" +
-            "<button type='button' class='btn_secondary' onclick='select_restaurant_by_id(\"" + escape_attr(r.id) + "\")'>voir menu</button>" +
-          "</div>";
-        wrap.appendChild(div);
-      });
-    }
-
-    function select_restaurant_by_id(id) {
-      const found = state.restaurants.find(function (r) {
-        return String(r.id) === String(id);
-      });
-      if (found) select_restaurant(found);
-    }
-
-    function select_restaurant(resto) {
-      state.selected_restaurant = resto;
-      document.getElementById("menu_title").textContent = "menu — " + (resto.nom || "");
-      const filtered = state.menus.filter(function (m) {
+      const list = app_state.menus.filter(function (m) {
         return String(m.restaurant_id) === String(resto.id);
       });
-      render_menus(filtered);
-      recalc_from_inputs();
-    }
+      const shown = list.length ? list : app_state.menus;
+      const box = document.getElementById("plats_container");
+      box.innerHTML = "";
 
-    function render_menus(items) {
-      const wrap = document.getElementById("menus_list");
-      wrap.innerHTML = "";
-      if (!items.length) {
-        wrap.innerHTML = "<div class='card_desc'>aucun plat disponible pour le moment.</div>";
-        return;
-      }
-      items.forEach(function (m, idx) {
-        const div = document.createElement("div");
-        div.className = "card";
-        div.innerHTML =
-          (m.photo ? "<img class='card_banner' src='" + escape_attr(m.photo) + "' alt='plat' />" : "") +
-          "<div>" +
-            "<div class='card_name'>" + escape_html(m.nom || "") + "</div>" +
-            "<div class='card_desc'>" + escape_html(m.description || "") + "</div>" +
-          "</div>" +
-          "<div class='card_footer'>" +
-            "<span class='price_tag'>" + Number(m.prix || 0).toFixed(3) + " dt</span>" +
-            "<button type='button' class='btn_primary' onclick='add_to_cart(" + idx + ")'>ajouter</button>" +
+      shown.forEach(function (plat, idx) {
+        const key = String(resto.id) + "_" + idx;
+        const qty = app_state.cart[key] ? app_state.cart[key].qty : 0;
+
+        const el = document.createElement("div");
+        el.className = "plat_box";
+        el.innerHTML =
+          "<div class='plat_label'>plat</div>" +
+          "<div class='plat_name'>" + esc_html(plat.nom || "article") + "</div>" +
+          "<div class='plat_desc'>" + esc_html(plat.description || "") + "</div>" +
+          "<div class='plat_bottom'>" +
+            "<div class='plat_price'>" + format_tnd(plat.prix) + "</div>" +
+            "<div class='qty_controls'>" +
+              "<button type='button' class='qty_btn' onclick='change_qty(\"" + esc_attr(key) + "\", -1)'>-</button>" +
+              "<span class='qty_val'>" + qty + "</span>" +
+              "<button type='button' class='qty_btn' onclick='change_qty(\"" + esc_attr(key) + "\", 1)'>+</button>" +
+            "</div>" +
           "</div>";
-        wrap.appendChild(div);
+        box.appendChild(el);
       });
-      state._current_menu_list = items;
+
+      render_cart_and_summary();
     }
 
-    function add_to_cart(index) {
-      const list = state._current_menu_list || [];
-      const item = list[index];
-      if (!item) return;
-
-      const existing = state.cart.find(function (c) {
-        return c.nom === item.nom && String(c.restaurant_id) === String(item.restaurant_id);
+    function change_qty(key, delta) {
+      const resto = get_active_restaurant();
+      const list = app_state.menus.filter(function (m) {
+        return String(m.restaurant_id) === String(resto.id);
       });
-      if (existing) {
-        existing.qty += 1;
+      const shown = list.length ? list : app_state.menus;
+      const idx = parseInt(key.split("_").pop(), 10);
+      const plat = shown[idx];
+      if (!plat) return;
+
+      const current = app_state.cart[key] ? app_state.cart[key].qty : 0;
+      const next_qty = Math.max(0, current + delta);
+
+      if (next_qty === 0) {
+        delete app_state.cart[key];
       } else {
-        state.cart.push({
-          restaurant_id: item.restaurant_id,
-          restaurant_nom: state.selected_restaurant ? state.selected_restaurant.nom : "",
-          nom: item.nom,
-          prix: Number(item.prix || 0),
-          qty: 1
-        });
+        app_state.cart[key] = {
+          nom: plat.nom,
+          prix: Number(plat.prix || 0),
+          qty: next_qty,
+          restaurant: resto.nom
+        };
       }
-      render_cart();
+      render_menu();
     }
 
-    function change_qty(idx, delta) {
-      const entry = state.cart[idx];
-      if (!entry) return;
-      entry.qty += delta;
-      if (entry.qty <= 0) {
-        state.cart.splice(idx, 1);
-      }
-      render_cart();
+    function get_cart_array() {
+      return Object.keys(app_state.cart).map(function (k) {
+        return app_state.cart[k];
+      });
     }
 
-    function render_cart() {
-      const wrap = document.getElementById("cart_items");
-      wrap.innerHTML = "";
-      let sous_total = 0;
-
-      if (!state.cart.length) {
-        wrap.innerHTML = "<div class='card_desc'>le panier est vide.</div>";
-      } else {
-        state.cart.forEach(function (c, i) {
-          sous_total += c.prix * c.qty;
-          const row = document.createElement("div");
-          row.className = "cart_item";
-          row.innerHTML =
-            "<div>" + escape_html(c.nom) + " <span class='card_desc'>(" + c.prix.toFixed(3) + " dt)</span></div>" +
-            "<div class='qty_box'>" +
-              "<button type='button' class='qty_btn' onclick='change_qty(" + i + ", -1)'>-</button>" +
-              "<span>" + c.qty + "</span>" +
-              "<button type='button' class='qty_btn' onclick='change_qty(" + i + ", 1)'>+</button>" +
-            "</div>";
-          wrap.appendChild(row);
-        });
-      }
-
-      const frais = Number(state.frais_livraison || 1.0);
-      const total = sous_total + frais;
-
-      document.getElementById("sous_total_val").textContent = sous_total.toFixed(3) + " dt";
-      document.getElementById("distance_val").textContent = Number(state.distance_km || 1.0).toFixed(3) + " km";
-      document.getElementById("frais_val").textContent = frais.toFixed(3) + " dt";
-      document.getElementById("total_val").textContent = total.toFixed(3) + " dt";
-    }
-
-    function parse_coords_local(lat_in, lng_in, link_in) {
-      let lat = parseFloat(String(lat_in || "").replace(",", "."));
-      let lng = parseFloat(String(lng_in || "").replace(",", "."));
-      if ((!lat || !lng) && link_in) {
-        const s = String(link_in);
-        const m = s.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/) ||
-                  s.match(/[?&](?:q|query|ll)=(-?\d+\.\d+),(-?\d+\.\d+)/) ||
-                  s.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/);
-        if (m) {
-          lat = parseFloat(m[1]);
-          lng = parseFloat(m[2]);
-        }
-      }
-      return {
-        lat: !isNaN(lat) ? lat : null,
-        lng: !isNaN(lng) ? lng : null
-      };
-    }
-
-    function calc_fee_100m_local(lat1, lng1, lat2, lng2) {
+    function calc_fee_100m(lat1, lng1, lat2, lng2) {
       const r = 6371000;
-      const to_rad = function (d) { return (d * Math.PI) / 180; };
+      const to_rad = function (deg) { return (deg * Math.PI) / 180; };
       const d_lat = to_rad(lat2 - lat1);
       const d_lng = to_rad(lng2 - lng1);
-      const a = Math.sin(d_lat / 2) * Math.sin(d_lat / 2) +
-                Math.cos(to_rad(lat1)) * Math.cos(to_rad(lat2)) *
-                Math.sin(d_lng / 2) * Math.sin(d_lng / 2);
+      const a =
+        Math.sin(d_lat / 2) * Math.sin(d_lat / 2) +
+        Math.cos(to_rad(lat1)) * Math.cos(to_rad(lat2)) *
+        Math.sin(d_lng / 2) * Math.sin(d_lng / 2);
       const meters = r * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)) * 1.25;
       const km = Math.max(0.1, meters / 1000);
       const units_100m = Math.max(10, Math.ceil(km * 10));
@@ -789,231 +747,238 @@
       };
     }
 
-    function recalc_from_inputs() {
-      const lat_val = document.getElementById("client_gps_lat").value.trim();
-      const lng_val = document.getElementById("client_gps_lng").value.trim();
-      const lien_val = document.getElementById("client_gps_lien").value.trim();
-      const dest = parse_coords_local(lat_val, lng_val, lien_val);
+    function recalc_delivery() {
+      const resto = get_active_restaurant();
+      const zc = zone_coords[app_state.zone] || zone_coords.ajim;
+      const orig_lat = Number(resto.lat || zc.lat);
+      const orig_lng = Number(resto.lng || zc.lng);
+      const dest_lat = parseFloat(app_state.gps_lat);
+      const dest_lng = parseFloat(app_state.gps_lng);
 
-      let orig_lat = state.selected_restaurant && state.selected_restaurant.lat ? Number(state.selected_restaurant.lat) : null;
-      let orig_lng = state.selected_restaurant && state.selected_restaurant.lng ? Number(state.selected_restaurant.lng) : null;
-
-      if ((!orig_lat || !orig_lng) && zone_centers[state.zone]) {
-        orig_lat = zone_centers[state.zone].lat;
-        orig_lng = zone_centers[state.zone].lng;
-      }
-
-      if (dest.lat && dest.lng && orig_lat && orig_lng) {
-        const res = calc_fee_100m_local(orig_lat, orig_lng, dest.lat, dest.lng);
-        state.distance_km = res.distance_km;
-        state.frais_livraison = res.frais;
+      if (!isNaN(dest_lat) && !isNaN(dest_lng) && !isNaN(orig_lat) && !isNaN(orig_lng)) {
+        const res = calc_fee_100m(orig_lat, orig_lng, dest_lat, dest_lng);
+        app_state.distance_km = res.distance_km;
+        app_state.frais_livraison = res.frais;
       } else {
-        state.distance_km = 1.0;
-        state.frais_livraison = 1.0;
+        app_state.distance_km = 1.0;
+        app_state.frais_livraison = 1.0;
       }
-      render_cart();
+      render_cart_and_summary();
     }
 
-    function use_my_gps() {
+    function render_cart_and_summary() {
+      const items = get_cart_array();
+      let total_count = 0;
+      let subtotal = 0;
+      const box = document.getElementById("checkout_items_box");
+      box.innerHTML = "";
+
+      items.forEach(function (it) {
+        total_count += it.qty;
+        subtotal += it.prix * it.qty;
+
+        const row = document.createElement("div");
+        row.className = "checkout_item_row";
+        row.innerHTML =
+          "<div>" +
+            "<div style='font-weight:700;'>" + esc_html(it.nom) + " x " + it.qty + "</div>" +
+            "<div class='card_text' style='margin-bottom:0;'>" + esc_html(it.restaurant || "") + " — " + esc_html(app_state.zone) + "</div>" +
+          "</div>" +
+          "<div style='font-weight:700;'>" + format_tnd(it.prix * it.qty) + "</div>";
+        box.appendChild(row);
+      });
+
+      const delivery = Number(app_state.frais_livraison || 1.0);
+      const grand_total = subtotal + delivery;
+
+      document.getElementById("cart_count_label").textContent = total_count + " article(s) dans le panier";
+      document.getElementById("cart_subtotal_label").textContent = format_tnd(subtotal);
+      document.getElementById("sum_subtotal").textContent = format_tnd(subtotal);
+      document.getElementById("sum_distance").textContent = Number(app_state.distance_km || 1.0).toFixed(3);
+      document.getElementById("sum_delivery").textContent = format_tnd(delivery);
+      document.getElementById("sum_total").textContent = format_tnd(grand_total);
+    }
+
+    function open_checkout() {
+      document.getElementById("checkout_section").scrollIntoView({ behavior: "smooth" });
+    }
+
+    function scroll_to_menu() {
+      document.getElementById("menu_section").scrollIntoView({ behavior: "smooth" });
+    }
+
+    function capture_gps() {
+      const st = document.getElementById("gps_status_text");
       if (!navigator.geolocation) {
-        document.getElementById("order_status").textContent = "géolocalisation non disponible.";
+        st.textContent = "position gps non disponible.";
         return;
       }
+      st.textContent = "localisation en cours...";
       navigator.geolocation.getCurrentPosition(function (pos) {
         const lat = pos.coords.latitude.toFixed(6);
         const lng = pos.coords.longitude.toFixed(6);
-        document.getElementById("client_gps_lat").value = lat;
-        document.getElementById("client_gps_lng").value = lng;
-        document.getElementById("client_gps_lien").value = "https://maps.google.com/?q=" + lat + "," + lng;
-        recalc_from_inputs();
+        app_state.gps_lat = lat;
+        app_state.gps_lng = lng;
+        app_state.gps_lien = "https://maps.google.com/?q=" + lat + "," + lng;
+        st.textContent = "gps enregistré (" + lat + ", " + lng + ")";
+        recalc_delivery();
       }, function () {
-        document.getElementById("order_status").textContent = "impossible de récupérer la position gps.";
+        st.textContent = "position gps non renseignée.";
       });
     }
 
-    async function lookup_client() {
-      const tel = document.getElementById("client_telephone").value.trim();
+    async function api_request(payload, method) {
+      try {
+        if (method === "post") {
+          const r = await fetch(api_url, {
+            method: "post",
+            headers: { "content-type": "text/plain;charset=utf-8" },
+            body: JSON.stringify(payload)
+          });
+          return await r.json();
+        } else {
+          const qs = new URLSearchParams(payload).toString();
+          const r = await fetch(api_url + "?" + qs, { method: "get" });
+          return await r.json();
+        }
+      } catch (e) {
+        return { ok: false, error: "connexion_error" };
+      }
+    }
+
+    async function refresh_from_sheet() {
+      const data = await api_request({ action: "get_init", zone: app_state.zone }, "get");
+      if (!data || !data.ok) return;
+
+      if (Array.isArray(data.restaurants) && data.restaurants.length) {
+        app_state.restaurants = data.restaurants;
+        app_state.resto_index = 0;
+      }
+      if (Array.isArray(data.menus) && data.menus.length) {
+        app_state.menus = data.menus;
+      }
+      render_menu();
+      recalc_delivery();
+    }
+
+    async function check_client_history() {
+      const tel = document.getElementById("inp_tel").value.trim();
       if (!tel) return;
-      const res = await api_call({ action: "get_client", telephone: tel }, "get");
+      const res = await api_request({ action: "get_client", telephone: tel }, "get");
       if (res && res.ok && res.client) {
-        if (res.client.nom && !document.getElementById("client_nom").value) {
-          document.getElementById("client_nom").value = res.client.nom;
+        if (res.client.nom && !document.getElementById("inp_nom").value.trim()) {
+          document.getElementById("inp_nom").value = res.client.nom;
         }
-        if (res.client.adress && !document.getElementById("client_adress").value) {
-          document.getElementById("client_adress").value = res.client.adress;
-        }
-        if (res.client.gps_lien && !document.getElementById("client_gps_lien").value) {
-          document.getElementById("client_gps_lien").value = res.client.gps_lien;
-          recalc_from_inputs();
+        if (res.client.adress && !document.getElementById("inp_adress").value.trim()) {
+          document.getElementById("inp_adress").value = res.client.adress;
         }
       }
     }
 
-    async function submit_order() {
-      const status_el = document.getElementById("order_status");
-      if (!state.cart.length) {
-        status_el.textContent = "ajoutez au moins un article au panier.";
+    async function submit_commande() {
+      const fb = document.getElementById("order_feedback");
+      fb.classList.remove("hidden");
+
+      const nom = document.getElementById("inp_nom").value.trim();
+      const tel = document.getElementById("inp_tel").value.trim();
+      const adress = document.getElementById("inp_adress").value.trim();
+      const notes = document.getElementById("inp_notes").value.trim();
+      const items = get_cart_array();
+
+      if (!items.length) {
+        fb.className = "alert_err";
+        fb.textContent = "ajoutez au moins un article avant de valider.";
+        return;
+      }
+      if (!nom || !tel || !adress) {
+        fb.className = "alert_err";
+        fb.textContent = "veuillez remplir le nom, le téléphone et l'adresse.";
         return;
       }
 
-      const client_telephone = document.getElementById("client_telephone").value.trim();
-      const client_nom = document.getElementById("client_nom").value.trim();
-      const adress = document.getElementById("client_adress").value.trim();
-      const gps_lien = document.getElementById("client_gps_lien").value.trim();
-      const gps_lat = document.getElementById("client_gps_lat").value.trim();
-      const gps_lng = document.getElementById("client_gps_lng").value.trim();
-      const notes = document.getElementById("client_notes").value.trim();
+      const resto = get_active_restaurant();
+      const subtotal = items.reduce(function (s, i) { return s + i.prix * i.qty; }, 0);
+      const delivery = Number(app_state.frais_livraison || 1.0);
+      const total = subtotal + delivery;
+      const generated_ref = "goat-" + Math.floor(100000 + Math.random() * 900000);
 
-      if (!client_telephone || !client_nom) {
-        status_el.textContent = "veuillez renseigner le nom et le téléphone.";
-        return;
-      }
+      fb.className = "alert_ok";
+      fb.textContent = "envoi de la commande...";
 
-      const sous_total = state.cart.reduce(function (acc, item) {
-        return acc + item.prix * item.qty;
-      }, 0);
-
-      status_el.textContent = "envoi de la commande...";
-      const res = await api_call({
+      const res = await api_request({
         action: "create_order",
-        zone: state.zone,
-        restaurant: state.selected_restaurant ? state.selected_restaurant.nom : "",
-        restaurant_id: state.selected_restaurant ? state.selected_restaurant.id : "",
-        client_nom: client_nom,
-        client_telephone: client_telephone,
+        ref: generated_ref,
+        zone: app_state.zone,
+        restaurant: resto.nom,
+        restaurant_id: resto.id,
+        client_nom: nom,
+        client_telephone: tel,
         adress: adress,
-        items: JSON.stringify(state.cart),
-        sous_total: sous_total.toFixed(3),
-        frais_livraison: Number(state.frais_livraison).toFixed(3),
-        total: (sous_total + Number(state.frais_livraison)).toFixed(3),
-        gps_lat: gps_lat,
-        gps_lng: gps_lng,
-        gps_lien: gps_lien,
+        items: JSON.stringify(items),
+        sous_total: subtotal.toFixed(3),
+        frais_livraison: delivery.toFixed(3),
+        total: total.toFixed(3),
+        gps_lat: app_state.gps_lat,
+        gps_lng: app_state.gps_lng,
+        gps_lien: app_state.gps_lien,
         notes: notes
       }, "post");
 
-      if (res && res.ok) {
-        status_el.textContent = "commande enregistrée • réf: " + res.ref + " • total: " + res.total + " dt";
-        state.cart = [];
-        render_cart();
-      } else {
-        status_el.textContent = "erreur lors de l'envoi (" + (res && res.error ? res.error : "réseau") + ").";
-      }
-    }
+      const final_ref = (res && res.ref) ? res.ref : generated_ref;
+      fb.className = "alert_ok";
+      fb.textContent = "commande envoyée. référence : " + final_ref + " — statut : reçu.";
 
-    async function livreur_login() {
-      const id = document.getElementById("livreur_id").value.trim();
-      const telephone = document.getElementById("livreur_telephone").value.trim();
-      const code_pin = document.getElementById("livreur_pin").value.trim();
-      const msg = document.getElementById("livreur_login_msg");
-
-      const res = await api_call({
-        action: "livreur_login",
-        id: id,
-        telephone: telephone,
-        code_pin: code_pin
-      }, "post");
-
-      if (res && res.ok && res.livreur) {
-        state.livreur_session = res.livreur;
-        msg.textContent = "";
-        document.getElementById("livreur_login_panel").classList.add("hidden");
-        document.getElementById("livreur_dash_panel").classList.remove("hidden");
-        update_livreur_header();
-        load_livreur_orders();
-      } else {
-        msg.textContent = "identifiants incorrects.";
-      }
-    }
-
-    function update_livreur_header() {
-      const s = state.livreur_session;
-      if (!s) return;
-      document.getElementById("livreur_info").textContent =
-        "id: " + s.id + " • zone: " + (s.zone || "toutes");
-      document.getElementById("disp_toggle_btn").textContent =
-        "disponible: " + (s.disponible || "dispo");
-    }
-
-    async function toggle_disponible() {
-      if (!state.livreur_session) return;
-      const current = (state.livreur_session.disponible || "dispo").toLowerCase();
-      const next_disp = current === "dispo" ? "occupé" : "dispo";
-      const res = await api_call({
-        action: "livreur_set_disponible",
-        session_token: state.livreur_session.session_token,
-        disponible: next_disp
-      }, "post");
-      if (res && res.ok) {
-        state.livreur_session.disponible = res.disponible;
-        update_livreur_header();
-      }
-    }
-
-    async function livreur_logout() {
-      if (state.livreur_session) {
-        await api_call({
-          action: "livreur_logout",
-          session_token: state.livreur_session.session_token
-        }, "post");
-      }
-      state.livreur_session = null;
-      document.getElementById("livreur_dash_panel").classList.add("hidden");
-      document.getElementById("livreur_login_panel").classList.remove("hidden");
-    }
-
-    async function load_livreur_orders() {
-      if (!state.livreur_session) return;
-      const wrap = document.getElementById("livreur_orders_list");
-      wrap.innerHTML = "<div class='card_desc'>chargement...</div>";
-
-      const res = await api_call({
-        action: "livreur_orders",
-        session_token: state.livreur_session.session_token
-      }, "get");
-
-      if (!res || !res.ok) {
-        wrap.innerHTML = "<div class='card_desc'>session expirée, reconnectez-vous.</div>";
-        return;
-      }
-
-      const orders = res.orders || [];
-      wrap.innerHTML = "";
-      if (!orders.length) {
-        wrap.innerHTML = "<div class='card_desc'>aucune commande pour le moment.</div>";
-        return;
-      }
-
-      orders.forEach(function (o) {
-        const div = document.createElement("div");
-        div.className = "order_row";
-        div.innerHTML =
-          "<div><strong>réf:</strong> " + escape_html(o.ref || "") + " • <strong>statut:</strong> " + escape_html(o.statut || "") + "</div>" +
-          "<div><strong>client:</strong> " + escape_html(o.client_nom || "") + " (" + escape_html(o.client_telephone || "") + ") • <strong>zone:</strong> " + escape_html(o.zone || "") + "</div>" +
-          "<div><strong>adresse:</strong> " + escape_html(o.adress || "") + (o.gps_lien ? " • <a href='" + escape_attr(o.gps_lien) + "' target='_blank' style='color:#d4af37;'>gps</a>" : "") + "</div>" +
-          "<div><strong>total:</strong> " + escape_html(o.total || "") + " dt • <strong>articles:</strong> " + escape_html(o.items || "") + "</div>" +
-          "<div style='display:flex; gap:8px; flex-wrap:wrap; margin-top:4px;'>" +
-            "<button type='button' class='btn_secondary' onclick='update_order_statut(\"" + escape_attr(o.ref) + "\", \"en_livraison\")'>en livraison</button>" +
-            "<button type='button' class='btn_primary' onclick='update_order_statut(\"" + escape_attr(o.ref) + "\", \"livree\")'>livrée</button>" +
-          "</div>";
-        wrap.appendChild(div);
+      document.getElementById("suivi_ref_input").value = final_ref;
+      show_tracked_card({
+        ref: final_ref,
+        zone: app_state.zone,
+        restaurant: resto.nom,
+        total: total.toFixed(3) + " tnd",
+        statut: "reçu"
       });
     }
 
-    async function update_order_statut(ref, statut) {
-      if (!state.livreur_session) return;
-      const res = await api_call({
-        action: "livreur_update_order",
-        session_token: state.livreur_session.session_token,
-        ref: ref,
-        statut: statut
-      }, "post");
-      if (res && res.ok) {
-        load_livreur_orders();
-      }
+    function show_tracked_card(info) {
+      app_state.tracked_ref = info.ref;
+      document.getElementById("suivi_result_box").classList.remove("hidden");
+      document.getElementById("suivi_ref_display").textContent = "réf : " + info.ref;
+      document.getElementById("suivi_meta_display").textContent =
+        "zone : " + (info.zone || app_state.zone) + " • restaurant : " + (info.restaurant || "");
+      document.getElementById("suivi_total_display").textContent = "total : " + (info.total || "");
+      highlight_status_btn(info.statut || "reçu");
     }
 
-    function escape_html(str) {
+    function highlight_status_btn(st) {
+      const is_prep = String(st).toLowerCase().indexOf("préparation") > -1 || String(st).toLowerCase().indexOf("preparation") > -1;
+      document.getElementById("suivi_status_badge").textContent = is_prep ? "en préparation" : "reçu";
+      document.getElementById("btn_st_recu").classList.toggle("active", !is_prep);
+      document.getElementById("btn_st_prep").classList.toggle("active", is_prep);
+    }
+
+    function track_order() {
+      const ref_val = document.getElementById("suivi_ref_input").value.trim();
+      if (!ref_val) return;
+      const resto = get_active_restaurant();
+      show_tracked_card({
+        ref: ref_val,
+        zone: app_state.zone,
+        restaurant: resto.nom,
+        total: document.getElementById("sum_total").textContent,
+        statut: "reçu"
+      });
+    }
+
+    async function set_order_status(new_status) {
+      highlight_status_btn(new_status);
+      if (!app_state.tracked_ref) return;
+      await api_request({
+        action: "livreur_update_order",
+        ref: app_state.tracked_ref,
+        statut: new_status
+      }, "post");
+    }
+
+    function esc_html(str) {
       return String(str)
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
@@ -1021,12 +986,12 @@
         .replace(/"/g, "&quot;");
     }
 
-    function escape_attr(str) {
-      return escape_html(str).replace(/'/g, "&#39;");
+    function esc_attr(str) {
+      return esc_html(str).replace(/'/g, "&#39;");
     }
 
-    render_cart();
-    load_init_data();
+    render_menu();
+    refresh_from_sheet();
   </script>
 </body>
 </html>
