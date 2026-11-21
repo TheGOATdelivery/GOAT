@@ -12,7 +12,6 @@
       --bg-olive: #232b1c;
       --bg-olive-deep: #181f13;
       --surface-olive: rgba(45, 55, 36, 0.88);
-      --surface-elevated: rgba(54, 66, 43, 0.94);
       --border-subtle: rgba(197, 155, 82, 0.28);
       --gold-wood: #c59b52;
       --gold-soft: #e3c58b;
@@ -45,7 +44,6 @@
       position: relative;
     }
 
-    /* Animated Dark Olive & Gold Marble Background */
     .marble-bg {
       position: fixed;
       inset: -15%;
@@ -113,7 +111,6 @@
       100% { transform: translateY(-108vh) translateX(26px) scale(1.15); opacity: 0; }
     }
 
-    /* Sticky Topbar */
     .topbar {
       position: sticky;
       top: 0;
@@ -131,14 +128,14 @@
       margin: 0 auto;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 12px;
+      justify-content: flex-start;
     }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 11px;
+    .brand-stack {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
       cursor: pointer;
     }
 
@@ -155,7 +152,7 @@
     .brand-name {
       font-family: 'Cinzel', serif;
       font-weight: 800;
-      font-size: 1.28rem;
+      font-size: 1.24rem;
       letter-spacing: 0.08em;
       color: var(--gold-wood);
       line-height: 1.1;
@@ -164,9 +161,10 @@
 
     .brand-sub {
       font-size: 0.78rem;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--gold-soft);
-      letter-spacing: 0.04em;
+      letter-spacing: 0.05em;
+      line-height: 1.15;
       text-transform: uppercase;
     }
 
@@ -209,7 +207,6 @@
       padding: 22px 18px 40px;
     }
 
-    /* Hero Slogan */
     .hero-section {
       text-align: center;
       padding: 14px 10px 22px;
@@ -233,7 +230,6 @@
       font-weight: 500;
     }
 
-    /* PUB Banner */
     .pub-section { margin-bottom: 22px; }
 
     .pub-card {
@@ -283,7 +279,6 @@
       border: 1px solid var(--gold-wood);
     }
 
-    /* Zone Switcher */
     .zone-selector-wrap {
       display: flex;
       flex-direction: column;
@@ -656,30 +651,26 @@
   <div class="marble-veins" aria-hidden="true"></div>
   <div class="particles-layer" id="particlesLayer" aria-hidden="true"></div>
 
-  <!-- Sticky Topbar (Logo + Brand only) -->
+  <!-- Topbar: Logo + THE GOAT + DJERBA DELIVERY stacked -->
   <header class="topbar">
     <div class="topbar-inner">
-      <div class="brand" id="brandHomeBtn">
+      <div class="brand-stack" id="brandHomeBtn">
         <img src="./logo.png" alt="Logo THE GOAT" class="brand-logo" />
-        <div>
-          <div class="brand-name">THE GOAT</div>
-          <div class="brand-sub">DJERBA DELIVERY</div>
-        </div>
+        <div class="brand-name">THE GOAT</div>
+        <div class="brand-sub">DJERBA DELIVERY</div>
       </div>
     </div>
   </header>
 
   <main class="container">
-    <!-- Hero Section -->
     <section class="hero-section">
       <h1 class="hero-title">MORE THAN JUST FOOD</h1>
       <p class="hero-subtitle">Vos restaurants préférés livrés rapidement à Djerba</p>
     </section>
 
-    <!-- PUB Banner -->
     <section class="pub-section" id="pubSection" aria-label="Offres et publicités"></section>
 
-    <!-- PAGE 1 : Zone Selector & Restaurants -->
+    <!-- Page 1: Zone Selector -->
     <div class="zone-selector-wrap" id="zoneSelectorWrap">
       <div class="zone-label">Choisissez votre zone</div>
       <div class="zone-tabs" role="tablist" aria-label="Zones de livraison">
@@ -693,7 +684,7 @@
     </div>
 
     <div id="orderFlow">
-      <!-- ÉTAPE / PAGE 1 : Restaurants -->
+      <!-- Page 1: Restaurants -->
       <section id="stepRestaurants">
         <div class="section-heading">
           <span id="restaurantsHeading">RESTAURANTS — AJIM</span>
@@ -702,7 +693,7 @@
         <div class="restaurants-grid" id="restaurantsGrid"></div>
       </section>
 
-      <!-- ÉTAPE / PAGE 2 : Menu du restaurant -->
+      <!-- Page 2: Restaurant Menu -->
       <section id="stepMenu" class="hidden">
         <div class="section-heading">
           <div>
@@ -727,7 +718,7 @@
         <div class="feedback-msg" id="menuFeedback"></div>
       </section>
 
-      <!-- ÉTAPE / PAGE 3 : Livraison, GPS & Paiement -->
+      <!-- Page 3: Checkout, Delivery & GPS -->
       <section id="stepCheckout" class="panel hidden">
         <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 12px;">
           <h2 style="font-family: 'Cinzel', serif; color: var(--gold-soft); font-size: 1.12rem; text-transform: uppercase;">
@@ -783,7 +774,6 @@
       </section>
     </div>
 
-    <!-- Bottom Service Highlights -->
     <section class="service-highlights" aria-label="Nos engagements">
       <div class="highlight-card">
         <div class="highlight-icon" aria-hidden="true">
