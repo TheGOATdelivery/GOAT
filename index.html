@@ -1308,7 +1308,7 @@
         } else {
           state.cart[id] = {
             id,
-            nom: getField(m, ["nom", "name", "plat", "article", "produit", "titre", "menu", "libelle", "designation"], "Article"),
+            nom: getField(m, ["ITEM_NAME", "item_name", "item", "nom", "name", "plat", "article", "titre"], "Article"),
             prix: parsePriceNum(getField(m, ["prix", "price", "tarif"], 0)),
             restaurant: restoName,
             zone: state.zone,
