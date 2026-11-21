@@ -1049,17 +1049,76 @@
       return parseFloat(cleaned) || 0;
     }
 
-    function getDeliveryFee(restaurantObj, zoneName) {
-      const sheetFee = getField(
-        restaurantObj,
-        ["livraison", "frais_livraison", "frais livraison", "delivery", "delivery_fee", "prix_livraison", "tarif_livraison"],
-        ""
-      );
-      if (sheetFee !== "") {
-        return parsePriceNum(sheetFee);
-      }
-      return DEFAULT_DELIVERY_FEE[zoneName] ?? 2.000;
+        function haversineKm(lat1, lon1, lat2, lon2) {
+      const a1 = parseFloat(lat1);
+      const o1 = parseFloat(lon1);
+      const a2 = parseFloat(lat2);
+      const o2 = parseFloat(lon2);
+      if (![a1, o1, a2, o2].every(Number.isFinite)) return null;
+
+      const R = 6371;
+      const toRad = (deg) => (deg * Math.PI) / 180;
+      const dLat = toRad(a2 - a1);
+      const dLon = toRad(o2 - o1);
+      const h =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(toRad(a1)) *
+          Math.cos(toRad(a2)) *
+          Math.sin(dLon / 2) *
+          Math.sin(dLon / 2);
+      return R * 2 * Math.atan2(Math.sqrt(h), Math.sqrt(1 - h));
     }
+
+    function getRestaurantCoords(restaurantObj) {
+      if (!restaurantObj) return null;
+      let lat = getField(restaurantObj, ["lat", "latitude", "gps_lat"], "");
+      let lng = getField(restaurantObj, ["lng", "lon", "longitude", "gps_lng"], "");
+
+      if (!lat || !lng) {
+        const rawGps = String(
+          getField(restaurantObj, ["gps", "gpslink", "coordonnees", "position"], "")
+        );
+        const match = rawGps.match(/(-?\d+\.\d+)\s*,\s*(-?\d+\.\d+)/);
+        if (match) {
+          lat = match[1];
+          lng = match[2];
+        }
+      }
+
+      const numLat = parseFloat(String(lat).replace(",", "."));
+      const numLng = parseFloat(String(lng).replace(",", "."));
+      if (Number.isFinite(numLat) && Number.isFinite(numLng)) {
+        return { lat: numLat, lng: numLng };
+      }
+      return null;
+    }
+
+    function getDeliveryFee(restaurantObj, zoneName) {
+      const RATE_PER_KM = 1.0;
+      const restoCoords = getRestaurantCoords(restaurantObj);
+      const clientLat = parseFloat(state.gps?.lat);
+      const clientLng = parseFloat(state.gps?.lng);
+
+      if (
+        restoCoords &&
+        Number.isFinite(clientLat) &&
+        Number.isFinite(clientLng)
+      ) {
+        const distKm = haversineKm(
+          restoCoords.lat,
+          restoCoords.lng,
+          clientLat,
+          clientLng
+        );
+        if (distKm !== null) {
+          const billableKm = Math.max(1, Math.ceil(distKm));
+          return Number((billableKm * RATE_PER_KM).toFixed(3));
+        }
+      }
+
+      return RATE_PER_KM;
+    }
+
 
     function isRestaurantOpen(r) {
       const raw = normalizeText(getField(r, ["statut", "status", "etat", "état", "ouvert", "disponible"], "ouvert"));
@@ -1331,7 +1390,7 @@
         .join("");
     }
 
-    el.gpsBtn.addEventListener("click", () => {
+        el.gpsBtn.addEventListener("click", () => {
       if (!navigator.geolocation) {
         el.gpsStatus.textContent = "GPS non disponible sur cet appareil.";
         return;
@@ -1344,9 +1403,10 @@
           state.gps = {
             lat,
             lng,
-            mapUrl: `https://maps.google.com/?q=${lat},${lng}`
+            mapUrl: `https://www.google.com/maps?q=${lat},${lng}`
           };
           el.gpsStatus.textContent = `GPS enregistré (${lat}, ${lng})`;
+          if (state.step === 3) renderCheckoutCart();
         },
         () => {
           el.gpsStatus.textContent = "GPS refusé ou indisponible. Précisez votre adresse.";
@@ -1354,6 +1414,7 @@
         { enableHighAccuracy: true, timeout: 10000 }
       );
     });
+
 
     el.orderForm.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -1379,8 +1440,8 @@
         sous_total: subtotal.toFixed(3),
         frais_livraison: deliveryFee.toFixed(3),
         total: total.toFixed(3),
-        client_nom: document.getElementById("clientName").value.trim(),
-        client_telephone: clientPhoneVal,
+        client_nom: (document.getElementById("clientNom")?.value || document.getElementById("client_nom")?.value || "").trim(),
+        client_telephone: String(clientPhoneVal || "").replace(/\s+/g, "").trim(),
         adresse: document.getElementById("clientAddress").value.trim(),
         notes: document.getElementById("orderNotes").value.trim(),
         gps_lat: state.gps.lat,
