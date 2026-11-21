@@ -1262,7 +1262,7 @@
       el.menuGrid.innerHTML = items
         .map((m, i) => {
           const id = String(getField(m, ["id", "code"], `${restoNameNorm}-${i}`));
-          const nom = getField(m, ["nom", "name", "plat", "article", "titre"], `Article ${i + 1}`);
+          const nom = getField(m, ["ITEM_NAME", "item_name", "item", "nom", "name", "plat", "article", "titre"], `Article ${i + 1}`);
           const cat = getField(m, ["categorie", "catégorie", "type"], "Plat");
           const desc = getField(m, ["description", "details", "détails"], "");
           const prix = parsePriceNum(getField(m, ["prix", "price", "tarif"], 0));
