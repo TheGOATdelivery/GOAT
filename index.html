@@ -728,20 +728,14 @@
             ← RETOUR AU MENU
           </button>
         </div>
-<div id="cartItems"></div>
-          <div style="margin-top: 12px; display: flex; justify-content: space-between; font-weight: 700; color: var(--gold-soft);">
-            <span>TOTAL À PAYER (LIVRAISON INCLUSE SELON ZONE)</span>
-            <span id="cartTotal">0.000 TND</span>
-          </div>
-        </div>
-
+        
         <form id="orderForm" style="margin-top: 16px;">
           <div class="form-grid">
             <div class="input-group">
               <label for="clientName">Nom complet *</label>
               <input class="input" id="clientName" name="clientName" type="text" required placeholder="Votre nom" />
             </div>
-            <div class="input-group">
+           <form id="orderForm" style="margin-top: 16px;">
               <label for="clientPhone">Téléphone *</label>
               <input class="input" id="clientPhone" name="clientPhone" type="tel" required placeholder="Ex. 20 123 456" />
             </div>
@@ -767,14 +761,17 @@
             <span id="checkoutDeliveryFee">SELON ZONE / GPS</span>
           </div>
           <div style="margin-top: 10px; display: flex; justify-content: space-between; font-weight: 700; color: var(--gold-soft);">
-            <span>TOTAL À PAYER</span>
-            <span id="cartTotal">0.000 TND</span>
-          </div>
-
-          <div style="margin-top: 16px;">
-            <button type="submit" class="btn btn-copper" id="submitOrderBtn">
-              CONFIRMER &amp; ENVOYER LA COMMANDE
-            </button>
+          <div style="margin-top: 18px; padding: 14px; border: 1px solid rgba(255,255,255,0.14); border-radius: 12px;">
+            <div style="font-family: 'Cinzel', serif; color: var(--gold-soft); font-size: 1rem; margin-bottom: 10px;">LIVRAISON, GPS &amp; VALIDATION</div>
+            <div id="cartItems"></div>
+            <div style="margin-top: 10px; display: flex; justify-content: space-between; font-size: 0.92rem; color: var(--text-muted, #cbd5e1);">
+              <span>FRAIS DE LIVRAISON</span>
+              <span id="checkoutDeliveryFee">SELON ZONE / GPS</span>
+            </div>
+            <div style="margin-top: 10px; display: flex; justify-content: space-between; font-weight: 700; color: var(--gold-soft);">
+              <span>TOTAL À PAYER</span>
+              <span id="cartTotal">0.000 TND</span>
+            </div>
           </div>
 
           <div class="feedback-msg" id="orderFeedback"></div>
@@ -903,6 +900,7 @@
       backToMenuBtn: document.getElementById("backToMenuBtn"),
       cartItems: document.getElementById("cartItems"),
       cartTotal: document.getElementById("cartTotal"),
+      checkoutDeliveryFee: document.getElementById("checkoutDeliveryFee"),
       gpsBtn: document.getElementById("gpsBtn"),
       gpsStatus: document.getElementById("gpsStatus"),
       orderForm: document.getElementById("orderForm"),
@@ -1204,6 +1202,7 @@
       if (!entries.length) {
         el.cartItems.innerHTML = `<p class="empty-state">Votre panier est vide.</p>`;
         el.cartTotal.textContent = "0.000 TND";
+        if (el.checkoutDeliveryFee) el.checkoutDeliveryFee.textContent = "0.000 TND";
         return;
       }
 
@@ -1221,7 +1220,11 @@
         })
         .join("");
 
-      el.cartTotal.textContent = `${total.toFixed(3)} TND`;
+     const hasGps = Boolean(state.gps || (state.lat && state.lng));
+     const rawFee = Number(state.deliveryFee ?? state.livraisonFee ?? state.fraisLivraison ?? state.zoneFee ?? state.gpsFee ?? state.fee ?? 0) || 0;
+      const feeText = rawFee > 0 ? `${rawFee.toFixed(3)} TND` : (hasGps ? "0.000 TND" : "SELON ZONE / GPS");
+      if (el.checkoutDeliveryFee) el.checkoutDeliveryFee.textContent = feeText;
+      el.cartTotal.textContent = `${(total + rawFee).toFixed(3)} TND`;
     }
 
     function showFeedback(targetEl, message, isOk = true) {
@@ -1265,6 +1268,7 @@
           const mapUrl = `https://maps.google.com/?q=${lat},${lng}`;
           state.gps = { lat, lng, mapUrl };
           el.gpsStatus.innerHTML = `Position enregistrée : <a href="${escapeHtml(mapUrl)}" target="_blank" rel="noopener" style="color: var(--gold-soft);">${lat}, ${lng}</a>`;
+          renderCheckoutCart();
         },
         () => {
           el.gpsStatus.textContent = "Position non obtenue. Vous pouvez saisir votre adresse manuellement.";
