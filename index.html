@@ -1,1587 +1,465 @@
-<!DOCTYPE html>
-<html lang="fr" dir="ltr">
+<!doctype html>
+<html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>THE GOAT — Djerba Delivery</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>the goat - commande</title>
   <style>
     :root {
-      --bg-olive: #232b1c;
-      --bg-olive-deep: #181f13;
-      --surface-olive: rgba(45, 55, 36, 0.88);
-      --border-subtle: rgba(197, 155, 82, 0.28);
-      --gold-wood: #c59b52;
-      --gold-soft: #e3c58b;
-      --wood-resto: #d4a06a;
-      --copper-vivid: #c85a32;
-      --copper-bright: #df6d43;
-      --text-main: #f4f0e6;
-      --text-muted: #c6c1b1;
-      --ok-green: #529463;
-      --closed-red: #b84335;
-      --shadow-card: 0 12px 30px rgba(8, 12, 6, 0.42);
-      --radius-lg: 18px;
-      --radius-md: 14px;
-      --radius-sm: 10px;
+      --bg: #111312;
+      --card: #1b1f1d;
+      --ink: #f3f1ec;
+      --muted: #a6aba7;
+      --accent: #b86b35;
+      --line: #2d3430;
+      --ok: #2e7d5b;
+      --err: #b83b3b;
     }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    * { box-sizing: border-box; }
     body {
-      background-color: var(--bg-olive-deep);
-      color: var(--text-main);
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      margin: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
       line-height: 1.5;
-      min-height: 100vh;
-      overflow-x: hidden;
-      position: relative;
     }
-
-    /* Animated Dark Olive & Gold Marble Background */
-    .marble-bg {
-      position: fixed;
-      inset: -15%;
-      z-index: -2;
-      background:
-        radial-gradient(ellipse at 20% 25%, rgba(197, 155, 82, 0.12) 0%, transparent 48%),
-        radial-gradient(ellipse at 80% 70%, rgba(200, 90, 50, 0.11) 0%, transparent 52%),
-        radial-gradient(ellipse at 55% 15%, rgba(58, 72, 44, 0.65) 0%, transparent 60%),
-        linear-gradient(135deg, #171d12 0%, #232b1c 45%, #192014 100%);
-      animation: marbleDrift 22s ease-in-out infinite alternate;
-      pointer-events: none;
-    }
-
-    .marble-veins {
-      position: fixed;
-      inset: -10%;
-      z-index: -2;
-      opacity: 0.24;
-      background-image:
-        repeating-linear-gradient(
-          118deg,
-          transparent 0px,
-          transparent 90px,
-          rgba(197, 155, 82, 0.18) 92px,
-          transparent 95px,
-          transparent 210px,
-          rgba(200, 90, 50, 0.14) 212px,
-          transparent 215px
-        );
-      filter: blur(1.2px);
-      animation: veinFlow 28s linear infinite alternate;
-      pointer-events: none;
-    }
-
-    @keyframes marbleDrift {
-      0% {
-        transform: translate3d(-2%, -2%, 0) scale(1.02);
-      }
-      100% {
-        transform: translate3d(2%, 2%, 0) scale(1.07);
-      }
-    }
-
-    @keyframes veinFlow {
-      0% {
-        transform: translate3d(0, 0, 0) rotate(0deg);
-      }
-      100% {
-        transform: translate3d(-2.5%, 1.5%, 0) rotate(1.5deg);
-      }
-    }
-
-    /* Floating Gold & Copper Dust Particles */
-    .particles-layer {
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-      overflow: hidden;
-      pointer-events: none;
-    }
-
-    .particle {
-      position: absolute;
-      bottom: -16px;
-      border-radius: 50%;
-      opacity: 0;
-      animation: floatSpark linear infinite;
-    }
-
-    @keyframes floatSpark {
-      0% {
-        transform: translateY(0) translateX(0) scale(0.7);
-        opacity: 0;
-      }
-      15% {
-        opacity: 0.75;
-      }
-      85% {
-        opacity: 0.55;
-      }
-      100% {
-        transform: translateY(-108vh) translateX(26px) scale(1.15);
-        opacity: 0;
-      }
-    }
-
-    /* Sticky Topbar */
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(22, 28, 17, 0.92);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-bottom: 1px solid var(--border-subtle);
-      padding: 11px 18px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
-    }
-
-    .topbar-inner {
-      max-width: 1040px;
+    .wrap {
+      max-width: 920px;
       margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
+      padding: 20px 16px 60px;
     }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      cursor: pointer;
-    }
-
-    .brand-logo {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 1.5px solid var(--gold-wood);
-      background: #12160e;
-      box-shadow: 0 0 14px rgba(197, 155, 82, 0.25);
-    }
-
-    .brand-name {
-      font-family: 'Cinzel', serif;
-      font-weight: 800;
-      font-size: 1.28rem;
-      letter-spacing: 0.08em;
-      color: var(--gold-wood);
-      line-height: 1.1;
-    }
-
-    .brand-sub {
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--gold-soft);
-      letter-spacing: 0.04em;
-    }
-
-    .btn {
-      border: none;
-      border-radius: 999px;
-      padding: 9px 16px;
-      font-family: inherit;
-      font-weight: 700;
-      font-size: 0.84rem;
-      cursor: pointer;
-      transition: transform 0.14s ease, background-color 0.2s ease, border-color 0.2s ease;
-    }
-
-    .btn:active {
-      transform: scale(0.97);
-    }
-
-    .btn-ghost {
-      background: rgba(45, 55, 36, 0.85);
-      color: var(--text-main);
-      border: 1px solid var(--border-subtle);
-    }
-
-    .btn-copper {
-      background: var(--copper-vivid);
-      color: #fff;
-      box-shadow: 0 6px 18px rgba(200, 90, 50, 0.35);
-    }
-
-    .btn-copper:hover {
-      background: var(--copper-bright);
-    }
-
-    .btn-gold-outline {
-      background: rgba(24, 31, 19, 0.7);
-      color: var(--gold-soft);
-      border: 1px solid var(--gold-wood);
-    }
-
-    .container {
-      max-width: 1040px;
-      margin: 0 auto;
-      padding: 22px 18px 40px;
-    }
-
-    /* Hero Slogan */
-    .hero-section {
-      text-align: center;
-      padding: 14px 10px 22px;
-    }
-
-    .hero-title {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: clamp(2rem, 5.2vw, 3rem);
-      font-weight: 700;
-      color: var(--gold-soft);
-      letter-spacing: 0.02em;
-      line-height: 1.15;
-      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
-    }
-
-    .hero-subtitle {
-      margin-top: 8px;
-      font-size: 0.96rem;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-
-    /* PUB Banner */
-    .pub-section {
-      margin-bottom: 22px;
-    }
-
-    .pub-card {
-      background: linear-gradient(125deg, rgba(200, 90, 50, 0.3), rgba(45, 55, 36, 0.9));
-      border: 1.5px solid rgba(223, 109, 67, 0.65);
-      border-radius: var(--radius-lg);
-      padding: 16px 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      box-shadow: var(--shadow-card);
-      flex-wrap: wrap;
-    }
-
-    .pub-tag {
-      display: inline-block;
-      background: var(--copper-vivid);
-      color: #fff;
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      padding: 3px 10px;
-      border-radius: 999px;
-      margin-bottom: 6px;
-    }
-
-    .pub-title {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--text-main);
-    }
-
-    .pub-desc {
-      font-size: 0.87rem;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    .pub-img {
-      width: 74px;
-      height: 74px;
-      border-radius: var(--radius-md);
-      object-fit: cover;
-      border: 1px solid var(--gold-wood);
-    }
-
-    /* Zone Switcher (Ajim first, Houmt Souk second) */
-    .zone-selector-wrap {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 26px;
-    }
-
-    .zone-label {
-      font-size: 0.82rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--gold-soft);
-      font-weight: 700;
-    }
-
-    .zone-tabs {
-      display: inline-flex;
-      gap: 8px;
-      background: rgba(20, 26, 15, 0.9);
-      padding: 7px;
-      border-radius: 999px;
-      border: 1.5px solid var(--gold-wood);
-      box-shadow: var(--shadow-card);
-    }
-
-    .zone-btn {
-      padding: 11px 24px;
-      border-radius: 999px;
-      border: none;
-      background: transparent;
-      color: var(--text-muted);
-      font-weight: 700;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .zone-btn.active {
-      background: var(--copper-vivid);
-      color: #ffffff;
-      box-shadow: 0 4px 14px rgba(200, 90, 50, 0.45);
-    }
-
-    .section-heading {
-      font-family: 'Cinzel', serif;
-      font-size: 1.18rem;
-      color: var(--gold-soft);
-      margin-bottom: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .restaurants-grid, .menu-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(265px, 1fr));
-      gap: 15px;
-      margin-bottom: 24px;
-    }
-
-    .resto-card, .menu-card {
-      background: var(--surface-olive);
-      backdrop-filter: blur(8px);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
+    h1, h2, h3, p { margin: 0 0 10px; }
+    .muted { color: var(--muted); font-size: 0.92rem; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
       padding: 16px;
-      box-shadow: var(--shadow-card);
+      margin-bottom: 16px;
     }
-
-    .resto-card {
-      cursor: pointer;
-      transition: transform 0.16s ease, border-color 0.2s ease;
-    }
-
-    .resto-card:hover {
-      transform: translateY(-3px);
-      border-color: var(--gold-wood);
-    }
-
-    .resto-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 6px;
-    }
-
-    .resto-name {
-      font-size: 1.08rem;
-      font-weight: 700;
-      color: var(--wood-resto);
-    }
-
-    .badge {
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 3px 9px;
-      border-radius: 999px;
-      white-space: nowrap;
-    }
-
-    .badge-open {
-      background: rgba(82, 148, 99, 0.24);
-      color: #8ee0a3;
-      border: 1px solid rgba(82, 148, 99, 0.55);
-    }
-
-    .badge-closed {
-      background: rgba(184, 67, 53, 0.24);
-      color: #f39b90;
-      border: 1px solid rgba(184, 67, 53, 0.55);
-    }
-
-    .resto-meta, .menu-desc {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
-    .resto-delivery-tag {
-      margin-top: 8px;
-      font-size: 0.8rem;
-      color: var(--gold-soft);
-      font-weight: 600;
-    }
-
-    .menu-card {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .menu-cat {
-      font-size: 0.73rem;
-      color: var(--copper-bright);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .menu-title {
-      font-size: 1.02rem;
-      font-weight: 700;
-      color: var(--text-main);
-      margin-top: 2px;
-    }
-
-    .menu-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding-top: 10px;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      flex-wrap: wrap;
-    }
-
-    .menu-price {
-      font-weight: 700;
-      color: var(--gold-soft);
-      font-size: 0.98rem;
-    }
-
-    .qty-controls {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .qty-btn {
-      width: 30px;
-      height: 30px;
-      border-radius: 8px;
-      border: 1px solid var(--gold-wood);
-      background: var(--bg-olive-deep);
-      color: var(--gold-soft);
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .qty-input {
-      width: 48px;
-      height: 30px;
-      text-align: center;
-      border-radius: 8px;
-      border: 1px solid var(--border-subtle);
-      background: var(--bg-olive-deep);
-      color: var(--text-main);
-      font-weight: 700;
-      font-size: 0.88rem;
-    }
-
-    .panel {
-      background: var(--surface-olive);
-      backdrop-filter: blur(8px);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      padding: 18px;
-      box-shadow: var(--shadow-card);
-      margin-bottom: 24px;
-    }
-
-    .cart-summary-bar {
-      background: rgba(24, 31, 19, 0.92);
-      border: 1.5px solid var(--copper-bright);
-      border-radius: var(--radius-md);
-      padding: 14px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .cart-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 9px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      font-size: 0.9rem;
-    }
-
-    .summary-lines {
-      margin-top: 12px;
-      padding-top: 10px;
-      border-top: 1px solid rgba(255, 255, 255, 0.12);
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .summary-line {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.92rem;
-      color: var(--text-muted);
-    }
-
-    .summary-line.total {
-      margin-top: 4px;
-      padding-top: 8px;
-      border-top: 1px solid var(--border-subtle);
-      font-weight: 700;
-      color: var(--gold-soft);
-      font-size: 1.05rem;
-    }
-
-    .form-grid {
+    .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 12px;
-      margin-top: 14px;
     }
-
-    .input-group {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
+    label {
+      display: block;
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-bottom: 4px;
     }
-
-    .input-group label {
-      font-size: 0.82rem;
-      color: var(--gold-soft);
-      font-weight: 600;
-    }
-
-    .input, textarea {
-      background: rgba(20, 26, 15, 0.9);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
-      padding: 10px 12px;
-      color: var(--text-main);
-      font-family: inherit;
-      font-size: 0.9rem;
+    input, select, textarea, button {
       width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: #131615;
+      color: var(--ink);
+      font-size: 0.95rem;
     }
-
-    .input:focus, textarea:focus {
-      outline: none;
-      border-color: var(--copper-bright);
+    button {
+      background: var(--accent);
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
     }
-
-    .gps-row {
+    button.secondary {
+      background: #252b28;
+      border: 1px solid var(--line);
+    }
+    button:disabled { opacity: 0.55; cursor: not-allowed; }
+    .menu-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      margin-bottom: 10px;
+      background: #151917;
+    }
+    .qty-box {
       display: flex;
       align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 12px;
+      gap: 8px;
+      min-width: 120px;
     }
-
-    .gps-status {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-    }
-
-    .service-highlights {
-      margin-top: 34px;
-      padding-top: 26px;
-      border-top: 1px solid var(--border-subtle);
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 18px;
-      text-align: center;
-    }
-
-    .highlight-card {
-      background: rgba(35, 43, 28, 0.72);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      padding: 20px 16px;
-    }
-
-    .highlight-icon {
-      width: 52px;
-      height: 52px;
-      margin: 0 auto 12px;
-      border-radius: 50%;
+    .qty-box button { width: 36px; padding: 6px; }
+    .qty-val { min-width: 24px; text-align: center; font-weight: 700; }
+    .summary-row {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(200, 90, 50, 0.2);
-      border: 1px solid var(--gold-wood);
-      color: var(--gold-soft);
-    }
-
-    .highlight-title {
-      font-family: 'Cinzel', serif;
-      font-size: 1.02rem;
-      color: var(--gold-soft);
+      justify-content: space-between;
       margin-bottom: 6px;
     }
-
-    .highlight-text {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
-    .site-footer {
-      text-align: center;
-      margin-top: 26px;
-      font-size: 0.8rem;
-      color: var(--text-muted);
-    }
-
-    .steps-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      margin-top: 14px;
-    }
-
-    .step-item {
-      background: var(--bg-olive-deep);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
-      padding: 10px 8px;
-      text-align: center;
-      font-size: 0.78rem;
-      color: var(--text-muted);
-    }
-
-    .step-item.done {
-      border-color: var(--copper-bright);
-      background: rgba(200, 90, 50, 0.24);
-      color: var(--text-main);
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.1rem;
       font-weight: 700;
+      padding-top: 8px;
+      border-top: 1px solid var(--line);
+      margin-top: 8px;
     }
-
-    .feedback-msg {
+    .msg {
+      padding: 12px;
+      border-radius: 10px;
       margin-top: 12px;
-      padding: 11px 14px;
-      border-radius: var(--radius-sm);
-      font-size: 0.88rem;
       display: none;
     }
-
-    .feedback-msg.show {
-      display: block;
-    }
-
-    .feedback-ok {
-      background: rgba(82, 148, 99, 0.22);
-      border: 1px solid var(--ok-green);
-      color: #b7f0c5;
-    }
-
-    .feedback-err {
-      background: rgba(200, 90, 50, 0.24);
-      border: 1px solid var(--copper-bright);
-      color: #ffd0be;
-    }
-
-    .empty-state {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      padding: 12px 0;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    @media (max-width: 600px) {
-      .steps-row {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .zone-btn {
-        padding: 10px 18px;
-        font-size: 0.9rem;
-      }
-    }
+    .msg.ok { display: block; background: rgba(46, 125, 91, 0.2); border: 1px solid var(--ok); }
+    .msg.err { display: block; background: rgba(184, 59, 59, 0.2); border: 1px solid var(--err); }
   </style>
 </head>
 <body>
+  <div class="wrap">
+    <h1>the goat</h1>
+    <p class="muted">commande en ligne — livraison calculée par gps (1.000 dt / km, min 1 km)</p>
 
-  <!-- Animated Marble & Gold/Copper Particles -->
-  <div class="marble-bg" aria-hidden="true"></div>
-  <div class="marble-veins" aria-hidden="true"></div>
-  <div class="particles-layer" id="particlesLayer" aria-hidden="true"></div>
-
-  <!-- Sticky Topbar -->
-  <header class="topbar">
-    <div class="topbar-inner">
-      <div class="brand" id="brandHomeBtn">
-        <img src="./logo.png" alt="Logo THE GOAT" class="brand-logo" />
+    <div class="card">
+      <h2>1. restaurant et zone</h2>
+      <div class="grid">
         <div>
-          <div class="brand-name">THE GOAT</div>
-          <div class="brand-sub">Djerba Delivery</div>
+          <label for="zone_select">zone</label>
+          <select id="zone_select"></select>
+        </div>
+        <div>
+          <label for="restaurant_select">restaurant</label>
+          <select id="restaurant_select"></select>
         </div>
       </div>
     </div>
-  </header>
 
-  <main class="container">
-    <!-- Hero Section -->
-    <section class="hero-section">
-      <h1 class="hero-title">More than just food.</h1>
-      <p class="hero-subtitle">Restaurant and snacks, local delivery.</p>
-    </section>
+    <div class="card">
+      <h2>2. menu</h2>
+      <div id="menu_list"><p class="muted">chargement du menu...</p></div>
+    </div>
 
-    <!-- PUB Banner -->
-    <section class="pub-section" id="pubSection" aria-label="Offres et publicités"></section>
+    <div class="card">
+      <h2>3. informations client et position gps</h2>
+      <div class="grid">
+        <div>
+          <label for="client_nom">nom complet</label>
+          <input id="client_nom" type="text" placeholder="nom du client" required />
+        </div>
+        <div>
+          <label for="client_telephone">telephone</label>
+          <input id="client_telephone" type="tel" placeholder="ex: 20123456" required />
+        </div>
+        <div>
+          <label for="adresse">adresse</label>
+          <input id="adresse" type="text" placeholder="quartier / rue / repere" />
+        </div>
+      </div>
 
-    <!-- Zone Selector (Ajim first, Houmt Souk second) -->
-    <div class="zone-selector-wrap" id="zoneSelectorWrap">
-      <div class="zone-label">Choisissez votre zone</div>
-      <div class="zone-tabs" role="tablist" aria-label="Zones de livraison">
-        <button class="zone-btn active" data-zone="Ajim" id="zoneAjim" type="button">
-          Ajim
-        </button>
-        <button class="zone-btn" data-zone="Houmt Souk" id="zoneHoumtSouk" type="button">
-          Houmt Souk
-        </button>
+      <div style="margin-top: 12px;">
+        <button id="btn_gps" type="button" class="secondary">activer ma position gps (client)</button>
+        <p id="gps_status" class="muted" style="margin-top: 8px;">position gps non definie</p>
+      </div>
+
+      <div style="margin-top: 12px;">
+        <label for="notes">notes</label>
+        <textarea id="notes" rows="2" placeholder="remarques pour la cuisine ou le livreur"></textarea>
       </div>
     </div>
 
-    <!-- Order Flow -->
-    <div id="orderFlow">
-      <!-- Restaurants -->
-      <section id="stepRestaurants">
-        <div class="section-heading">
-          <span id="restaurantsHeading">Restaurants — Ajim</span>
-          <button class="btn btn-gold-outline" id="reloadDataBtn" type="button">Actualiser</button>
-        </div>
+    <div class="card">
+      <h2>4. recapitulatif</h2>
+      <div class="summary-row"><span>sous-total</span><span id="sous_total_txt">0.000 dt</span></div>
+      <div class="summary-row"><span>frais de livraison estimes</span><span id="frais_txt">1.000 dt</span></div>
+      <div class="total-row"><span>total estime</span><span id="total_txt">1.000 dt</span></div>
 
-        <div class="restaurants-grid" id="restaurantsGrid"></div>
-      </section>
-
-      <!-- Menu + Quantités -->
-      <section id="stepMenu" class="hidden">
-        <div class="section-heading">
-          <div>
-            <button class="btn btn-ghost" id="backToRestaurantsBtn" type="button" style="margin-right: 10px;">
-              ← Restaurants
-            </button>
-            <span id="menuHeading">Menu</span>
-          </div>
-        </div>
-
-        <div class="menu-grid" id="menuGrid"></div>
-
-        <div class="cart-summary-bar">
-          <div>
-            <div style="font-size: 0.82rem; color: var(--text-muted);" id="step2SummaryCount">0 article(s) dans le panier</div>
-            <div style="font-weight: 700; color: var(--gold-soft); font-size: 1.04rem;" id="step2SummaryTotal">0.000 TND</div>
-          </div>
-          <button class="btn btn-copper" id="confirmCartBtn" type="button">
-            Confirmer le panier →
-          </button>
-        </div>
-        <div class="feedback-msg" id="menuFeedback"></div>
-      </section>
-
-      <!-- Coordonnées, GPS & Validation -->
-      <section id="stepCheckout" class="panel hidden">
-        <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 12px;">
-          <h2 style="font-family: 'Cinzel', serif; color: var(--gold-soft); font-size: 1.12rem;">
-            Finaliser la commande
-          </h2>
-          <button class="btn btn-ghost" id="backToMenuBtn" type="button">
-            ← Modifier le panier
-          </button>
-        </div>
-
-        <div id="cartItems"></div>
-
-        <div class="summary-lines">
-          <div class="summary-line">
-            <span>Sous-total articles</span>
-            <span id="cartSubtotal">0.000 TND</span>
-          </div>
-          <div class="summary-line">
-            <span>Livraison</span>
-            <span id="cartDelivery">0.000 TND</span>
-          </div>
-          <div class="summary-line total">
-            <span>Total à payer</span>
-            <span id="cartTotal">0.000 TND</span>
-          </div>
-        </div>
-
-        <form id="orderForm" style="margin-top: 16px;">
-          <div class="form-grid">
-            <div class="input-group">
-              <label for="clientName">Nom complet *</label>
-              <input class="input" id="clientName" name="clientName" type="text" required placeholder="Votre nom" />
-            </div>
-            <div class="input-group">
-              <label for="clientPhone">Téléphone *</label>
-              <input class="input" id="clientPhone" name="clientPhone" type="tel" required placeholder="Ex. 20 123 456" />
-            </div>
-            <div class="input-group">
-              <label for="clientAddress">Adresse / Repère *</label>
-              <input class="input" id="clientAddress" name="clientAddress" type="text" required placeholder="Rue, quartier ou point de repère" />
-            </div>
-          </div>
-
-          <div class="input-group" style="margin-top: 12px;">
-            <label for="orderNotes">Notes de commande (optionnel)</label>
-            <textarea id="orderNotes" name="orderNotes" rows="2" placeholder="Sans piment, appeler à l'arrivée..."></textarea>
-          </div>
-
-          <div class="gps-row">
-            <button type="button" class="btn btn-gold-outline" id="gpsBtn">
-              Me localiser (GPS)
-            </button>
-            <span class="gps-status" id="gpsStatus">Position GPS non renseignée.</span>
-          </div>
-
-          <div style="margin-top: 16px;">
-            <button type="submit" class="btn btn-copper" id="submitOrderBtn">
-              Valider la commande
-            </button>
-          </div>
-
-          <div class="feedback-msg" id="orderFeedback"></div>
-        </form>
-
-        <!-- Post-order tracking box (shown only after order is submitted) -->
-        <div id="postOrderTracking" class="hidden" style="margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border-subtle);">
-          <h3 style="font-family: 'Cinzel', serif; color: var(--gold-soft); font-size: 1rem; margin-bottom: 8px;">
-            Suivi de votre commande
-          </h3>
-          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-            <input class="input" id="trackQuery" type="text" placeholder="Référence ou téléphone" style="max-width: 280px;" />
-            <button class="btn btn-copper" id="trackSearchBtn" type="button">Suivre</button>
-          </div>
-          <div id="trackResult" style="margin-top: 14px;"></div>
-        </div>
-      </section>
+      <div style="margin-top: 14px;">
+        <button id="btn_submit" type="button">confirmer la commande</button>
+      </div>
+      <div id="msg_box" class="msg"></div>
     </div>
-
-    <!-- Bottom Service Highlights -->
-    <section class="service-highlights" aria-label="Nos engagements">
-      <div class="highlight-card">
-        <div class="highlight-icon" aria-hidden="true">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M3 11h18M5 11V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v4M6 11v8h12v-8"/>
-          </svg>
-        </div>
-        <h3 class="highlight-title">Les meilleurs restaurants</h3>
-        <p class="highlight-text">
-          Une sélection d'adresses locales à Ajim et Houmt Souk pour toutes vos envies.
-        </p>
-      </div>
-
-      <div class="highlight-card">
-        <div class="highlight-icon" aria-hidden="true">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="9"/>
-            <path d="M12 7v5l3 2"/>
-          </svg>
-        </div>
-        <h3 class="highlight-title">Livraison rapide</h3>
-        <p class="highlight-text">
-          Commandez en quelques instants et recevez votre repas directement chez vous.
-        </p>
-      </div>
-
-      <div class="highlight-card">
-        <div class="highlight-icon" aria-hidden="true">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 21s-6-4.35-6-10a6 6 0 1 1 12 0c0 5.65-6 10-6 10z"/>
-            <circle cx="12" cy="11" r="2"/>
-          </svg>
-        </div>
-        <h3 class="highlight-title">Toujours à votre service</h3>
-        <p class="highlight-text">
-          Localisation GPS précise et suivi simple de l'avancement de votre commande.
-        </p>
-      </div>
-    </section>
-
-    <footer class="site-footer">
-      THE GOAT — Djerba Delivery • Ajim &amp; Houmt Souk
-    </footer>
-  </main>
+  </div>
 
   <script>
-    const APPS_SCRIPT_URL =
-      "https://script.google.com/macros/s/AKfycbyYQGotPDlz_jzmFg1JptL-P1z5svUk87k-v5vLIvAXDVzddEx2Wk_pFrbPORzCxNoBtA/exec";
+    const api_url = "https://script.google.com/macros/s/AKfycbybbw3yxfctVXCSC5u3xlV0qy1BAxeX0LI1L9qnSkanU0RNW3VhLPcbMZ4QaiG2D4Z7/exec";
 
-    // Frais de livraison par défaut si non précisés dans la feuille Google Sheet
-    const DEFAULT_DELIVERY_FEE = {
-      Ajim: 2.000,
-      "Houmt Souk": 3.000
-    };
+    let restaurants_data = [];
+    let menus_data = [];
+    let panier = {};
+    let client_gps = { lat: "", lng: "", lien: "" };
 
-    const state = {
-      step: 1,
-      zone: "Ajim",
-      restaurants: [],
-      menus: [],
-      pubs: [],
-      selectedRestaurant: null,
-      cart: {},
-      gps: { lat: "", lng: "", mapUrl: "" }
-    };
+    const zone_select = document.getElementById("zone_select");
+    const restaurant_select = document.getElementById("restaurant_select");
+    const menu_list = document.getElementById("menu_list");
+    const btn_gps = document.getElementById("btn_gps");
+    const gps_status = document.getElementById("gps_status");
+    const btn_submit = document.getElementById("btn_submit");
+    const msg_box = document.getElementById("msg_box");
 
-    const el = {
-      brandHomeBtn: document.getElementById("brandHomeBtn"),
-      zoneSelectorWrap: document.getElementById("zoneSelectorWrap"),
-      stepRestaurants: document.getElementById("stepRestaurants"),
-      stepMenu: document.getElementById("stepMenu"),
-      stepCheckout: document.getElementById("stepCheckout"),
-      zoneBtns: document.querySelectorAll(".zone-btn"),
-      reloadDataBtn: document.getElementById("reloadDataBtn"),
-      pubSection: document.getElementById("pubSection"),
-      restaurantsHeading: document.getElementById("restaurantsHeading"),
-      restaurantsGrid: document.getElementById("restaurantsGrid"),
-      backToRestaurantsBtn: document.getElementById("backToRestaurantsBtn"),
-      menuHeading: document.getElementById("menuHeading"),
-      menuGrid: document.getElementById("menuGrid"),
-      step2SummaryCount: document.getElementById("step2SummaryCount"),
-      step2SummaryTotal: document.getElementById("step2SummaryTotal"),
-      confirmCartBtn: document.getElementById("confirmCartBtn"),
-      menuFeedback: document.getElementById("menuFeedback"),
-      backToMenuBtn: document.getElementById("backToMenuBtn"),
-      cartItems: document.getElementById("cartItems"),
-      cartSubtotal: document.getElementById("cartSubtotal"),
-      cartDelivery: document.getElementById("cartDelivery"),
-      cartTotal: document.getElementById("cartTotal"),
-      gpsBtn: document.getElementById("gpsBtn"),
-      gpsStatus: document.getElementById("gpsStatus"),
-      orderForm: document.getElementById("orderForm"),
-      submitOrderBtn: document.getElementById("submitOrderBtn"),
-      orderFeedback: document.getElementById("orderFeedback"),
-      postOrderTracking: document.getElementById("postOrderTracking"),
-      trackQuery: document.getElementById("trackQuery"),
-      trackSearchBtn: document.getElementById("trackSearchBtn"),
-      trackResult: document.getElementById("trackResult")
-    };
-
-    function initParticles() {
-      const layer = document.getElementById("particlesLayer");
-      if (!layer) return;
-      const count = 22;
-      for (let i = 0; i < count; i++) {
-        const dot = document.createElement("span");
-        dot.className = "particle";
-        const size = (Math.random() * 3.2 + 1.8).toFixed(1);
-        const isCopper = i % 3 === 0;
-        dot.style.width = `${size}px`;
-        dot.style.height = `${size}px`;
-        dot.style.left = `${(Math.random() * 100).toFixed(2)}%`;
-        dot.style.background = isCopper ? "#df6d43" : "#e3c58b";
-        dot.style.boxShadow = isCopper
-          ? "0 0 8px rgba(223, 109, 67, 0.7)"
-          : "0 0 8px rgba(227, 197, 139, 0.7)";
-        dot.style.animationDuration = `${(Math.random() * 12 + 11).toFixed(1)}s`;
-        dot.style.animationDelay = `${(Math.random() * -18).toFixed(1)}s`;
-        layer.appendChild(dot);
-      }
+    function show_msg(text, is_ok) {
+      msg_box.className = "msg " + (is_ok ? "ok" : "err");
+      msg_box.textContent = text;
     }
 
-    function goToStep(stepNum) {
-      state.step = stepNum;
-      el.stepRestaurants.classList.toggle("hidden", stepNum !== 1);
-      el.stepMenu.classList.toggle("hidden", stepNum !== 2);
-      el.stepCheckout.classList.toggle("hidden", stepNum !== 3);
-      el.zoneSelectorWrap.classList.toggle("hidden", stepNum !== 1);
-
-      if (stepNum === 2) renderMenus();
-      if (stepNum === 3) renderCheckoutCart();
-      window.scrollTo({ top: 0, behavior: "smooth" });
+    function to_num(v) {
+      const n = parseFloat(String(v || 0).replace(",", "."));
+      return Number.isFinite(n) ? n : 0;
     }
 
-    function normalizeText(v) {
-      return String(v ?? "")
-        .trim()
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "");
+    function haversine_km(lat1, lon1, lat2, lon2) {
+      const r = 6371;
+      const d_lat = (lat2 - lat1) * Math.PI / 180;
+      const d_lon = (lon2 - lon1) * Math.PI / 180;
+      const a =
+        Math.sin(d_lat / 2) * Math.sin(d_lat / 2) +
+        Math.cos(lat1 * Math.PI / 180) *
+        Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(d_lon / 2) * Math.sin(d_lon / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return r * c;
     }
 
-    function getField(obj, keys, fallback = "") {
-      if (!obj || typeof obj !== "object") return fallback;
-      for (const k of keys) {
-        if (obj[k] !== undefined && obj[k] !== null && String(obj[k]).trim() !== "") {
-          return obj[k];
-        }
-        const foundKey = Object.keys(obj).find((ok) => normalizeText(ok) === normalizeText(k));
-        if (foundKey && obj[foundKey] !== undefined && String(obj[foundKey]).trim() !== "") {
-          return obj[foundKey];
-        }
-      }
-      return fallback;
+    function get_selected_restaurant() {
+      const r_name = restaurant_select.value;
+      const z_name = zone_select.value;
+      return restaurants_data.find(r =>
+        String(r.nom || "").trim() === r_name &&
+        (!z_name || String(r.zone || "").trim() === z_name)
+      ) || null;
     }
 
-    function formatPrice(val) {
-      const cleaned = String(val ?? "0").replace(",", ".").replace(/[^\d.-]/g, "");
-      const num = parseFloat(cleaned) || 0;
-      return `${num.toFixed(3)} TND`;
+    function calc_frais_estime() {
+      const resto = get_selected_restaurant();
+      if (!resto || !client_gps.lat || !client_gps.lng) return 1.0;
+      const r_lat = to_num(resto.lat);
+      const r_lng = to_num(resto.lng);
+      const c_lat = to_num(client_gps.lat);
+      const c_lng = to_num(client_gps.lng);
+      if (!r_lat || !r_lng || !c_lat || !c_lng) return 1.0;
+      const dist = haversine_km(r_lat, r_lng, c_lat, c_lng);
+      const km_facture = Math.max(1, Math.ceil(dist));
+      return Number((km_facture * 1.0).toFixed(3));
     }
 
-    function parsePriceNum(val) {
-      const cleaned = String(val ?? "0").replace(",", ".").replace(/[^\d.-]/g, "");
-      return parseFloat(cleaned) || 0;
+    function update_recap() {
+      let sous_total = 0;
+      Object.values(panier).forEach(item => {
+        sous_total += to_num(item.prix) * item.qty;
+      });
+      sous_total = Number(sous_total.toFixed(3));
+      const frais = calc_frais_estime();
+      const total = Number((sous_total + frais).toFixed(3));
+
+      document.getElementById("sous_total_txt").textContent = sous_total.toFixed(3) + " dt";
+      document.getElementById("frais_txt").textContent = frais.toFixed(3) + " dt";
+      document.getElementById("total_txt").textContent = total.toFixed(3) + " dt";
     }
 
-        function haversineKm(lat1, lon1, lat2, lon2) {
-      const a1 = parseFloat(lat1);
-      const o1 = parseFloat(lon1);
-      const a2 = parseFloat(lat2);
-      const o2 = parseFloat(lon2);
-      if (![a1, o1, a2, o2].every(Number.isFinite)) return null;
+    function render_menu() {
+      const resto = get_selected_restaurant();
+      const resto_id = resto ? String(resto.id || "").trim() : "";
+      const resto_nom = resto ? String(resto.nom || "").trim() : "";
 
-      const R = 6371;
-      const toRad = (deg) => (deg * Math.PI) / 180;
-      const dLat = toRad(a2 - a1);
-      const dLon = toRad(o2 - o1);
-      const h =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(toRad(a1)) *
-          Math.cos(toRad(a2)) *
-          Math.sin(dLon / 2) *
-          Math.sin(dLon / 2);
-      return R * 2 * Math.atan2(Math.sqrt(h), Math.sqrt(1 - h));
-    }
-
-    function getRestaurantCoords(restaurantObj) {
-      if (!restaurantObj) return null;
-      let lat = getField(restaurantObj, ["lat", "latitude", "gps_lat"], "");
-      let lng = getField(restaurantObj, ["lng", "lon", "longitude", "gps_lng"], "");
-
-      if (!lat || !lng) {
-        const rawGps = String(
-          getField(restaurantObj, ["gps", "gpslink", "coordonnees", "position"], "")
-        );
-        const match = rawGps.match(/(-?\d+\.\d+)\s*,\s*(-?\d+\.\d+)/);
-        if (match) {
-          lat = match[1];
-          lng = match[2];
-        }
-      }
-
-      const numLat = parseFloat(String(lat).replace(",", "."));
-      const numLng = parseFloat(String(lng).replace(",", "."));
-      if (Number.isFinite(numLat) && Number.isFinite(numLng)) {
-        return { lat: numLat, lng: numLng };
-      }
-      return null;
-    }
-
-    function getDeliveryFee(restaurantObj, zoneName) {
-      const RATE_PER_KM = 1.0;
-      const restoCoords = getRestaurantCoords(restaurantObj);
-      const clientLat = parseFloat(state.gps?.lat);
-      const clientLng = parseFloat(state.gps?.lng);
-
-      if (
-        restoCoords &&
-        Number.isFinite(clientLat) &&
-        Number.isFinite(clientLng)
-      ) {
-        const distKm = haversineKm(
-          restoCoords.lat,
-          restoCoords.lng,
-          clientLat,
-          clientLng
-        );
-        if (distKm !== null) {
-          const billableKm = Math.max(1, Math.ceil(distKm));
-          return Number((billableKm * RATE_PER_KM).toFixed(3));
-        }
-      }
-
-      return RATE_PER_KM;
-    }
-
-
-    function isRestaurantOpen(r) {
-      const raw = normalizeText(getField(r, ["statut", "status", "etat", "état", "ouvert", "disponible"], "ouvert"));
-      return !["ferme", "fermé", "closed", "false", "0", "non", "inactif"].includes(raw);
-    }
-
-    function extractArray(data, keys) {
-      if (Array.isArray(data)) return data;
-      if (!data || typeof data !== "object") return [];
-      for (const k of keys) {
-        if (Array.isArray(data[k])) return data[k];
-        const match = Object.keys(data).find((ok) => normalizeText(ok) === normalizeText(k));
-        if (match && Array.isArray(data[match])) return data[match];
-      }
-      return [];
-    }
-
-    async function fetchSheetData() {
-      el.restaurantsGrid.innerHTML = `<p class="empty-state">Chargement des restaurants...</p>`;
-      try {
-        const res = await fetch(`${APPS_SCRIPT_URL}?action=init`, { cache: "no-store" });
-        const data = await res.json();
-
-        state.restaurants = extractArray(data, ["restaurants", "RESTAURANTS", "restaurant"]);
-        state.menus = extractArray(data, ["menus", "MENUS", "menu"]);
-        state.pubs = extractArray(data, ["pub", "PUB", "pubs"]);
-
-        renderPubs();
-        renderRestaurantsForZone();
-      } catch (err) {
-        renderPubs();
-        el.restaurantsGrid.innerHTML = `<p class="empty-state">Impossible de charger les données. Vérifiez la connexion.</p>`;
-      }
-    }
-
-    function renderPubs() {
-      const activePub =
-        state.pubs.find((p) => {
-          const z = normalizeText(getField(p, ["zone", "secteur", "ville"], ""));
-          return !z || z === "toutes" || z === "all" || z.includes(normalizeText(state.zone));
-        }) || state.pubs[0];
-
-      const title = activePub
-        ? getField(activePub, ["titre", "title", "nom"], "Offre spéciale THE GOAT")
-        : "Livraison locale à Ajim & Houmt Souk";
-      const desc = activePub
-        ? getField(activePub, ["description", "texte", "detail"], "Commandez vos plats préférés en quelques clics.")
-        : "Découvrez nos restaurants partenaires à Djerba.";
-      const img = activePub ? getField(activePub, ["image", "photo", "img", "url"], "") : "";
-
-      el.pubSection.innerHTML = `
-        <div class="pub-card">
-          <div>
-            <span class="pub-tag">À la une</span>
-            <div class="pub-title">${escapeHtml(title)}</div>
-            <div class="pub-desc">${escapeHtml(desc)}</div>
-          </div>
-          ${img ? `<img src="${escapeAttr(img)}" alt="${escapeAttr(title)}" class="pub-img" />` : ""}
-        </div>
-      `;
-    }
-
-    function renderRestaurantsForZone() {
-      el.restaurantsHeading.textContent = `Restaurants — ${state.zone}`;
-
-      const targetZone = normalizeText(state.zone);
-      const filtered = state.restaurants.filter((r) => {
-        const rz = normalizeText(getField(r, ["zone", "secteur", "ville", "region"], ""));
-        return rz === targetZone || rz.includes(targetZone);
+      const filtered = menus_data.filter(m => {
+        const m_rid = String(m.restaurant_id || "").trim();
+        const m_rnom = String(m.restaurant || "").trim();
+        if (resto_id && m_rid) return m_rid === resto_id;
+        if (resto_nom && m_rnom) return m_rnom === resto_nom;
+        return true;
       });
 
       if (!filtered.length) {
-        el.restaurantsGrid.innerHTML = `<p class="empty-state">Aucun restaurant disponible pour ${escapeHtml(state.zone)} pour le moment.</p>`;
+        menu_list.innerHTML = '<p class="muted">aucun article disponible pour ce restaurant.</p>';
+        update_recap();
         return;
       }
 
-      el.restaurantsGrid.innerHTML = filtered
-        .map((r, idx) => {
-          const name = getField(r, ["nom", "name", "restaurant"], `Restaurant ${idx + 1}`);
-          const cat = getField(r, ["categorie", "catégorie", "specialite", "spécialité", "adresse"], "Cuisine & Livraison");
-          const open = isRestaurantOpen(r);
-          const fee = getDeliveryFee(r, state.zone);
-          return `
-            <div class="resto-card" data-idx="${idx}">
-              <div class="resto-top">
-                <div class="resto-name">${escapeHtml(name)}</div>
-                <span class="badge ${open ? "badge-open" : "badge-closed"}">
-                  ${open ? "Ouvert" : "Fermé"}
-                </span>
-              </div>
-              <div class="resto-meta">${escapeHtml(cat)}</div>
-              <div class="resto-delivery-tag">Livraison : ${formatPrice(fee)}</div>
-            </div>
-          `;
-        })
-        .join("");
+      menu_list.innerHTML = "";
+      filtered.forEach((m, idx) => {
+        const key = String(m.id || (m.nom + "_" + idx));
+        const nom = String(m.nom || "article");
+        const desc = String(m.description || "");
+        const prix = to_num(m.prix);
+        const qty = panier[key] ? panier[key].qty : 0;
 
-      el.restaurantsGrid.querySelectorAll(".resto-card").forEach((card) => {
-        card.addEventListener("click", () => {
-          const chosen = filtered[Number(card.dataset.idx)];
-          if (!chosen) return;
-          const chosenName = getField(chosen, ["nom", "name", "restaurant"], "Restaurant");
-          const prevName = state.selectedRestaurant
-            ? getField(state.selectedRestaurant, ["nom", "name", "restaurant"], "")
-            : "";
-
-          if (normalizeText(prevName) !== normalizeText(chosenName)) {
-            state.cart = {};
-          }
-          state.selectedRestaurant = chosen;
-          el.menuFeedback.className = "feedback-msg";
-          goToStep(2);
-        });
-      });
-    }
-
-    function renderMenus() {
-      if (!state.selectedRestaurant) {
-        goToStep(1);
-        return;
-      }
-
-      const restoName = getField(state.selectedRestaurant, ["nom", "name", "restaurant"], "Restaurant");
-      const restoId = normalizeText(getField(state.selectedRestaurant, ["id", "code"], ""));
-      const restoNameNorm = normalizeText(restoName);
-      const open = isRestaurantOpen(state.selectedRestaurant);
-
-      el.menuHeading.textContent = `Menu — ${restoName}`;
-
-      const items = state.menus.filter((m) => {
-        const mResto = normalizeText(getField(m, ["restaurant_id", "restaurant", "resto", "nom_restaurant"], ""));
-        return !mResto || mResto === restoNameNorm || (restoId && mResto === restoId) || mResto.includes(restoNameNorm);
-      });
-
-      if (!items.length) {
-        el.menuGrid.innerHTML = `<p class="empty-state">Aucun article disponible pour ce restaurant.</p>`;
-        updateStep2Summary();
-        return;
-      }
-
-      el.menuGrid.innerHTML = items
-        .map((m, i) => {
-          const id = String(getField(m, ["id", "code"], `${restoNameNorm}-${i}`));
-          const nom = getField(m, ["ITEM_NAME", "item_name", "item", "nom", "name", "plat", "article", "titre"], `Article ${i + 1}`);
-          const cat = getField(m, ["categorie", "catégorie", "type"], "Plat");
-          const desc = getField(m, ["description", "details", "détails"], "");
-          const prix = parsePriceNum(getField(m, ["prix", "price", "tarif"], 0));
-          const qty = state.cart[id]?.qty || 0;
-
-          return `
-            <div class="menu-card">
-              <div>
-                <div class="menu-cat">${escapeHtml(cat)}</div>
-                <div class="menu-title">${escapeHtml(nom)}</div>
-                ${desc ? `<div class="menu-desc">${escapeHtml(desc)}</div>` : ""}
-              </div>
-              <div class="menu-footer">
-                <span class="menu-price">${formatPrice(prix)}</span>
-                <div class="qty-controls">
-                  <button type="button" class="qty-btn" data-op="dec" data-id="${escapeAttr(id)}" ${!open || qty <= 0 ? "disabled" : ""}>-</button>
-                  <input
-                    type="number"
-                    min="0"
-                    max="99"
-                    class="qty-input"
-                    data-id="${escapeAttr(id)}"
-                    value="${qty}"
-                    ${!open ? "disabled" : ""}
-                    aria-label="Quantité pour ${escapeAttr(nom)}"
-                  />
-                  <button type="button" class="qty-btn" data-op="inc" data-id="${escapeAttr(id)}" ${!open ? "disabled" : ""}>+</button>
-                </div>
-              </div>
-            </div>
-          `;
-        })
-        .join("");
-
-      function setItemQty(id, newQty) {
-        const idx = items.findIndex((m, i) => String(getField(m, ["id", "code"], `${restoNameNorm}-${i}`)) === id);
-        if (idx === -1) return;
-        const m = items[idx];
-        const safeQty = Math.max(0, Math.min(99, parseInt(newQty, 10) || 0));
-
-        if (safeQty === 0) {
-          delete state.cart[id];
-        } else {
-          state.cart[id] = {
-            id,
-            nom: getField(m, ["ITEM_NAME", "item_name", "item", "nom", "name", "plat", "article", "titre"], "Article"),
-            prix: parsePriceNum(getField(m, ["prix", "price", "tarif"], 0)),
-            restaurant: restoName,
-            zone: state.zone,
-            qty: safeQty
-          };
-        }
-        renderMenus();
-      }
-
-      el.menuGrid.querySelectorAll(".qty-btn").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const id = btn.dataset.id;
-          const current = state.cart[id]?.qty || 0;
-          setItemQty(id, btn.dataset.op === "inc" ? current + 1 : current - 1);
-        });
-      });
-
-      el.menuGrid.querySelectorAll(".qty-input").forEach((inp) => {
-        inp.addEventListener("change", () => {
-          setItemQty(inp.dataset.id, inp.value);
-        });
-      });
-
-      updateStep2Summary();
-    }
-
-    function getCartTotals() {
-      const entries = Object.values(state.cart);
-      let count = 0;
-      let subtotal = 0;
-      entries.forEach((e) => {
-        count += e.qty;
-        subtotal += e.qty * e.prix;
-      });
-      const deliveryFee = count > 0 ? getDeliveryFee(state.selectedRestaurant, state.zone) : 0;
-      const total = subtotal + deliveryFee;
-      return { entries, count, subtotal, deliveryFee, total };
-    }
-
-    function updateStep2Summary() {
-      const { count, subtotal } = getCartTotals();
-      el.step2SummaryCount.textContent = `${count} article(s) dans le panier`;
-      el.step2SummaryTotal.textContent = formatPrice(subtotal);
-    }
-
-    el.confirmCartBtn.addEventListener("click", () => {
-      const { count } = getCartTotals();
-      if (count <= 0) {
-        el.menuFeedback.textContent = "Choisissez au moins un article avant de confirmer le panier.";
-        el.menuFeedback.className = "feedback-msg show feedback-err";
-        return;
-      }
-      el.menuFeedback.className = "feedback-msg";
-      goToStep(3);
-    });
-
-    function renderCheckoutCart() {
-      const { entries, subtotal, deliveryFee, total } = getCartTotals();
-      el.cartSubtotal.textContent = formatPrice(subtotal);
-      el.cartDelivery.textContent = formatPrice(deliveryFee);
-      el.cartTotal.textContent = formatPrice(total);
-
-      if (!entries.length) {
-        el.cartItems.innerHTML = `<p class="empty-state">Votre panier est vide.</p>`;
-        return;
-      }
-      el.cartItems.innerHTML = entries
-        .map(
-          (e) => `
-          <div class="cart-item">
-            <div>
-              <strong>${escapeHtml(e.nom)}</strong> × ${e.qty}
-              <div style="font-size: 0.78rem; color: var(--text-muted);">${escapeHtml(e.restaurant)} — ${escapeHtml(e.zone)}</div>
-            </div>
-            <div style="color: var(--gold-soft); font-weight: 700;">${formatPrice(e.qty * e.prix)}</div>
+        const row = document.createElement("div");
+        row.className = "menu-item";
+        row.innerHTML = `
+          <div>
+            <strong>${nom}</strong>
+            ${desc ? `<div class="muted">${desc}</div>` : ""}
+            <div style="margin-top:4px; color:#e09b63; font-weight:600;">${prix.toFixed(3)} dt</div>
           </div>
-        `
-        )
-        .join("");
+          <div class="qty-box">
+            <button type="button" class="secondary minus_btn">-</button>
+            <span class="qty-val">${qty}</span>
+            <button type="button" class="plus_btn">+</button>
+          </div>
+        `;
+
+        const minus_btn = row.querySelector(".minus_btn");
+        const plus_btn = row.querySelector(".plus_btn");
+        const qty_val = row.querySelector(".qty-val");
+
+        minus_btn.addEventListener("click", () => {
+          const cur = panier[key] ? panier[key].qty : 0;
+          const next = Math.max(0, cur - 1);
+          if (next === 0) delete panier[key];
+          else panier[key] = { nom, prix, qty: next };
+          qty_val.textContent = next;
+          update_recap();
+        });
+
+        plus_btn.addEventListener("click", () => {
+          const cur = panier[key] ? panier[key].qty : 0;
+          const next = cur + 1;
+          panier[key] = { nom, prix, qty: next };
+          qty_val.textContent = next;
+          update_recap();
+        });
+
+        menu_list.appendChild(row);
+      });
+
+      update_recap();
     }
 
-        el.gpsBtn.addEventListener("click", () => {
+    function populate_zones_and_restaurants() {
+      const zones = [...new Set(restaurants_data.map(r => String(r.zone || "").trim()).filter(Boolean))];
+      zone_select.innerHTML = zones.length
+        ? zones.map(z => `<option value="${z}">${z}</option>`).join("")
+        : '<option value="houmt souk">houmt souk</option>';
+
+      function refresh_restos() {
+        const z = zone_select.value;
+        const list = restaurants_data.filter(r => !z || String(r.zone || "").trim() === z);
+        const final_list = list.length ? list : restaurants_data;
+        restaurant_select.innerHTML = final_list.map(r => {
+          const nom = String(r.nom || "").trim();
+          return `<option value="${nom}">${nom}</option>`;
+        }).join("");
+        panier = {};
+        render_menu();
+      }
+
+      zone_select.addEventListener("change", refresh_restos);
+      restaurant_select.addEventListener("change", () => {
+        panier = {};
+        render_menu();
+      });
+
+      refresh_restos();
+    }
+
+    async function load_init_data() {
+      try {
+        const res = await fetch(api_url + "?action=init");
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.message || "erreur chargement");
+        restaurants_data = Array.isArray(data.restaurants) ? data.restaurants : [];
+        menus_data = Array.isArray(data.menus) ? data.menus : [];
+        populate_zones_and_restaurants();
+      } catch (err) {
+        menu_list.innerHTML = '<p class="muted">impossible de charger les donnees depuis google sheets.</p>';
+        show_msg("erreur de connexion au serveur : " + err.message, false);
+      }
+    }
+
+    btn_gps.addEventListener("click", () => {
       if (!navigator.geolocation) {
-        el.gpsStatus.textContent = "GPS non disponible sur cet appareil.";
+        show_msg("la geolocalisation n'est pas supportee sur cet appareil.", false);
         return;
       }
-      el.gpsStatus.textContent = "Localisation en cours...";
+      btn_gps.disabled = true;
+      gps_status.textContent = "recuperation de la position gps du client...";
+
       navigator.geolocation.getCurrentPosition(
-        (pos) => {
+        pos => {
           const lat = pos.coords.latitude.toFixed(6);
           const lng = pos.coords.longitude.toFixed(6);
-          state.gps = {
-            lat,
-            lng,
-            mapUrl: `https://www.google.com/maps?q=${lat},${lng}`
+          client_gps = {
+            lat: lat,
+            lng: lng,
+            lien: "https://www.google.com/maps?q=" + lat + "," + lng
           };
-          el.gpsStatus.textContent = `GPS enregistré (${lat}, ${lng})`;
-          if (state.step === 3) renderCheckoutCart();
+          gps_status.textContent = "gps client actif : " + lat + ", " + lng;
+          btn_gps.disabled = false;
+          update_recap();
         },
-        () => {
-          el.gpsStatus.textContent = "GPS refusé ou indisponible. Précisez votre adresse.";
+        err => {
+          btn_gps.disabled = false;
+          gps_status.textContent = "echec gps : " + err.message;
+          show_msg("impossible d'obtenir la position gps : " + err.message, false);
         },
-        { enableHighAccuracy: true, timeout: 10000 }
+        { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 }
       );
     });
 
+    btn_submit.addEventListener("click", async () => {
+      const client_nom = document.getElementById("client_nom").value.trim();
+      const client_telephone = document.getElementById("client_telephone").value.trim();
+      const adresse = document.getElementById("adresse").value.trim();
+      const notes = document.getElementById("notes").value.trim();
+      const zone = zone_select.value.trim();
+      const restaurant = restaurant_select.value.trim();
+      const items_arr = Object.values(panier).filter(i => i.qty > 0);
 
-    el.orderForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const { entries, subtotal, deliveryFee, total } = getCartTotals();
-      if (!entries.length) {
-        showOrderFeedback("Votre panier est vide.", false);
+      if (!client_nom || !client_telephone) {
+        show_msg("merci de saisir le nom et le telephone du client.", false);
+        return;
+      }
+      if (!items_arr.length) {
+        show_msg("merci d'ajouter au moins un article au panier.", false);
         return;
       }
 
-      const restoName = state.selectedRestaurant
-        ? getField(state.selectedRestaurant, ["nom", "name", "restaurant"], entries[0].restaurant)
-        : entries[0].restaurant;
-
-      const orderRef = "GOAT-" + Math.floor(100000 + Math.random() * 900000);
-      const clientPhoneVal = document.getElementById("clientPhone").value.trim();
+      const sous_total = Number(
+        items_arr.reduce((sum, i) => sum + to_num(i.prix) * i.qty, 0).toFixed(3)
+      );
 
       const payload = {
-        action: "createOrder",
-        reference: orderRef,
-        zone: state.zone,
-        restaurant: restoName,
-        items: entries.map((i) => `${i.nom || i.name || i.titre || i.article || "Article"} (x${i.qty || i.quantity || 1})`),
-        sous_total: subtotal.toFixed(3),
-        frais_livraison: deliveryFee.toFixed(3),
-        total: total.toFixed(3),
-        client_nom: (document.getElementById("clientNom")?.value || document.getElementById("client_nom")?.value || document.getElementById("clientName")?.value || document.getElementById("nom")?.value || el.orderForm?.querySelector('input[name*="nom" i], input[name*="name" i], input[type="text"]')?.value || "").trim(),
-        client_telephone: String(clientPhoneVal || "").replace(/\s+/g, "").trim(),
-        adresse: document.getElementById("clientAddress").value.trim(),
-        notes: document.getElementById("orderNotes").value.trim(),
-        gps_lat: state.gps.lat,
-        gps_lng: state.gps.lng,
-        gps_lien: state.gps.mapUrl,
-        statut: "Reçue"
+        action: "create_order",
+        zone: zone,
+        restaurant: restaurant,
+        client_nom: client_nom,
+        client_telephone: client_telephone,
+        adresse: adresse,
+        items: items_arr,
+        sous_total: sous_total,
+        gps_lat: client_gps.lat,
+        gps_lng: client_gps.lng,
+        gps_lien: client_gps.lien,
+        notes: notes
       };
 
-      el.submitOrderBtn.disabled = true;
-      el.submitOrderBtn.textContent = "Envoi en cours...";
+      btn_submit.disabled = true;
+      show_msg("envoi de la commande en cours...", true);
 
       try {
-        await fetch(APPS_SCRIPT_URL, {
+        const res = await fetch(api_url, {
           method: "POST",
-          mode: "no-cors",
-          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload)
         });
-
-        state.cart = {};
-        el.orderForm.reset();
-        state.gps = { lat: "", lng: "", mapUrl: "" };
-        el.gpsStatus.textContent = "Position GPS non renseignée.";
-        renderCheckoutCart();
-        updateStep2Summary();
-
-        showOrderFeedback(
-          `Commande envoyée. Référence : ${orderRef} — Statut : Reçue.`,
-          true
-        );
-
-        el.postOrderTracking.classList.remove("hidden");
-        el.trackQuery.value = orderRef;
-        renderLocalTrackingPreview(orderRef, payload.zone, payload.restaurant, payload.total, "Reçue");
-      } catch (err) {
-        showOrderFeedback("Erreur lors de l'envoi de la commande.", false);
-      } finally {
-        el.submitOrderBtn.disabled = false;
-        el.submitOrderBtn.textContent = "Valider la commande";
-      }
-    });
-
-    function showOrderFeedback(msg, ok) {
-      el.orderFeedback.textContent = msg;
-      el.orderFeedback.className = `feedback-msg show ${ok ? "feedback-ok" : "feedback-err"}`;
-    }
-
-    const STATUS_STEPS = ["Reçue", "En préparation", "En livraison", "Livrée"];
-
-    function renderLocalTrackingPreview(ref, zone, restaurant, total, currentStatus) {
-      const activeIdx = Math.max(
-        0,
-        STATUS_STEPS.findIndex((s) => normalizeText(s) === normalizeText(currentStatus))
-      );
-      el.trackResult.innerHTML = `
-        <div style="background: var(--bg-olive-deep); padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
-          <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
-            <strong>Réf : ${escapeHtml(ref)}</strong>
-            <span class="badge badge-open">${escapeHtml(currentStatus)}</span>
-          </div>
-          <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">
-            Zone : ${escapeHtml(zone)} • Restaurant : ${escapeHtml(restaurant)} • Total : ${escapeHtml(total)} TND
-          </div>
-          <div class="steps-row">
-            ${STATUS_STEPS.map(
-              (st, i) => `<div class="step-item ${i <= activeIdx ? "done" : ""}">${escapeHtml(st)}</div>`
-            ).join("")}
-          </div>
-        </div>
-      `;
-    }
-
-    el.trackSearchBtn.addEventListener("click", async () => {
-      const q = el.trackQuery.value.trim();
-      if (!q) {
-        el.trackResult.innerHTML = `<p class="empty-state">Entrez un téléphone ou une référence.</p>`;
-        return;
-      }
-      el.trackResult.innerHTML = `<p class="empty-state">Recherche en cours...</p>`;
-
-      try {
-        const res = await fetch(`${APPS_SCRIPT_URL}?action=track&q=${encodeURIComponent(q)}`, {
-          cache: "no-store"
-        });
         const data = await res.json();
-        const order = data.order || (Array.isArray(data.orders) ? data.orders[0] : null);
+        btn_submit.disabled = false;
 
-        if (!order) {
-          el.trackResult.innerHTML = `<p class="empty-state">Aucune commande trouvée pour le moment.</p>`;
+        if (!data.ok) {
+          show_msg("erreur : " + (data.message || "echec creation commande"), false);
           return;
         }
 
-        const currentStatus = String(getField(order, ["statut", "status", "etat"], "Reçue")).trim();
-        renderLocalTrackingPreview(
-          getField(order, ["reference", "ref", "id"], q),
-          getField(order, ["zone"], "-"),
-          getField(order, ["restaurant"], "-"),
-          getField(order, ["total"], "-"),
-          currentStatus
+        show_msg(
+          "commande enregistree ! ref : " + data.ref +
+          " | livraison : " + Number(data.frais_livraison).toFixed(3) + " dt" +
+          " | total : " + Number(data.total).toFixed(3) + " dt",
+          true
         );
+
+        panier = {};
+        render_menu();
       } catch (err) {
-        el.trackResult.innerHTML = `<p class="empty-state">Impossible de charger le suivi.</p>`;
+        btn_submit.disabled = false;
+        show_msg("erreur reseau : " + err.message, false);
       }
     });
 
-    el.brandHomeBtn.addEventListener("click", () => {
-      goToStep(1);
-    });
-
-    el.zoneBtns.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        el.zoneBtns.forEach((b) => b.classList.remove("active"));
-        btn.classList.add("active");
-        state.zone = btn.dataset.zone;
-        state.selectedRestaurant = null;
-        state.cart = {};
-        updateStep2Summary();
-        renderPubs();
-        renderRestaurantsForZone();
-      });
-    });
-
-    el.reloadDataBtn.addEventListener("click", fetchSheetData);
-    el.backToRestaurantsBtn.addEventListener("click", () => goToStep(1));
-    el.backToMenuBtn.addEventListener("click", () => goToStep(2));
-
-    function escapeHtml(str) {
-      return String(str ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;");
-    }
-
-    function escapeAttr(str) {
-      return escapeHtml(str).replace(/'/g, "&#39;");
-    }
-
-    initParticles();
-    fetchSheetData();
+    load_init_data();
   </script>
 </body>
 </html>
