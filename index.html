@@ -560,6 +560,59 @@
       color: var(--text-muted);
     }
 
+    /* الثلاثة بلوكات بجنب بعضهم في الأسفل */
+    .highlights-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 30px;
+    }
+
+    .highlight-card {
+      background: var(--surface-olive);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 18px 16px;
+      text-align: center;
+      box-shadow: var(--shadow-card);
+      transition: transform 0.16s ease, border-color 0.2s ease;
+    }
+
+    .highlight-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--gold-wood);
+    }
+
+    .highlight-icon {
+      width: 44px;
+      height: 44px;
+      margin: 0 auto 10px;
+      border-radius: 50%;
+      background: rgba(200, 90, 50, 0.18);
+      border: 1px solid rgba(227, 197, 139, 0.45);
+      color: var(--gold-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+    }
+
+    .highlight-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.96rem;
+      font-weight: 700;
+      color: var(--gold-soft);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .highlight-desc {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
     .site-footer {
       text-align: center;
       margin-top: 26px;
@@ -598,6 +651,12 @@
     }
 
     .hidden { display: none !important; }
+
+    @media (max-width: 780px) {
+      .highlights-grid {
+        grid-template-columns: 1fr;
+      }
+    }
 
     @media (max-width: 600px) {
       .zone-btn {
@@ -734,6 +793,24 @@
         </form>
       </section>
     </div>
+
+    <section class="highlights-grid" aria-label="Points forts du service">
+      <div class="highlight-card">
+        <div class="highlight-icon" aria-hidden="true">🍽️</div>
+        <div class="highlight-title">CHOIX VARIÉ</div>
+        <div class="highlight-desc">Restaurants, cafés et adresses locales sélectionnés à Ajim et Houmt Souk.</div>
+      </div>
+      <div class="highlight-card">
+        <div class="highlight-icon" aria-hidden="true">⚡</div>
+        <div class="highlight-title">LIVRAISON RAPIDE</div>
+        <div class="highlight-desc">Prise en charge directe avec calcul précis par GPS jusqu'à votre porte.</div>
+      </div>
+      <div class="highlight-card">
+        <div class="highlight-icon" aria-hidden="true">📍</div>
+        <div class="highlight-title">SERVICE DE PROXIMITÉ</div>
+        <div class="highlight-desc">Un service local fiable et attentif à vos préférences à Djerba.</div>
+      </div>
+    </section>
 
     <footer class="site-footer">
       THE GOAT — DJERBA DELIVERY • AJIM &amp; HOUMT SOUK
