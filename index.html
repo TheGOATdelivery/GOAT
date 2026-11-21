@@ -111,15 +111,16 @@
       100% { transform: translateY(-108vh) translateX(26px) scale(1.15); opacity: 0; }
     }
 
+    /* البار الفوقانية المدمجة: اللوغو على اليسار وبجنبه الاسم والوصف */
     .topbar {
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(22, 28, 17, 0.92);
+      background: rgba(22, 28, 17, 0.94);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       border-bottom: 1px solid var(--border-subtle);
-      padding: 11px 18px;
+      padding: 8px 16px;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
     }
 
@@ -133,38 +134,46 @@
 
     .brand-stack {
       display: inline-flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 4px;
+      flex-direction: row;
+      align-items: center;
+      gap: 10px;
       cursor: pointer;
     }
 
     .brand-logo {
-      width: 48px;
-      height: 48px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       object-fit: cover;
       border: 1.5px solid var(--gold-wood);
       background: #12160e;
-      box-shadow: 0 0 14px rgba(197, 155, 82, 0.25);
+      box-shadow: 0 0 12px rgba(197, 155, 82, 0.25);
+      flex-shrink: 0;
+    }
+
+    .brand-text-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1px;
     }
 
     .brand-name {
       font-family: 'Cinzel', serif;
       font-weight: 800;
-      font-size: 1.24rem;
+      font-size: 1.05rem;
       letter-spacing: 0.08em;
       color: var(--gold-wood);
-      line-height: 1.1;
+      line-height: 1.05;
       text-transform: uppercase;
     }
 
     .brand-sub {
-      font-size: 0.78rem;
+      font-size: 0.68rem;
       font-weight: 700;
       color: var(--gold-soft);
       letter-spacing: 0.05em;
-      line-height: 1.15;
+      line-height: 1.1;
       text-transform: uppercase;
     }
 
@@ -205,12 +214,12 @@
     .container {
       max-width: 1040px;
       margin: 0 auto;
-      padding: 22px 18px 40px;
+      padding: 20px 16px 36px;
     }
 
     .hero-section {
       text-align: center;
-      padding: 14px 10px 22px;
+      padding: 12px 8px 20px;
     }
 
     .hero-title {
@@ -560,12 +569,12 @@
       color: var(--text-muted);
     }
 
-    /* الثلاثة بلوكات بجنب بعضهم في الأسفل */
+    /* مربعات صغيرة بجنب بعضهم في الأسفل */
     .highlights-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
-      margin-top: 30px;
+      gap: 10px;
+      margin-top: 26px;
     }
 
     .highlight-card {
@@ -573,21 +582,25 @@
       backdrop-filter: blur(8px);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-md);
-      padding: 18px 16px;
+      padding: 12px 8px;
       text-align: center;
       box-shadow: var(--shadow-card);
       transition: transform 0.16s ease, border-color 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
     }
 
     .highlight-card:hover {
-      transform: translateY(-3px);
+      transform: translateY(-2px);
       border-color: var(--gold-wood);
     }
 
     .highlight-icon {
-      width: 44px;
-      height: 44px;
-      margin: 0 auto 10px;
+      width: 32px;
+      height: 32px;
+      margin: 0 auto 7px;
       border-radius: 50%;
       background: rgba(200, 90, 50, 0.18);
       border: 1px solid rgba(227, 197, 139, 0.45);
@@ -595,28 +608,29 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.25rem;
+      font-size: 0.95rem;
     }
 
     .highlight-title {
       font-family: 'Cinzel', serif;
-      font-size: 0.96rem;
+      font-size: 0.72rem;
       font-weight: 700;
       color: var(--gold-soft);
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       text-transform: uppercase;
+      line-height: 1.25;
     }
 
     .highlight-desc {
-      font-size: 0.84rem;
+      font-size: 0.68rem;
       color: var(--text-muted);
-      line-height: 1.45;
+      line-height: 1.35;
     }
 
     .site-footer {
       text-align: center;
-      margin-top: 26px;
-      font-size: 0.8rem;
+      margin-top: 24px;
+      font-size: 0.78rem;
       color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 0.04em;
@@ -652,16 +666,24 @@
 
     .hidden { display: none !important; }
 
-    @media (max-width: 780px) {
-      .highlights-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
     @media (max-width: 600px) {
       .zone-btn {
         padding: 10px 18px;
         font-size: 0.9rem;
+      }
+      .highlights-grid {
+        gap: 7px;
+      }
+      .highlight-card {
+        padding: 10px 6px;
+        border-radius: 12px;
+      }
+      .highlight-title {
+        font-size: 0.64rem;
+      }
+      .highlight-desc {
+        font-size: 0.6rem;
+        line-height: 1.3;
       }
     }
   </style>
@@ -676,8 +698,10 @@
     <div class="topbar-inner">
       <div class="brand-stack" id="brandHomeBtn">
         <img src="./logo.png" alt="Logo THE GOAT" class="brand-logo" />
-        <div class="brand-name">THE GOAT</div>
-        <div class="brand-sub">DJERBA DELIVERY</div>
+        <div class="brand-text-wrap">
+          <div class="brand-name">THE GOAT</div>
+          <div class="brand-sub">DJERBA DELIVERY</div>
+        </div>
       </div>
     </div>
   </header>
@@ -798,17 +822,17 @@
       <div class="highlight-card">
         <div class="highlight-icon" aria-hidden="true">🍽️</div>
         <div class="highlight-title">CHOIX VARIÉ</div>
-        <div class="highlight-desc">Restaurants, cafés et adresses locales sélectionnés à Ajim et Houmt Souk.</div>
+        <div class="highlight-desc">Restaurants, cafés et adresses locales à Ajim &amp; Houmt Souk.</div>
       </div>
       <div class="highlight-card">
         <div class="highlight-icon" aria-hidden="true">⚡</div>
         <div class="highlight-title">LIVRAISON RAPIDE</div>
-        <div class="highlight-desc">Prise en charge directe avec calcul précis par GPS jusqu'à votre porte.</div>
+        <div class="highlight-desc">Prise en charge directe avec calcul GPS jusqu'à vous.</div>
       </div>
       <div class="highlight-card">
         <div class="highlight-icon" aria-hidden="true">📍</div>
         <div class="highlight-title">SERVICE DE PROXIMITÉ</div>
-        <div class="highlight-desc">Un service local fiable et attentif à vos préférences à Djerba.</div>
+        <div class="highlight-desc">Service local fiable et attentif à Djerba.</div>
       </div>
     </section>
 
