@@ -1,22 +1,32 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr" dir="ltr">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>the goat — djerba delivery</title>
+  <title>THE GOAT — Djerba Delivery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg_main: #121811;
-      --bg_card: #1b2419;
-      --bg_input: #232e21;
-      --gold: #d8b24c;
-      --copper: #c87b52;
-      --copper_bright: #d98254;
-      --cream: #f4efe4;
-      --muted: #b6b1a3;
-      --line: rgba(216, 178, 76, 0.22);
-      --ok_bg: #243b29;
-      --ok_fg: #8be09e;
+      --bg-olive: #232b1c;
+      --bg-olive-deep: #181f13;
+      --surface-olive: rgba(45, 55, 36, 0.88);
+      --surface-elevated: rgba(54, 66, 43, 0.94);
+      --border-subtle: rgba(197, 155, 82, 0.28);
+      --gold-wood: #c59b52;
+      --gold-soft: #e3c58b;
+      --wood-resto: #d4a06a;
+      --copper-vivid: #c85a32;
+      --copper-bright: #df6d43;
+      --text-main: #f4f0e6;
+      --text-muted: #c6c1b1;
+      --ok-green: #529463;
+      --closed-red: #b84335;
+      --shadow-card: 0 12px 30px rgba(8, 12, 6, 0.42);
+      --radius-lg: 18px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
     }
 
     * {
@@ -26,972 +36,1504 @@
     }
 
     body {
-      background: linear-gradient(180deg, #161f15 0%, var(--bg_main) 100%);
-      color: var(--cream);
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-olive-deep);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      line-height: 1.5;
       min-height: 100vh;
-      padding: 16px 14px 60px;
-      line-height: 1.45;
+      overflow-x: hidden;
+      position: relative;
     }
 
-    .wrap {
-      max-width: 540px;
-      margin: 0 auto;
+    /* Animated Dark Olive & Gold Marble Background */
+    .marble-bg {
+      position: fixed;
+      inset: -15%;
+      z-index: -2;
+      background:
+        radial-gradient(ellipse at 20% 25%, rgba(197, 155, 82, 0.12) 0%, transparent 48%),
+        radial-gradient(ellipse at 80% 70%, rgba(200, 90, 50, 0.11) 0%, transparent 52%),
+        radial-gradient(ellipse at 55% 15%, rgba(58, 72, 44, 0.65) 0%, transparent 60%),
+        linear-gradient(135deg, #171d12 0%, #232b1c 45%, #192014 100%);
+      animation: marbleDrift 22s ease-in-out infinite alternate;
+      pointer-events: none;
     }
 
-    .brand_header {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      padding: 8px 0 18px;
+    .marble-veins {
+      position: fixed;
+      inset: -10%;
+      z-index: -2;
+      opacity: 0.24;
+      background-image:
+        repeating-linear-gradient(
+          118deg,
+          transparent 0px,
+          transparent 90px,
+          rgba(197, 155, 82, 0.18) 92px,
+          transparent 95px,
+          transparent 210px,
+          rgba(200, 90, 50, 0.14) 212px,
+          transparent 215px
+        );
+      filter: blur(1.2px);
+      animation: veinFlow 28s linear infinite alternate;
+      pointer-events: none;
     }
 
-    .logo_circle {
-      width: 54px;
-      height: 54px;
-      border-radius: 50%;
-      background: #0e130d;
-      border: 1.5px solid var(--gold);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--gold);
-      font-weight: 800;
-      font-size: 16px;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
+    @keyframes marbleDrift {
+      0% {
+        transform: translate3d(-2%, -2%, 0) scale(1.02);
+      }
+      100% {
+        transform: translate3d(2%, 2%, 0) scale(1.07);
+      }
+    }
+
+    @keyframes veinFlow {
+      0% {
+        transform: translate3d(0, 0, 0) rotate(0deg);
+      }
+      100% {
+        transform: translate3d(-2.5%, 1.5%, 0) rotate(1.5deg);
+      }
+    }
+
+    /* Floating Gold & Copper Dust Particles */
+    .particles-layer {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
       overflow: hidden;
+      pointer-events: none;
     }
 
-    .logo_circle img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    .particle {
+      position: absolute;
+      bottom: -16px;
+      border-radius: 50%;
+      opacity: 0;
+      animation: floatSpark linear infinite;
     }
 
-    .brand_name {
-      font-size: 24px;
-      font-weight: 800;
-      color: var(--gold);
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      line-height: 1.1;
+    @keyframes floatSpark {
+      0% {
+        transform: translateY(0) translateX(0) scale(0.7);
+        opacity: 0;
+      }
+      15% {
+        opacity: 0.75;
+      }
+      85% {
+        opacity: 0.55;
+      }
+      100% {
+        transform: translateY(-108vh) translateX(26px) scale(1.15);
+        opacity: 0;
+      }
     }
 
-    .brand_tagline {
-      font-size: 13px;
-      color: var(--cream);
-      opacity: 0.9;
+    /* Sticky Topbar (Always visible while scrolling) */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(22, 28, 17, 0.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 11px 18px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
     }
 
-    .hero_box {
-      text-align: center;
-      padding: 6px 6px 18px;
-    }
-
-    .hero_title {
-      font-size: 32px;
-      font-weight: 800;
-      color: var(--cream);
-      line-height: 1.15;
-      margin-bottom: 8px;
-    }
-
-    .hero_sub {
-      font-size: 15px;
-      color: var(--muted);
-    }
-
-    .card {
-      background: var(--bg_card);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 18px;
-      margin-bottom: 16px;
-      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25);
-    }
-
-    .badge_une {
-      display: inline-block;
-      background: #47281e;
-      color: #f29d72;
-      border: 1px solid rgba(217, 130, 84, 0.45);
-      border-radius: 999px;
-      padding: 4px 12px;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.6px;
-      text-transform: uppercase;
-      margin-bottom: 10px;
-    }
-
-    .card_heading {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--cream);
-      margin-bottom: 6px;
-    }
-
-    .card_text {
-      font-size: 14px;
-      color: var(--muted);
-      margin-bottom: 12px;
-    }
-
-    .zone_pills {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 12px;
-    }
-
-    .zone_pill {
-      border: 1px solid var(--line);
-      background: var(--bg_input);
-      color: var(--cream);
-      border-radius: 10px;
-      padding: 6px 12px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .zone_pill.active {
-      background: var(--copper_bright);
-      color: #fff;
-      border-color: var(--copper_bright);
-    }
-
-    .top_nav_row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 14px;
-    }
-
-    .btn_ghost {
-      background: transparent;
-      border: 1px solid var(--line);
-      color: var(--cream);
-      border-radius: 10px;
-      padding: 8px 12px;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      text-transform: uppercase;
-    }
-
-    .menu_kicker {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--muted);
-      letter-spacing: 0.7px;
-      text-transform: uppercase;
-      margin-bottom: 12px;
-    }
-
-    .plat_box {
-      background: var(--bg_input);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 14px;
-      margin-bottom: 12px;
-    }
-
-    .plat_label {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--copper_bright);
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-      margin-bottom: 4px;
-    }
-
-    .plat_name {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--cream);
-      margin-bottom: 4px;
-    }
-
-    .plat_desc {
-      font-size: 13px;
-      color: var(--muted);
-      margin-bottom: 12px;
-    }
-
-    .plat_bottom {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .plat_price {
-      font-size: 18px;
-      font-weight: 800;
-      color: var(--gold);
-    }
-
-    .qty_controls {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .qty_btn {
-      width: 34px;
-      height: 34px;
-      border-radius: 9px;
-      border: 1px solid var(--line);
-      background: var(--bg_card);
-      color: var(--cream);
-      font-size: 17px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .qty_val {
-      min-width: 24px;
-      text-align: center;
-      font-weight: 700;
-      font-size: 15px;
-    }
-
-    .cart_bar {
+    .topbar-inner {
+      max-width: 1040px;
+      margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      padding-top: 8px;
-      border-top: 1px solid var(--line);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      cursor: pointer;
+    }
+
+    .brand-logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1.5px solid var(--gold-wood);
+      background: #12160e;
+      box-shadow: 0 0 14px rgba(197, 155, 82, 0.25);
+    }
+
+    .brand-name {
+      font-family: 'Cinzel', serif;
+      font-weight: 800;
+      font-size: 1.28rem;
+      letter-spacing: 0.08em;
+      color: var(--gold-wood);
+      line-height: 1.1;
+      text-transform: uppercase;
+    }
+
+    .brand-sub {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--gold-soft);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 9px 16px;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 0.84rem;
+      cursor: pointer;
+      transition: transform 0.14s ease, background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn-ghost {
+      background: rgba(45, 55, 36, 0.85);
+      color: var(--text-main);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .btn-ghost.active {
+      background: var(--copper-vivid);
+      color: #fff;
+      border-color: var(--copper-vivid);
+    }
+
+    .btn-copper {
+      background: var(--copper-vivid);
+      color: #fff;
+      box-shadow: 0 6px 18px rgba(200, 90, 50, 0.35);
+    }
+
+    .btn-copper:hover {
+      background: var(--copper-bright);
+    }
+
+    .btn-gold-outline {
+      background: rgba(24, 31, 19, 0.7);
+      color: var(--gold-soft);
+      border: 1px solid var(--gold-wood);
+    }
+
+    .container {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 22px 18px 40px;
+    }
+
+    /* Hero Slogan ("MORE THAN JUST FOOD") */
+    .hero-section {
+      text-align: center;
+      padding: 14px 10px 22px;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(1.9rem, 5vw, 2.95rem);
+      font-weight: 700;
+      color: var(--gold-soft);
+      letter-spacing: 0.04em;
+      line-height: 1.15;
+      text-transform: uppercase;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+    }
+
+    .hero-subtitle {
+      margin-top: 8px;
+      font-size: 0.96rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* PUB Banner right below Hero */
+    .pub-section {
+      margin-bottom: 22px;
+    }
+
+    .pub-card {
+      background: linear-gradient(125deg, rgba(200, 90, 50, 0.3), rgba(45, 55, 36, 0.9));
+      border: 1.5px solid rgba(223, 109, 67, 0.65);
+      border-radius: var(--radius-lg);
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      box-shadow: var(--shadow-card);
       flex-wrap: wrap;
     }
 
-    .cart_summary_main {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--cream);
-    }
-
-    .cart_summary_sub {
-      font-size: 16px;
-      font-weight: 800;
-      color: var(--gold);
-    }
-
-    .btn_copper {
-      background: var(--copper_bright);
+    .pub-tag {
+      display: inline-block;
+      background: var(--copper-vivid);
       color: #fff;
-      border: none;
-      border-radius: 12px;
-      padding: 12px 18px;
-      font-size: 14px;
+      font-size: 0.72rem;
       font-weight: 700;
-      cursor: pointer;
-    }
-
-    .btn_copper:hover {
-      background: var(--copper);
-    }
-
-    .section_upper {
-      font-size: 14px;
-      font-weight: 800;
-      color: var(--cream);
-      letter-spacing: 0.7px;
       text-transform: uppercase;
-      margin-bottom: 12px;
-    }
-
-    .checkout_item_row {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 10px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--line);
-      margin-bottom: 12px;
-    }
-
-    .line_row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 14px;
-      color: var(--muted);
-      margin-bottom: 8px;
-    }
-
-    .total_row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 18px;
-      font-weight: 800;
-      color: var(--cream);
-      padding-top: 10px;
-      border-top: 1px solid var(--line);
-      margin-bottom: 16px;
-    }
-
-    .field_group {
-      margin-bottom: 14px;
-    }
-
-    .field_label {
-      display: block;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--cream);
+      letter-spacing: 0.06em;
+      padding: 3px 10px;
+      border-radius: 999px;
       margin-bottom: 6px;
     }
 
-    .field_input, .field_textarea {
-      width: 100%;
-      background: var(--bg_input);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 12px 14px;
-      color: var(--cream);
-      font-size: 15px;
-    }
-
-    .field_input:focus, .field_textarea:focus {
-      outline: none;
-      border-color: var(--gold);
-    }
-
-    .btn_gps {
-      width: 100%;
-      background: var(--bg_input);
-      border: 1px solid var(--line);
-      color: var(--cream);
-      border-radius: 12px;
-      padding: 12px 14px;
-      font-size: 15px;
+    .pub-title {
+      font-size: 1.05rem;
       font-weight: 700;
-      cursor: pointer;
-      margin-bottom: 8px;
+      color: var(--text-main);
+      text-transform: uppercase;
     }
 
-    .gps_status {
-      font-size: 13px;
-      color: var(--muted);
-      margin-bottom: 14px;
+    .pub-desc {
+      font-size: 0.87rem;
+      color: var(--text-muted);
+      margin-top: 2px;
     }
 
-    .btn_submit_full {
-      width: 100%;
-      background: var(--copper_bright);
-      color: #fff;
-      border: none;
-      border-radius: 12px;
-      padding: 14px 16px;
-      font-size: 16px;
-      font-weight: 700;
-      cursor: pointer;
+    .pub-img {
+      width: 74px;
+      height: 74px;
+      border-radius: var(--radius-md);
+      object-fit: cover;
+      border: 1px solid var(--gold-wood);
     }
 
-    .alert_ok {
-      margin-top: 14px;
-      background: var(--ok_bg);
-      border: 1px solid rgba(139, 224, 158, 0.35);
-      color: var(--ok_fg);
-      border-radius: 12px;
-      padding: 12px 14px;
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .alert_err {
-      margin-top: 14px;
-      background: rgba(180, 60, 45, 0.25);
-      border: 1px solid rgba(242, 157, 114, 0.45);
-      color: #ffbfa3;
-      border-radius: 12px;
-      padding: 12px 14px;
-      font-size: 13px;
-    }
-
-    .suivi_row {
+    /* Zone Switcher (AJIM first, HOUMT SOUK second) */
+    .zone-selector-wrap {
       display: flex;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-
-    .suivi_card {
-      background: var(--bg_input);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 14px;
-    }
-
-    .suivi_top {
-      display: flex;
-      justify-content: space-between;
+      flex-direction: column;
       align-items: center;
+      gap: 10px;
+      margin-bottom: 26px;
+    }
+
+    .zone-label {
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--gold-soft);
+      font-weight: 700;
+    }
+
+    .zone-tabs {
+      display: inline-flex;
+      gap: 8px;
+      background: rgba(20, 26, 15, 0.9);
+      padding: 7px;
+      border-radius: 999px;
+      border: 1.5px solid var(--gold-wood);
+      box-shadow: var(--shadow-card);
+    }
+
+    .zone-btn {
+      padding: 11px 24px;
+      border-radius: 999px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .zone-btn.active {
+      background: var(--copper-vivid);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(200, 90, 50, 0.45);
+    }
+
+    .stepper {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .step-pill {
+      padding: 6px 13px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      background: rgba(24, 31, 19, 0.85);
+      color: var(--text-muted);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .step-pill.active {
+      background: var(--copper-vivid);
+      color: #fff;
+      border-color: var(--copper-vivid);
+    }
+
+    .section-heading {
+      font-family: 'Cinzel', serif;
+      font-size: 1.18rem;
+      color: var(--gold-soft);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .restaurants-grid, .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(265px, 1fr));
+      gap: 15px;
+      margin-bottom: 24px;
+    }
+
+    .resto-card, .menu-card {
+      background: var(--surface-olive);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .resto-card {
+      cursor: pointer;
+      transition: transform 0.16s ease, border-color 0.2s ease;
+    }
+
+    .resto-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--gold-wood);
+    }
+
+    .resto-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
       gap: 8px;
       margin-bottom: 6px;
     }
 
-    .status_pill {
-      background: var(--ok_bg);
-      color: var(--ok_fg);
-      border-radius: 999px;
-      padding: 4px 12px;
-      font-size: 12px;
+    .resto-name {
+      font-size: 1.08rem;
       font-weight: 700;
+      color: var(--wood-resto);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
     }
 
-    .status_btns {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+    .badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 999px;
+      white-space: nowrap;
+      text-transform: uppercase;
+    }
+
+    .badge-open {
+      background: rgba(82, 148, 99, 0.24);
+      color: #8ee0a3;
+      border: 1px solid rgba(82, 148, 99, 0.55);
+    }
+
+    .badge-closed {
+      background: rgba(184, 67, 53, 0.24);
+      color: #f39b90;
+      border: 1px solid rgba(184, 67, 53, 0.55);
+    }
+
+    .resto-meta, .menu-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .menu-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .menu-cat {
+      font-size: 0.73rem;
+      color: var(--copper-bright);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .menu-title {
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-top: 2px;
+      text-transform: uppercase;
+    }
+
+    .menu-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       gap: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      flex-wrap: wrap;
+    }
+
+    .menu-price {
+      font-weight: 700;
+      color: var(--gold-soft);
+      font-size: 0.98rem;
+    }
+
+    .qty-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .qty-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      border: 1px solid var(--gold-wood);
+      background: var(--bg-olive-deep);
+      color: var(--gold-soft);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .qty-input {
+      width: 48px;
+      height: 30px;
+      text-align: center;
+      border-radius: 8px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-olive-deep);
+      color: var(--text-main);
+      font-weight: 700;
+      font-size: 0.88rem;
+    }
+
+    .panel {
+      background: var(--surface-olive);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 24px;
+    }
+
+    .cart-summary-bar {
+      background: rgba(24, 31, 19, 0.92);
+      border: 1.5px solid var(--copper-bright);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 9px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 0.9rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .input-group label {
+      font-size: 0.82rem;
+      color: var(--gold-soft);
+      font-weight: 600;
+    }
+
+    .input, textarea {
+      background: rgba(20, 26, 15, 0.9);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.9rem;
+      width: 100%;
+    }
+
+    .input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--copper-bright);
+    }
+
+    .gps-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
       margin-top: 12px;
     }
 
-    .status_btn {
-      background: var(--bg_card);
-      border: 1px solid var(--line);
-      color: var(--cream);
-      border-radius: 11px;
-      padding: 10px 12px;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
+    .gps-status {
+      font-size: 0.82rem;
+      color: var(--text-muted);
     }
 
-    .status_btn.active {
-      background: #4e2d21;
-      border-color: var(--copper_bright);
-      color: #fff;
+    /* Bottom Service Highlights */
+    .service-highlights {
+      margin-top: 34px;
+      padding-top: 26px;
+      border-top: 1px solid var(--border-subtle);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+      text-align: center;
+    }
+
+    .highlight-card {
+      background: rgba(35, 43, 28, 0.72);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 20px 16px;
+    }
+
+    .highlight-icon {
+      width: 52px;
+      height: 52px;
+      margin: 0 auto 12px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(200, 90, 50, 0.2);
+      border: 1px solid var(--gold-wood);
+      color: var(--gold-soft);
+    }
+
+    .highlight-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.02rem;
+      color: var(--gold-soft);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .highlight-text {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      text-align: center;
+      margin-top: 26px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .steps-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .step-item {
+      background: var(--bg-olive-deep);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 10px 8px;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .step-item.done {
+      border-color: var(--copper-bright);
+      background: rgba(200, 90, 50, 0.24);
+      color: var(--text-main);
+      font-weight: 700;
+    }
+
+    .feedback-msg {
+      margin-top: 12px;
+      padding: 11px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
+      display: none;
+    }
+
+    .feedback-msg.show {
+      display: block;
+    }
+
+    .feedback-ok {
+      background: rgba(82, 148, 99, 0.22);
+      border: 1px solid var(--ok-green);
+      color: #b7f0c5;
+    }
+
+    .feedback-err {
+      background: rgba(200, 90, 50, 0.24);
+      border: 1px solid var(--copper-bright);
+      color: #ffd0be;
+    }
+
+    .empty-state {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      padding: 12px 0;
     }
 
     .hidden {
       display: none !important;
     }
+
+    @media (max-width: 600px) {
+      .steps-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .zone-btn {
+        padding: 10px 18px;
+        font-size: 0.9rem;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <header class="brand_header">
-      <div class="logo_circle" id="brand_logo_box">tg</div>
-      <div>
-        <div class="brand_name">the goat</div>
-        <div class="brand_tagline">djerba delivery</div>
-      </div>
-    </header>
 
-    <section class="hero_box">
-      <h1 class="hero_title">more than just food.</h1>
-      <p class="hero_sub">restaurant and snacks, local delivery.</p>
-    </section>
+  <!-- Animated Marble & Gold/Copper Particles -->
+  <div class="marble-bg" aria-hidden="true"></div>
+  <div class="marble-veins" aria-hidden="true"></div>
+  <div class="particles-layer" id="particlesLayer" aria-hidden="true"></div>
 
-    <section class="card">
-      <span class="badge_une">à la une</span>
-      <h2 class="card_heading">livraison locale à ajim &amp; houmt souk</h2>
-      <p class="card_text">découvrez nos restaurants partenaires à djerba.</p>
-      <div class="zone_pills">
-        <button type="button" class="zone_pill active" data-zone="ajim" onclick="set_zone('ajim')">ajim</button>
-        <button type="button" class="zone_pill" data-zone="houmt souk" onclick="set_zone('houmt souk')">houmt souk</button>
-      </div>
-    </section>
-
-    <section class="card" id="menu_section">
-      <div class="top_nav_row">
-        <button type="button" class="btn_ghost" onclick="cycle_restaurant()">&lt;- restaurants</button>
-        <div class="menu_kicker" id="menu_heading" style="margin-bottom:0;">menu — la fameuse big ben</div>
-      </div>
-
-      <div id="plats_container"></div>
-
-      <div class="cart_bar">
+  <!-- Sticky Topbar -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand" id="brandHomeBtn">
+        <img src="./logo.jpg" alt="Logo THE GOAT" class="brand-logo" />
         <div>
-          <div class="cart_summary_main" id="cart_count_label">0 article(s) dans le panier</div>
-          <div class="cart_summary_sub" id="cart_subtotal_label">0.000 tnd</div>
-        </div>
-        <button type="button" class="btn_copper" onclick="open_checkout()">confirmer le panier -&gt;</button>
-      </div>
-    </section>
-
-    <section class="card" id="checkout_section">
-      <div class="top_nav_row">
-        <div class="section_upper" style="margin-bottom:0;">finaliser la commande</div>
-        <button type="button" class="btn_ghost" onclick="scroll_to_menu()">&lt;- modifier le panier</button>
-      </div>
-
-      <div id="checkout_items_box"></div>
-
-      <div class="line_row">
-        <span>sous-total articles</span>
-        <span id="sum_subtotal">0.000 tnd</span>
-      </div>
-      <div class="line_row">
-        <span>livraison (<span id="sum_distance">1.000</span> km)</span>
-        <span id="sum_delivery">1.000 tnd</span>
-      </div>
-      <div class="total_row">
-        <span>total à payer</span>
-        <span id="sum_total">1.000 tnd</span>
-      </div>
-
-      <div class="field_group">
-        <label class="field_label" for="inp_nom">nom complet *</label>
-        <input class="field_input" type="text" id="inp_nom" placeholder="votre nom" />
-      </div>
-
-      <div class="field_group">
-        <label class="field_label" for="inp_tel">téléphone *</label>
-        <input class="field_input" type="tel" id="inp_tel" placeholder="ex: 20 123 456" onblur="check_client_history()" />
-      </div>
-
-      <div class="field_group">
-        <label class="field_label" for="inp_adress">adresse / repère *</label>
-        <input class="field_input" type="text" id="inp_adress" placeholder="rue, quartier ou point de repère" />
-      </div>
-
-      <div class="field_group">
-        <label class="field_label" for="inp_notes">notes de commande (optionnel)</label>
-        <textarea class="field_textarea" id="inp_notes" rows="3" placeholder="sans piment, appeler à l'arrivée..."></textarea>
-      </div>
-
-      <button type="button" class="btn_gps" onclick="capture_gps()">me localiser (gps)</button>
-      <div class="gps_status" id="gps_status_text">position gps non renseignée.</div>
-
-      <button type="button" class="btn_submit_full" id="btn_valider_commande" onclick="submit_commande()">valider la commande</button>
-
-      <div id="order_feedback" class="hidden"></div>
-    </section>
-
-    <section class="card" id="suivi_section">
-      <div class="section_upper">suivi de votre commande</div>
-      <div class="suivi_row">
-        <input class="field_input" type="text" id="suivi_ref_input" placeholder="goat-123456" />
-        <button type="button" class="btn_copper" onclick="track_order()">suivre</button>
-      </div>
-
-      <div id="suivi_result_box" class="hidden">
-        <div class="suivi_card">
-          <div class="suivi_top">
-            <strong id="suivi_ref_display">réf : —</strong>
-            <span class="status_pill" id="suivi_status_badge">reçu</span>
-          </div>
-          <div class="card_text" id="suivi_meta_display" style="margin-bottom:4px;"></div>
-          <div class="plat_price" id="suivi_total_display" style="font-size:15px;"></div>
-
-          <div class="status_btns">
-            <button type="button" class="status_btn active" id="btn_st_recu" onclick="set_order_status('reçu')">reçu</button>
-            <button type="button" class="status_btn" id="btn_st_prep" onclick="set_order_status('en préparation')">en préparation</button>
-          </div>
+          <div class="brand-name">THE GOAT</div>
+          <div class="brand-sub">DJERBA DELIVERY</div>
         </div>
       </div>
+
+      <div class="nav-actions">
+        <button class="btn btn-ghost active" id="navOrderBtn" type="button">COMMANDER</button>
+        <button class="btn btn-ghost" id="navTrackBtn" type="button">SUIVRE</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Hero Section ("MORE THAN JUST FOOD") -->
+    <section class="hero-section">
+      <h1 class="hero-title">MORE THAN JUST FOOD</h1>
+      <p class="hero-subtitle">Vos restaurants préférés livrés rapidement à Djerba</p>
     </section>
-  </div>
+
+    <!-- PUB Banner right below Hero -->
+    <section class="pub-section" id="pubSection" aria-label="Offres et publicités"></section>
+
+    <!-- Zone Selector (AJIM first, HOUMT SOUK second) -->
+    <div class="zone-selector-wrap" id="zoneSelectorWrap">
+      <div class="zone-label">Choisissez votre zone</div>
+      <div class="zone-tabs" role="tablist" aria-label="Zones de livraison">
+        <button class="zone-btn active" data-zone="Ajim" id="zoneAjim" type="button">
+          AJIM
+        </button>
+        <button class="zone-btn" data-zone="Houmt Souk" id="zoneHoumtSouk" type="button">
+          HOUMT SOUK
+        </button>
+      </div>
+    </div>
+
+    <!-- Order Flow -->
+    <div id="orderFlow">
+      <div class="stepper">
+        <span class="step-pill active" id="pillStep1">1. RESTAURANTS</span>
+        <span class="step-pill" id="pillStep2">2. MENU &amp; QUANTITÉS</span>
+        <span class="step-pill" id="pillStep3">3. GPS &amp; VALIDATION</span>
+      </div>
+
+      <!-- ÉTAPE 1 : Restaurants -->
+      <section id="stepRestaurants">
+        <div class="section-heading">
+          <span id="restaurantsHeading">RESTAURANTS — AJIM</span>
+          <button class="btn btn-gold-outline" id="reloadDataBtn" type="button">ACTUALISER</button>
+        </div>
+
+        <div class="restaurants-grid" id="restaurantsGrid"></div>
+      </section>
+
+      <!-- ÉTAPE 2 : Menu + Quantités -->
+      <section id="stepMenu" class="hidden">
+        <div class="section-heading">
+          <div>
+            <button class="btn btn-ghost" id="backToRestaurantsBtn" type="button" style="margin-right: 10px;">
+              ← RESTAURANTS
+            </button>
+            <span id="menuHeading">MENU</span>
+          </div>
+        </div>
+
+        <div class="menu-grid" id="menuGrid"></div>
+
+        <div class="cart-summary-bar">
+          <div>
+            <div style="font-size: 0.82rem; color: var(--text-muted);" id="step2SummaryCount">0 ARTICLE(S) DANS LE PANIER</div>
+            <div style="font-weight: 700; color: var(--gold-soft); font-size: 1.04rem;" id="step2SummaryTotal">0.000 TND</div>
+          </div>
+          <button class="btn btn-copper" id="confirmCartBtn" type="button">
+            CONFIRMER LE PANIER →
+          </button>
+        </div>
+        <div class="feedback-msg" id="menuFeedback"></div>
+      </section>
+
+      <!-- ÉTAPE 3 : Coordonnées, GPS & Validation -->
+      <section id="stepCheckout" class="panel hidden">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 12px;">
+          <h2 style="font-family: 'Cinzel', serif; color: var(--gold-soft); font-size: 1.12rem; text-transform: uppercase;">
+            FINALISER LA COMMANDE
+          </h2>
+          <button class="btn btn-ghost" id="backToMenuBtn" type="button">
+            ← MODIFIER LE PANIER
+          </button>
+        </div>
+
+        <div id="cartItems"></div>
+        <div style="margin-top: 12px; display: flex; justify-content: space-between; font-weight: 700; color: var(--gold-soft); font-size: 1rem;">
+          <span>TOTAL À PAYER</span>
+          <span id="cartTotal">0.000 TND</span>
+        </div>
+
+        <form id="orderForm" style="margin-top: 16px;">
+          <div class="form-grid">
+            <div class="input-group">
+              <label for="clientName">Nom complet *</label>
+              <input class="input" id="clientName" name="clientName" type="text" required placeholder="Votre nom" />
+            </div>
+            <div class="input-group">
+              <label for="clientPhone">Téléphone *</label>
+              <input class="input" id="clientPhone" name="clientPhone" type="tel" required placeholder="Ex. 20 123 456" />
+            </div>
+            <div class="input-group">
+              <label for="clientAddress">Adresse / Repère *</label>
+              <input class="input" id="clientAddress" name="clientAddress" type="text" required placeholder="Rue, quartier ou point de repère" />
+            </div>
+          </div>
+
+          <div class="input-group" style="margin-top: 12px;">
+            <label for="orderNotes">Notes de commande (optionnel)</label>
+            <textarea id="orderNotes" name="orderNotes" rows="2" placeholder="Sans piment, appeler à l'arrivée..."></textarea>
+          </div>
+
+          <div class="gps-row">
+            <button type="button" class="btn btn-gold-outline" id="gpsBtn">
+              ME LOCALISER (GPS)
+            </button>
+            <span class="gps-status" id="gpsStatus">Position GPS non renseignée.</span>
+          </div>
+
+          <div style="margin-top: 16px;">
+            <button type="submit" class="btn btn-copper" id="submitOrderBtn">
+              VALIDER LA COMMANDE
+            </button>
+          </div>
+
+          <div class="feedback-msg" id="orderFeedback"></div>
+        </form>
+      </section>
+    </div>
+
+    <!-- Vue Suivi de commande -->
+    <section id="trackView" class="panel hidden" aria-label="Suivi de commande">
+      <h2 style="font-family: 'Cinzel', serif; color: var(--gold-soft); font-size: 1.12rem; text-transform: uppercase; margin-bottom: 8px;">
+        SUIVRE MA COMMANDE
+      </h2>
+      <p style="font-size: 0.86rem; color: var(--text-muted); margin-bottom: 14px;">
+        Saisissez votre numéro de téléphone ou votre référence de commande.
+      </p>
+
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <input class="input" id="trackQuery" type="text" placeholder="Téléphone ou référence" style="max-width: 320px;" />
+        <button class="btn btn-copper" id="trackSearchBtn" type="button">VÉRIFIER</button>
+      </div>
+
+      <div id="trackResult" style="margin-top: 16px;"></div>
+    </section>
+
+    <!-- Bottom Service Highlights -->
+    <section class="service-highlights" aria-label="Nos engagements">
+      <div class="highlight-card">
+        <div class="highlight-icon" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 11h18M5 11V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v4M6 11v8h12v-8"/>
+          </svg>
+        </div>
+        <h3 class="highlight-title">LES MEILLEURS RESTAURANTS</h3>
+        <p class="highlight-text">
+          Une sélection d'adresses locales à Ajim et Houmt Souk pour toutes vos envies.
+        </p>
+      </div>
+
+      <div class="highlight-card">
+        <div class="highlight-icon" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M12 7v5l3 2"/>
+          </svg>
+        </div>
+        <h3 class="highlight-title">LIVRAISON RAPIDE</h3>
+        <p class="highlight-text">
+          Commandez en quelques instants et recevez votre repas directement chez vous.
+        </p>
+      </div>
+
+      <div class="highlight-card">
+        <div class="highlight-icon" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 21s-6-4.35-6-10a6 6 0 1 1 12 0c0 5.65-6 10-6 10z"/>
+            <circle cx="12" cy="11" r="2"/>
+          </svg>
+        </div>
+        <h3 class="highlight-title">TOUJOURS À VOTRE SERVICE</h3>
+        <p class="highlight-text">
+          Localisation GPS précise et suivi simple de l'avancement de votre commande.
+        </p>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      THE GOAT — DJERBA DELIVERY • AJIM &amp; HOUMT SOUK
+    </footer>
+  </main>
 
   <script>
-    const api_url = "https://script.google.com/macros/s/AKfycbybbw3yxfctVXCSC5u3xlV0qy1BAxeX0LI1L9qnSkanU0RNW3VhLPcbMZ4QaiG2D4Z7/exec";
-    const zone_coords = {
-      ajim: { lat: 33.7222531, lng: 10.7437356 },
-      "houmt souk": { lat: 33.8758, lng: 10.8574 }
-    };
+    const APPS_SCRIPT_URL =
+      "https://script.google.com/macros/s/AKfycbwyUD3-fSG7Gz9VBdr-6b4EUiGeue5BEv31rtbGDz1Q5VK1j_O3NhwHCjwrRc12Xr9IXQ/exec";
 
-    const app_state = {
-      zone: "ajim",
-      restaurants: [
-        {
-          id: "1",
-          nom: "la fameuse big ben",
-          zone: "ajim",
-          lat: 33.7222531,
-          lng: 10.7437356,
-          logo: ""
-        }
-      ],
-      menus: [
-        {
-          restaurant_id: "1",
-          nom: "article 1",
-          description: "sauce tomate, mozzarella, thon frais, olives, huile d'olive.",
-          prix: 12.0,
-          photo: ""
-        }
-      ],
-      resto_index: 0,
+    const state = {
+      step: 1,
+      zone: "Ajim",
+      restaurants: [],
+      menus: [],
+      pubs: [],
+      selectedRestaurant: null,
       cart: {},
-      gps_lat: "",
-      gps_lng: "",
-      gps_lien: "",
-      distance_km: 1.0,
-      frais_livraison: 1.0,
-      tracked_ref: ""
+      gps: { lat: "", lng: "", mapUrl: "" }
     };
 
-    function format_tnd(val) {
-      const num = Number(val || 0);
-      return num.toFixed(3) + " tnd";
-    }
+    const el = {
+      brandHomeBtn: document.getElementById("brandHomeBtn"),
+      orderFlow: document.getElementById("orderFlow"),
+      trackView: document.getElementById("trackView"),
+      navOrderBtn: document.getElementById("navOrderBtn"),
+      navTrackBtn: document.getElementById("navTrackBtn"),
+      zoneSelectorWrap: document.getElementById("zoneSelectorWrap"),
+      pillStep1: document.getElementById("pillStep1"),
+      pillStep2: document.getElementById("pillStep2"),
+      pillStep3: document.getElementById("pillStep3"),
+      stepRestaurants: document.getElementById("stepRestaurants"),
+      stepMenu: document.getElementById("stepMenu"),
+      stepCheckout: document.getElementById("stepCheckout"),
+      zoneBtns: document.querySelectorAll(".zone-btn"),
+      reloadDataBtn: document.getElementById("reloadDataBtn"),
+      pubSection: document.getElementById("pubSection"),
+      restaurantsHeading: document.getElementById("restaurantsHeading"),
+      restaurantsGrid: document.getElementById("restaurantsGrid"),
+      backToRestaurantsBtn: document.getElementById("backToRestaurantsBtn"),
+      menuHeading: document.getElementById("menuHeading"),
+      menuGrid: document.getElementById("menuGrid"),
+      step2SummaryCount: document.getElementById("step2SummaryCount"),
+      step2SummaryTotal: document.getElementById("step2SummaryTotal"),
+      confirmCartBtn: document.getElementById("confirmCartBtn"),
+      menuFeedback: document.getElementById("menuFeedback"),
+      backToMenuBtn: document.getElementById("backToMenuBtn"),
+      cartItems: document.getElementById("cartItems"),
+      cartTotal: document.getElementById("cartTotal"),
+      gpsBtn: document.getElementById("gpsBtn"),
+      gpsStatus: document.getElementById("gpsStatus"),
+      orderForm: document.getElementById("orderForm"),
+      submitOrderBtn: document.getElementById("submitOrderBtn"),
+      orderFeedback: document.getElementById("orderFeedback"),
+      trackQuery: document.getElementById("trackQuery"),
+      trackSearchBtn: document.getElementById("trackSearchBtn"),
+      trackResult: document.getElementById("trackResult")
+    };
 
-    function set_zone(zone_name) {
-      app_state.zone = zone_name.toLowerCase();
-      document.querySelectorAll(".zone_pill").forEach(function (btn) {
-        btn.classList.toggle("active", btn.dataset.zone === app_state.zone);
-      });
-      refresh_from_sheet();
-      recalc_delivery();
-    }
-
-    function get_active_restaurant() {
-      if (!app_state.restaurants.length) {
-        return { id: "1", nom: "la fameuse big ben", zone: app_state.zone, lat: zone_coords[app_state.zone].lat, lng: zone_coords[app_state.zone].lng };
-      }
-      return app_state.restaurants[app_state.resto_index % app_state.restaurants.length];
-    }
-
-    function cycle_restaurant() {
-      if (app_state.restaurants.length > 1) {
-        app_state.resto_index = (app_state.resto_index + 1) % app_state.restaurants.length;
-      }
-      render_menu();
-      recalc_delivery();
-    }
-
-    function render_menu() {
-      const resto = get_active_restaurant();
-      document.getElementById("menu_heading").textContent = "menu — " + (resto.nom || "la fameuse big ben");
-
-      if (resto.logo) {
-        document.getElementById("brand_logo_box").innerHTML = "<img src='" + esc_attr(resto.logo) + "' alt='logo' />";
-      }
-
-      const list = app_state.menus.filter(function (m) {
-        return String(m.restaurant_id) === String(resto.id);
-      });
-      const shown = list.length ? list : app_state.menus;
-      const box = document.getElementById("plats_container");
-      box.innerHTML = "";
-
-      shown.forEach(function (plat, idx) {
-        const key = String(resto.id) + "_" + idx;
-        const qty = app_state.cart[key] ? app_state.cart[key].qty : 0;
-
-        const el = document.createElement("div");
-        el.className = "plat_box";
-        el.innerHTML =
-          "<div class='plat_label'>plat</div>" +
-          "<div class='plat_name'>" + esc_html(plat.nom || "article") + "</div>" +
-          "<div class='plat_desc'>" + esc_html(plat.description || "") + "</div>" +
-          "<div class='plat_bottom'>" +
-            "<div class='plat_price'>" + format_tnd(plat.prix) + "</div>" +
-            "<div class='qty_controls'>" +
-              "<button type='button' class='qty_btn' onclick='change_qty(\"" + esc_attr(key) + "\", -1)'>-</button>" +
-              "<span class='qty_val'>" + qty + "</span>" +
-              "<button type='button' class='qty_btn' onclick='change_qty(\"" + esc_attr(key) + "\", 1)'>+</button>" +
-            "</div>" +
-          "</div>";
-        box.appendChild(el);
-      });
-
-      render_cart_and_summary();
-    }
-
-    function change_qty(key, delta) {
-      const resto = get_active_restaurant();
-      const list = app_state.menus.filter(function (m) {
-        return String(m.restaurant_id) === String(resto.id);
-      });
-      const shown = list.length ? list : app_state.menus;
-      const idx = parseInt(key.split("_").pop(), 10);
-      const plat = shown[idx];
-      if (!plat) return;
-
-      const current = app_state.cart[key] ? app_state.cart[key].qty : 0;
-      const next_qty = Math.max(0, current + delta);
-
-      if (next_qty === 0) {
-        delete app_state.cart[key];
-      } else {
-        app_state.cart[key] = {
-          nom: plat.nom,
-          prix: Number(plat.prix || 0),
-          qty: next_qty,
-          restaurant: resto.nom
-        };
-      }
-      render_menu();
-    }
-
-    function get_cart_array() {
-      return Object.keys(app_state.cart).map(function (k) {
-        return app_state.cart[k];
-      });
-    }
-
-    function calc_fee_100m(lat1, lng1, lat2, lng2) {
-      const r = 6371000;
-      const to_rad = function (deg) { return (deg * Math.PI) / 180; };
-      const d_lat = to_rad(lat2 - lat1);
-      const d_lng = to_rad(lng2 - lng1);
-      const a =
-        Math.sin(d_lat / 2) * Math.sin(d_lat / 2) +
-        Math.cos(to_rad(lat1)) * Math.cos(to_rad(lat2)) *
-        Math.sin(d_lng / 2) * Math.sin(d_lng / 2);
-      const meters = r * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)) * 1.25;
-      const km = Math.max(0.1, meters / 1000);
-      const units_100m = Math.max(10, Math.ceil(km * 10));
-      return {
-        distance_km: Number(km.toFixed(3)),
-        frais: Number((units_100m * 0.1).toFixed(3))
-      };
-    }
-
-    function recalc_delivery() {
-      const resto = get_active_restaurant();
-      const zc = zone_coords[app_state.zone] || zone_coords.ajim;
-      const orig_lat = Number(resto.lat || zc.lat);
-      const orig_lng = Number(resto.lng || zc.lng);
-      const dest_lat = parseFloat(app_state.gps_lat);
-      const dest_lng = parseFloat(app_state.gps_lng);
-
-      if (!isNaN(dest_lat) && !isNaN(dest_lng) && !isNaN(orig_lat) && !isNaN(orig_lng)) {
-        const res = calc_fee_100m(orig_lat, orig_lng, dest_lat, dest_lng);
-        app_state.distance_km = res.distance_km;
-        app_state.frais_livraison = res.frais;
-      } else {
-        app_state.distance_km = 1.0;
-        app_state.frais_livraison = 1.0;
-      }
-      render_cart_and_summary();
-    }
-
-    function render_cart_and_summary() {
-      const items = get_cart_array();
-      let total_count = 0;
-      let subtotal = 0;
-      const box = document.getElementById("checkout_items_box");
-      box.innerHTML = "";
-
-      items.forEach(function (it) {
-        total_count += it.qty;
-        subtotal += it.prix * it.qty;
-
-        const row = document.createElement("div");
-        row.className = "checkout_item_row";
-        row.innerHTML =
-          "<div>" +
-            "<div style='font-weight:700;'>" + esc_html(it.nom) + " x " + it.qty + "</div>" +
-            "<div class='card_text' style='margin-bottom:0;'>" + esc_html(it.restaurant || "") + " — " + esc_html(app_state.zone) + "</div>" +
-          "</div>" +
-          "<div style='font-weight:700;'>" + format_tnd(it.prix * it.qty) + "</div>";
-        box.appendChild(row);
-      });
-
-      const delivery = Number(app_state.frais_livraison || 1.0);
-      const grand_total = subtotal + delivery;
-
-      document.getElementById("cart_count_label").textContent = total_count + " article(s) dans le panier";
-      document.getElementById("cart_subtotal_label").textContent = format_tnd(subtotal);
-      document.getElementById("sum_subtotal").textContent = format_tnd(subtotal);
-      document.getElementById("sum_distance").textContent = Number(app_state.distance_km || 1.0).toFixed(3);
-      document.getElementById("sum_delivery").textContent = format_tnd(delivery);
-      document.getElementById("sum_total").textContent = format_tnd(grand_total);
-    }
-
-    function open_checkout() {
-      document.getElementById("checkout_section").scrollIntoView({ behavior: "smooth" });
-    }
-
-    function scroll_to_menu() {
-      document.getElementById("menu_section").scrollIntoView({ behavior: "smooth" });
-    }
-
-    function capture_gps() {
-      const st = document.getElementById("gps_status_text");
-      if (!navigator.geolocation) {
-        st.textContent = "position gps non disponible.";
-        return;
-      }
-      st.textContent = "localisation en cours...";
-      navigator.geolocation.getCurrentPosition(function (pos) {
-        const lat = pos.coords.latitude.toFixed(6);
-        const lng = pos.coords.longitude.toFixed(6);
-        app_state.gps_lat = lat;
-        app_state.gps_lng = lng;
-        app_state.gps_lien = "https://maps.google.com/?q=" + lat + "," + lng;
-        st.textContent = "gps enregistré (" + lat + ", " + lng + ")";
-        recalc_delivery();
-      }, function () {
-        st.textContent = "position gps non renseignée.";
-      });
-    }
-
-    async function api_request(payload, method) {
-      try {
-        if (method === "post") {
-          const r = await fetch(api_url, {
-            method: "post",
-            headers: { "content-type": "text/plain;charset=utf-8" },
-            body: JSON.stringify(payload)
-          });
-          return await r.json();
-        } else {
-          const qs = new URLSearchParams(payload).toString();
-          const r = await fetch(api_url + "?" + qs, { method: "get" });
-          return await r.json();
-        }
-      } catch (e) {
-        return { ok: false, error: "connexion_error" };
-      }
-    }
-
-    async function refresh_from_sheet() {
-      const data = await api_request({ action: "get_init", zone: app_state.zone }, "get");
-      if (!data || !data.ok) return;
-
-      if (Array.isArray(data.restaurants) && data.restaurants.length) {
-        app_state.restaurants = data.restaurants;
-        app_state.resto_index = 0;
-      }
-      if (Array.isArray(data.menus) && data.menus.length) {
-        app_state.menus = data.menus;
-      }
-      render_menu();
-      recalc_delivery();
-    }
-
-    async function check_client_history() {
-      const tel = document.getElementById("inp_tel").value.trim();
-      if (!tel) return;
-      const res = await api_request({ action: "get_client", telephone: tel }, "get");
-      if (res && res.ok && res.client) {
-        if (res.client.nom && !document.getElementById("inp_nom").value.trim()) {
-          document.getElementById("inp_nom").value = res.client.nom;
-        }
-        if (res.client.adress && !document.getElementById("inp_adress").value.trim()) {
-          document.getElementById("inp_adress").value = res.client.adress;
-        }
-      }
-    }
-
-    async function submit_commande() {
-      const fb = document.getElementById("order_feedback");
-      fb.classList.remove("hidden");
-
-      const nom = document.getElementById("inp_nom").value.trim();
-      const tel = document.getElementById("inp_tel").value.trim();
-      const adress = document.getElementById("inp_adress").value.trim();
-      const notes = document.getElementById("inp_notes").value.trim();
-      const items = get_cart_array();
-
-      if (!items.length) {
-        fb.className = "alert_err";
-        fb.textContent = "ajoutez au moins un article avant de valider.";
-        return;
-      }
-      if (!nom || !tel || !adress) {
-        fb.className = "alert_err";
-        fb.textContent = "veuillez remplir le nom, le téléphone et l'adresse.";
-        return;
-      }
-
-      const resto = get_active_restaurant();
-      const subtotal = items.reduce(function (s, i) { return s + i.prix * i.qty; }, 0);
-      const delivery = Number(app_state.frais_livraison || 1.0);
-      const total = subtotal + delivery;
-      const generated_ref = "goat-" + Math.floor(100000 + Math.random() * 900000);
-
-      fb.className = "alert_ok";
-      fb.textContent = "envoi de la commande...";
-
-      const res = await api_request({
-        action: "create_order",
-        ref: generated_ref,
-        zone: app_state.zone,
-        restaurant: resto.nom,
-        restaurant_id: resto.id,
-        client_nom: nom,
-        client_telephone: tel,
-        adress: adress,
-        items: JSON.stringify(items),
-        sous_total: subtotal.toFixed(3),
-        frais_livraison: delivery.toFixed(3),
-        total: total.toFixed(3),
-        gps_lat: app_state.gps_lat,
-        gps_lng: app_state.gps_lng,
-        gps_lien: app_state.gps_lien,
-        notes: notes
-      }, "post");
-
-      const final_ref = (res && res.ref) ? res.ref : generated_ref;
-      fb.className = "alert_ok";
-      fb.textContent = "commande envoyée. référence : " + final_ref + " — statut : reçu.";
-
-      document.getElementById("suivi_ref_input").value = final_ref;
-      show_tracked_card({
-        ref: final_ref,
-        zone: app_state.zone,
-        restaurant: resto.nom,
-        total: total.toFixed(3) + " tnd",
-        statut: "reçu"
-      });
-    }
-
-    function show_tracked_card(info) {
-      app_state.tracked_ref = info.ref;
-      document.getElementById("suivi_result_box").classList.remove("hidden");
-      document.getElementById("suivi_ref_display").textContent = "réf : " + info.ref;
-      document.getElementById("suivi_meta_display").textContent =
-        "zone : " + (info.zone || app_state.zone) + " • restaurant : " + (info.restaurant || "");
-      document.getElementById("suivi_total_display").textContent = "total : " + (info.total || "");
-      highlight_status_btn(info.statut || "reçu");
-    }
-
-    function highlight_status_btn(st) {
-      const is_prep = String(st).toLowerCase().indexOf("préparation") > -1 || String(st).toLowerCase().indexOf("preparation") > -1;
-      document.getElementById("suivi_status_badge").textContent = is_prep ? "en préparation" : "reçu";
-      document.getElementById("btn_st_recu").classList.toggle("active", !is_prep);
-      document.getElementById("btn_st_prep").classList.toggle("active", is_prep);
-    }
-
-    function track_order() {
-      const ref_val = document.getElementById("suivi_ref_input").value.trim();
-      if (!ref_val) return;
-      const resto = get_active_restaurant();
-      show_tracked_card({
-        ref: ref_val,
-        zone: app_state.zone,
-        restaurant: resto.nom,
-        total: document.getElementById("sum_total").textContent,
-        statut: "reçu"
-      });
-    }
-
-    async function set_order_status(new_status) {
-      highlight_status_btn(new_status);
-      if (!app_state.tracked_ref) return;
-      await api_request({
-        action: "livreur_update_order",
-        ref: app_state.tracked_ref,
-        statut: new_status
-      }, "post");
-    }
-
-    function esc_html(str) {
-      return String(str)
+    function escapeHtml(str) {
+      return String(str ?? "")
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;");
     }
 
-    function esc_attr(str) {
-      return esc_html(str).replace(/'/g, "&#39;");
+    function toUpper(str) {
+      return String(str ?? "").trim().toLocaleUpperCase("fr-FR");
     }
 
-    render_menu();
-    refresh_from_sheet();
+    function initParticles() {
+      const layer = document.getElementById("particlesLayer");
+      if (!layer) return;
+      const count = 22;
+      for (let i = 0; i < count; i++) {
+        const dot = document.createElement("span");
+        dot.className = "particle";
+        const size = (Math.random() * 3.2 + 1.8).toFixed(1);
+        const isCopper = i % 3 === 0;
+        dot.style.width = `${size}px`;
+        dot.style.height = `${size}px`;
+        dot.style.left = `${(Math.random() * 100).toFixed(2)}%`;
+        dot.style.background = isCopper ? "#df6d43" : "#e3c58b";
+        dot.style.boxShadow = isCopper
+          ? "0 0 8px rgba(223, 109, 67, 0.7)"
+          : "0 0 8px rgba(227, 197, 139, 0.7)";
+        dot.style.animationDuration = `${(Math.random() * 12 + 11).toFixed(1)}s`;
+        dot.style.animationDelay = `${(Math.random() * -18).toFixed(1)}s`;
+        layer.appendChild(dot);
+      }
+    }
+
+    function switchMainView(viewName) {
+      const isOrder = viewName === "order";
+      el.orderFlow.classList.toggle("hidden", !isOrder);
+      el.trackView.classList.toggle("hidden", isOrder);
+      el.zoneSelectorWrap.classList.toggle("hidden", !isOrder || state.step !== 1);
+      el.navOrderBtn.classList.toggle("active", isOrder);
+      el.navTrackBtn.classList.toggle("active", !isOrder);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function goToStep(stepNum) {
+      state.step = stepNum;
+      el.stepRestaurants.classList.toggle("hidden", stepNum !== 1);
+      el.stepMenu.classList.toggle("hidden", stepNum !== 2);
+      el.stepCheckout.classList.toggle("hidden", stepNum !== 3);
+      el.zoneSelectorWrap.classList.toggle("hidden", stepNum !== 1 || el.orderFlow.classList.contains("hidden"));
+
+      el.pillStep1.classList.toggle("active", stepNum === 1);
+      el.pillStep2.classList.toggle("active", stepNum === 2);
+      el.pillStep3.classList.toggle("active", stepNum === 3);
+
+      if (stepNum === 2) renderMenus();
+      if (stepNum === 3) renderCheckoutCart();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function normalizeText(v) {
+      return String(v ?? "")
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function getField(obj, keys, fallback = "") {
+      if (!obj || typeof obj !== "object") return fallback;
+      for (const k of keys) {
+        if (obj[k] !== undefined && obj[k] !== null && String(obj[k]).trim() !== "") {
+          return obj[k];
+        }
+        const foundKey = Object.keys(obj).find((ok) => normalizeText(ok) === normalizeText(k));
+        if (foundKey && obj[foundKey] !== undefined && String(obj[foundKey]).trim() !== "") {
+          return obj[foundKey];
+        }
+      }
+      return fallback;
+    }
+
+    function formatPrice(val) {
+      const cleaned = String(val ?? "0").replace(",", ".").replace(/[^\d.-]/g, "");
+      const num = parseFloat(cleaned) || 0;
+      return `${num.toFixed(3)} TND`;
+    }
+
+    function parsePriceNum(val) {
+      const cleaned = String(val ?? "0").replace(",", ".").replace(/[^\d.-]/g, "");
+      return parseFloat(cleaned) || 0;
+    }
+
+    function isRestaurantOpen(r) {
+      const raw = normalizeText(getField(r, ["statut", "status", "etat", "état", "ouvert", "disponible"], "ouvert"));
+      return !["ferme", "fermé", "closed", "false", "0", "non", "inactif"].includes(raw);
+    }
+
+    function isActivePub(p) {
+      const raw = normalizeText(getField(p, ["actif", "active", "statut", "status", "etat", "état"], "actif"));
+      return !["inactif", "inactive", "false", "0", "non", "ferme", "fermé", "off"].includes(raw);
+    }
+
+    function extractArray(data, keys) {
+      if (Array.isArray(data)) return data;
+      if (!data || typeof data !== "object") return [];
+      for (const k of keys) {
+        if (Array.isArray(data[k])) return data[k];
+        const match = Object.keys(data).find((ok) => normalizeText(ok) === normalizeText(k));
+        if (match && Array.isArray(data[match])) return data[match];
+      }
+      return [];
+    }
+
+    function renderPubs() {
+      const activePubs = (state.pubs || []).filter(isActivePub);
+      if (!activePubs.length) {
+        el.pubSection.innerHTML = "";
+        return;
+      }
+
+      el.pubSection.innerHTML = activePubs
+        .map((p) => {
+          const title = escapeHtml(toUpper(getField(p, ["titre", "title", "nom", "offre"], "OFFRE SPÉCIALE")));
+          const desc = escapeHtml(getField(p, ["description", "desc", "texte", "message"], ""));
+          const tag = escapeHtml(toUpper(getField(p, ["badge", "tag", "categorie", "catégorie"], "PUB")));
+          const img = getField(p, ["image", "img", "photo", "url"], "");
+          const safeImg = img && /^https?:\/\//i.test(String(img).trim()) ? String(img).trim() : "";
+
+          return `
+            <div class="pub-card">
+              <div style="flex: 1; min-width: 200px;">
+                <span class="pub-tag">${tag}</span>
+                <div class="pub-title">${title}</div>
+                ${desc ? `<div class="pub-desc">${desc}</div>` : ""}
+              </div>
+              ${safeImg ? `<img src="${escapeHtml(safeImg)}" alt="${title}" class="pub-img" />` : ""}
+            </div>
+          `;
+        })
+        .join("");
+    }
+
+    function getRestaurantId(r) {
+      return String(getField(r, ["id", "resto_id", "restaurant_id", "code", "nom", "name"], "")).trim();
+    }
+
+    function renderRestaurants() {
+      el.restaurantsHeading.textContent = `RESTAURANTS — ${toUpper(state.zone)}`;
+      const targetZone = normalizeText(state.zone);
+
+      const filtered = (state.restaurants || []).filter((r) => {
+        const z = normalizeText(getField(r, ["zone", "ville", "secteur", "region", "région"], ""));
+        return !z || z === targetZone || z.includes(targetZone);
+      });
+
+      if (!filtered.length) {
+        el.restaurantsGrid.innerHTML = `<p class="empty-state">Aucun restaurant trouvé pour ${escapeHtml(toUpper(state.zone))}.</p>`;
+        return;
+      }
+
+      el.restaurantsGrid.innerHTML = "";
+      filtered.forEach((r) => {
+        const rawName = getField(r, ["nom", "name", "restaurant", "titre"], "RESTAURANT");
+        const name = toUpper(rawName);
+        const cuisine = getField(r, ["specialite", "spécialité", "categorie", "catégorie", "cuisine", "type"], "");
+        const deliveryFee = getField(r, ["frais_livraison", "livraison", "delivery_fee", "frais"], "");
+        const open = isRestaurantOpen(r);
+
+        const card = document.createElement("div");
+        card.className = "resto-card";
+        card.innerHTML = `
+          <div class="resto-top">
+            <div class="resto-name">${escapeHtml(name)}</div>
+            <span class="badge ${open ? "badge-open" : "badge-closed"}">${open ? "OUVERT" : "FERMÉ"}</span>
+          </div>
+          ${cuisine ? `<div class="resto-meta">${escapeHtml(cuisine)}</div>` : ""}
+          ${deliveryFee !== "" ? `<div class="resto-meta" style="margin-top: 6px; color: var(--gold-soft);">Livraison : ${escapeHtml(formatPrice(deliveryFee))}</div>` : ""}
+        `;
+
+        card.addEventListener("click", () => {
+          state.selectedRestaurant = r;
+          state.cart = {};
+          el.menuFeedback.className = "feedback-msg";
+          el.menuFeedback.textContent = "";
+          goToStep(2);
+        });
+
+        el.restaurantsGrid.appendChild(card);
+      });
+    }
+
+    function getMenuItemId(item, idx) {
+      const rawId = String(getField(item, ["id", "plat_id", "menu_id", "code"], "")).trim();
+      const name = String(getField(item, ["nom", "name", "plat", "titre"], "ARTICLE")).trim();
+      return rawId ? `${rawId}_${idx}` : `${name}_${idx}`;
+    }
+
+    function getCartSummary() {
+      let count = 0;
+      let total = 0;
+      Object.values(state.cart).forEach((entry) => {
+        const qty = parseInt(entry.qty, 10) || 0;
+        if (qty > 0) {
+          count += qty;
+          total += qty * parsePriceNum(entry.price);
+        }
+      });
+      return { count, total };
+    }
+
+    function updateStep2Summary() {
+      const { count, total } = getCartSummary();
+      el.step2SummaryCount.textContent = `${count} ARTICLE(S) DANS LE PANIER`;
+      el.step2SummaryTotal.textContent = `${total.toFixed(3)} TND`;
+    }
+
+    function renderMenus() {
+      const r = state.selectedRestaurant;
+      const rName = getField(r, ["nom", "name", "restaurant", "titre"], "MENU");
+      const rId = normalizeText(getRestaurantId(r));
+      const rNameNorm = normalizeText(rName);
+
+      el.menuHeading.textContent = `MENU — ${toUpper(rName)}`;
+      updateStep2Summary();
+
+      const items = (state.menus || []).filter((m) => {
+        const mResto = normalizeText(
+          getField(m, ["restaurant_id", "resto_id", "id_restaurant", "restaurant", "resto", "nom_restaurant"], "")
+        );
+        if (!mResto) return true;
+        return mResto === rId || mResto === rNameNorm || (rNameNorm && mResto.includes(rNameNorm));
+      });
+
+      if (!items.length) {
+        el.menuGrid.innerHTML = `<p class="empty-state">Aucun plat disponible pour ce restaurant pour le moment.</p>`;
+        return;
+      }
+
+      el.menuGrid.innerHTML = "";
+      items.forEach((item, idx) => {
+        const key = getMenuItemId(item, idx);
+        const name = toUpper(getField(item, ["nom", "name", "plat", "titre"], "ARTICLE"));
+        const desc = getField(item, ["description", "desc", "details", "détails", "ingredients"], "");
+        const cat = getField(item, ["categorie", "catégorie", "category", "type"], "");
+        const priceNum = parsePriceNum(getField(item, ["prix", "price", "tarif", "montant"], 0));
+        const currentQty = state.cart[key]?.qty || 0;
+
+        const card = document.createElement("div");
+        card.className = "menu-card";
+        card.innerHTML = `
+          <div>
+            ${cat ? `<div class="menu-cat">${escapeHtml(toUpper(cat))}</div>` : ""}
+            <div class="menu-title">${escapeHtml(name)}</div>
+            ${desc ? `<div class="menu-desc" style="margin-top: 4px;">${escapeHtml(desc)}</div>` : ""}
+          </div>
+          <div class="menu-footer">
+            <div class="menu-price">${priceNum.toFixed(3)} TND</div>
+            <div class="qty-controls">
+              <button type="button" class="qty-btn minus-btn" aria-label="Diminuer">-</button>
+              <input type="number" min="0" max="99" class="qty-input" value="${currentQty}" aria-label="Quantité" />
+              <button type="button" class="qty-btn plus-btn" aria-label="Augmenter">+</button>
+            </div>
+          </div>
+        `;
+
+        const inputEl = card.querySelector(".qty-input");
+        const minusBtn = card.querySelector(".minus-btn");
+        const plusBtn = card.querySelector(".plus-btn");
+
+        const setQty = (newQty) => {
+          const safeQty = Math.max(0, Math.min(99, parseInt(newQty, 10) || 0));
+          inputEl.value = safeQty;
+          if (safeQty === 0) {
+            delete state.cart[key];
+          } else {
+            state.cart[key] = { name, price: priceNum, qty: safeQty };
+          }
+          updateStep2Summary();
+        };
+
+        minusBtn.addEventListener("click", () => setQty((parseInt(inputEl.value, 10) || 0) - 1));
+        plusBtn.addEventListener("click", () => setQty((parseInt(inputEl.value, 10) || 0) + 1));
+        inputEl.addEventListener("change", () => setQty(inputEl.value));
+
+        el.menuGrid.appendChild(card);
+      });
+    }
+
+    function renderCheckoutCart() {
+      const entries = Object.values(state.cart).filter((i) => i.qty > 0);
+      if (!entries.length) {
+        el.cartItems.innerHTML = `<p class="empty-state">Votre panier est vide.</p>`;
+        el.cartTotal.textContent = "0.000 TND";
+        return;
+      }
+
+      let total = 0;
+      el.cartItems.innerHTML = entries
+        .map((item) => {
+          const lineTotal = item.qty * item.price;
+          total += lineTotal;
+          return `
+            <div class="cart-item">
+              <span>${escapeHtml(item.name)} × <strong>${item.qty}</strong></span>
+              <span style="color: var(--gold-soft); font-weight: 700;">${lineTotal.toFixed(3)} TND</span>
+            </div>
+          `;
+        })
+        .join("");
+
+      el.cartTotal.textContent = `${total.toFixed(3)} TND`;
+    }
+
+    function showFeedback(targetEl, message, isOk = true) {
+      targetEl.textContent = message;
+      targetEl.className = `feedback-msg show ${isOk ? "feedback-ok" : "feedback-err"}`;
+    }
+
+    async function fetchSheetData() {
+      el.restaurantsGrid.innerHTML = `<p class="empty-state">Chargement des restaurants...</p>`;
+      try {
+        const res = await fetch(`${APPS_SCRIPT_URL}?action=init`, { cache: "no-store" });
+        const data = await res.json();
+
+        state.restaurants = extractArray(data, ["restaurants", "RESTAURANTS", "restaurant"]);
+        state.menus = extractArray(data, ["menus", "MENUS", "menu"]);
+        state.pubs = extractArray(data, ["pub", "PUB", "pubs"]);
+
+        renderPubs();
+        renderRestaurants();
+      } catch (err) {
+        el.restaurantsGrid.innerHTML = `<p class="empty-state">Impossible de charger les données pour le moment. Réessayez.</p>`;
+      }
+    }
+
+    function requestGps() {
+      if (!navigator.geolocation) {
+        el.gpsStatus.textContent = "Géolocalisation non prise en charge sur cet appareil.";
+        return;
+      }
+      el.gpsStatus.textContent = "Recherche de votre position GPS...";
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const lat = pos.coords.latitude.toFixed(6);
+          const lng = pos.coords.longitude.toFixed(6);
+          const mapUrl = `https://maps.google.com/?q=${lat},${lng}`;
+          state.gps = { lat, lng, mapUrl };
+          el.gpsStatus.innerHTML = `Position enregistrée : <a href="${escapeHtml(mapUrl)}" target="_blank" rel="noopener" style="color: var(--gold-soft);">${lat}, ${lng}</a>`;
+        },
+        () => {
+          el.gpsStatus.textContent = "Position non obtenue. Vous pouvez saisir votre adresse manuellement.";
+        },
+        { enableHighAccuracy: true, timeout: 10000 }
+      );
+    }
+
+    async function submitOrder(e) {
+      e.preventDefault();
+      const entries = Object.values(state.cart).filter((i) => i.qty > 0);
+      if (!entries.length) {
+        showFeedback(el.orderFeedback, "Votre panier est vide.", false);
+        return;
+      }
+
+      const clientName = document.getElementById("clientName").value.trim();
+      const clientPhone = document.getElementById("clientPhone").value.trim();
+      const clientAddress = document.getElementById("clientAddress").value.trim();
+      const orderNotes = document.getElementById("orderNotes").value.trim();
+
+      if (!clientName || !clientPhone || !clientAddress) {
+        showFeedback(el.orderFeedback, "Veuillez remplir les champs obligatoires (*).", false);
+        return;
+      }
+
+      const { total } = getCartSummary();
+      const restoName = toUpper(getField(state.selectedRestaurant, ["nom", "name", "restaurant"], "RESTAURANT"));
+
+      const payload = {
+        action: "createOrder",
+        zone: toUpper(state.zone),
+        restaurant: restoName,
+        items: entries.map((i) => ({ name: i.name, qty: i.qty, price: i.price })),
+        itemsText: entries.map((i) => `${i.name} x${i.qty}`).join(", "),
+        total: total.toFixed(3),
+        clientName,
+        clientPhone,
+        clientAddress,
+        notes: orderNotes,
+        gpsLat: state.gps.lat,
+        gpsLng: state.gps.lng,
+        gpsUrl: state.gps.mapUrl
+      };
+
+      el.submitOrderBtn.disabled = true;
+      el.submitOrderBtn.textContent = "ENVOI EN COURS...";
+      el.orderFeedback.className = "feedback-msg";
+
+      try {
+        const res = await fetch(APPS_SCRIPT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json().catch(() => ({}));
+        const ref = data.orderId || data.id || data.reference || "";
+
+        showFeedback(
+          el.orderFeedback,
+          ref
+            ? `Commande envoyée avec succès ! Référence : ${ref}`
+            : "Commande envoyée avec succès !",
+          true
+        );
+
+        state.cart = {};
+        el.orderForm.reset();
+        state.gps = { lat: "", lng: "", mapUrl: "" };
+        el.gpsStatus.textContent = "Position GPS non renseignée.";
+      } catch (err) {
+        showFeedback(el.orderFeedback, "Erreur lors de l'envoi de la commande. Veuillez réessayer.", false);
+      } finally {
+        el.submitOrderBtn.disabled = false;
+        el.submitOrderBtn.textContent = "VALIDER LA COMMANDE";
+      }
+    }
+
+    function getStatusStepIndex(statusRaw) {
+      const s = normalizeText(statusRaw);
+      if (["livre", "livree", "livrée", "delivered", "termine", "terminée", "done"].some((k) => s.includes(k))) return 3;
+      if (["en livraison", "livraison", "route", "out for delivery", "driver"].some((k) => s.includes(k))) return 2;
+      if (["preparation", "préparation", "en cours", "prepare", "preparing", "accepte", "acceptée"].some((k) => s.includes(k))) return 1;
+      return 0;
+    }
+
+    async function searchOrder() {
+      const q = el.trackQuery.value.trim();
+      if (!q) {
+        el.trackResult.innerHTML = `<p class="empty-state">Veuillez saisir un numéro de téléphone ou une référence.</p>`;
+        return;
+      }
+
+      el.trackResult.innerHTML = `<p class="empty-state">Recherche en cours...</p>`;
+      try {
+        const res = await fetch(`${APPS_SCRIPT_URL}?action=track&q=${encodeURIComponent(q)}`, { cache: "no-store" });
+        const data = await res.json();
+        const orders = Array.isArray(data) ? data : extractArray(data, ["orders", "commandes", "results", "data"]);
+
+        if (!orders.length) {
+          el.trackResult.innerHTML = `<p class="empty-state">Aucune commande trouvée pour "${escapeHtml(q)}".</p>`;
+          return;
+        }
+
+        el.trackResult.innerHTML = orders
+          .map((o) => {
+            const ref = toUpper(getField(o, ["id", "reference", "ref", "order_id", "commande_id"], "COMMANDE"));
+            const status = toUpper(getField(o, ["statut", "status", "etat", "état"], "REÇUE"));
+            const resto = toUpper(getField(o, ["restaurant", "resto", "nom_restaurant"], ""));
+            const total = getField(o, ["total", "montant"], "");
+            const activeIdx = getStatusStepIndex(status);
+            const steps = ["REÇUE", "EN PRÉPARATION", "EN LIVRAISON", "LIVRÉE"];
+
+            return `
+              <div class="resto-card" style="cursor: default; margin-bottom: 12px;">
+                <div class="resto-top">
+                  <div class="resto-name">RÉF : ${escapeHtml(ref)}</div>
+                  <span class="badge badge-open">${escapeHtml(status)}</span>
+                </div>
+                ${resto ? `<div class="resto-meta">RESTAURANT : ${escapeHtml(resto)}</div>` : ""}
+                ${total !== "" ? `<div class="resto-meta" style="color: var(--gold-soft); margin-top: 4px;">TOTAL : ${escapeHtml(formatPrice(total))}</div>` : ""}
+                <div class="steps-row">
+                  ${steps.map((st, i) => `<div class="step-item ${i <= activeIdx ? "done" : ""}">${st}</div>`).join("")}
+                </div>
+              </div>
+            `;
+          })
+          .join("");
+      } catch (err) {
+        el.trackResult.innerHTML = `<p class="empty-state">Impossible de vérifier la commande pour le moment.</p>`;
+      }
+    }
+
+    // Event Listeners
+    el.brandHomeBtn.addEventListener("click", () => {
+      switchMainView("order");
+      goToStep(1);
+    });
+
+    el.navOrderBtn.addEventListener("click", () => switchMainView("order"));
+    el.navTrackBtn.addEventListener("click", () => switchMainView("track"));
+
+    el.zoneBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        el.zoneBtns.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        state.zone = btn.dataset.zone;
+        renderRestaurants();
+      });
+    });
+
+    el.reloadDataBtn.addEventListener("click", fetchSheetData);
+
+    el.backToRestaurantsBtn.addEventListener("click", () => goToStep(1));
+    el.backToMenuBtn.addEventListener("click", () => goToStep(2));
+
+    el.confirmCartBtn.addEventListener("click", () => {
+      const { count } = getCartSummary();
+      if (count <= 0) {
+        showFeedback(el.menuFeedback, "Veuillez ajouter au moins un article avant de continuer.", false);
+        return;
+      }
+      el.menuFeedback.className = "feedback-msg";
+      goToStep(3);
+    });
+
+    el.gpsBtn.addEventListener("click", requestGps);
+    el.orderForm.addEventListener("submit", submitOrder);
+    el.trackSearchBtn.addEventListener("click", searchOrder);
+    el.trackQuery.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        searchOrder();
+      }
+    });
+
+    initParticles();
+    fetchSheetData();
   </script>
 </body>
 </html>
