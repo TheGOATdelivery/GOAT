@@ -735,9 +735,9 @@
               <label for="clientName">Nom complet *</label>
               <input class="input" id="clientName" name="clientName" type="text" required placeholder="Votre nom" />
             </div>
-           <form id="orderForm" style="margin-top: 16px;">
+          
               <label for="clientPhone">Téléphone *</label>
-              <input class="input" id="clientPhone" name="clientPhone" type="tel" required placeholder="Ex. 20 123 456" />
+             <input class="input" id="clientPhone" name="clientPhone" type="tel" required placeholder="Ex. 20 123 456">
             </div>
             <div class="input-group">
               <label for="clientAddress">Adresse / Repère *</label>
@@ -755,69 +755,19 @@
               ME LOCALISER (GPS)
             </button>
             <span class="gps-status" id="gpsStatus">Position GPS non renseignée.</span>
-         <div id="cartItems" style="margin-top: 14px;"></div>
-          <div style="margin-top: 10px; display: flex; justify-content: space-between; font-size: 0.92rem; color: var(--text-muted, #cbd5e1);">
+       <div id="cartItems" style="margin-top: 14px;"></div>
+          <div style="margin-top: 12px; display: flex; justify-content: space-between; font-size: 0.92rem; color: var(--text-muted, #cbd5e1);">
             <span>FRAIS DE LIVRAISON</span>
             <span id="checkoutDeliveryFee">SELON ZONE / GPS</span>
           </div>
           <div style="margin-top: 10px; display: flex; justify-content: space-between; font-weight: 700; color: var(--gold-soft);">
-          <div style="margin-top: 18px; padding: 14px; border: 1px solid rgba(255,255,255,0.14); border-radius: 12px;">
-            <div style="font-family: 'Cinzel', serif; color: var(--gold-soft); font-size: 1rem; margin-bottom: 10px;">LIVRAISON, GPS &amp; VALIDATION</div>
-            <div id="cartItems"></div>
-            <div style="margin-top: 10px; display: flex; justify-content: space-between; font-size: 0.92rem; color: var(--text-muted, #cbd5e1);">
-              <span>FRAIS DE LIVRAISON</span>
-              <span id="checkoutDeliveryFee">SELON ZONE / GPS</span>
-            </div>
-            <div style="margin-top: 10px; display: flex; justify-content: space-between; font-weight: 700; color: var(--gold-soft);">
-              <span>TOTAL À PAYER</span>
-              <span id="cartTotal">0.000 TND</span>
-            </div>
+            <span>TOTAL À PAYER</span>
+            <span id="cartTotal">0.000 TND</span>
           </div>
-
           <div class="feedback-msg" id="orderFeedback"></div>
         </form>
       </section>
     </div>
-
-    <section class="service-highlights" aria-label="Nos engagements">
-      <div class="highlight-card">
-        <div class="highlight-icon" aria-hidden="true">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M3 11h18M5 11V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v4M6 11v8h12v-8"/>
-          </svg>
-        </div>
-        <h3 class="highlight-title">LES MEILLEURS RESTAURANTS</h3>
-        <p class="highlight-text">
-          Une sélection d'adresses locales à Ajim et Houmt Souk pour toutes vos envies.
-        </p>
-      </div>
-
-      <div class="highlight-card">
-        <div class="highlight-icon" aria-hidden="true">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="9"/>
-            <path d="M12 7v5l3 2"/>
-          </svg>
-        </div>
-        <h3 class="highlight-title">LIVRAISON RAPIDE</h3>
-        <p class="highlight-text">
-          Commandez en quelques instants et recevez votre repas directement chez vous.
-        </p>
-      </div>
-
-      <div class="highlight-card">
-        <div class="highlight-icon" aria-hidden="true">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 21s-6-4.35-6-10a6 6 0 1 1 12 0c0 5.65-6 10-6 10z"/>
-            <circle cx="12" cy="11" r="2"/>
-          </svg>
-        </div>
-        <h3 class="highlight-title">TOUJOURS À VOTRE SERVICE</h3>
-        <p class="highlight-text">
-          Localisation GPS précise pour une livraison rapide et sans accroc.
-        </p> 
-      </div>
-    </section>
 
     <footer class="site-footer">
       THE GOAT — DJERBA DELIVERY • AJIM &amp; HOUMT SOUK
@@ -1220,12 +1170,27 @@
         })
         .join("");
 
-     const hasGps = Boolean(state.gps || (state.lat && state.lng));
-     const rawFee = Number(state.deliveryFee ?? state.livraisonFee ?? state.fraisLivraison ?? state.zoneFee ?? state.gpsFee ?? state.fee ?? 0) || 0;
-      const feeText = rawFee > 0 ? `${rawFee.toFixed(3)} TND` : (hasGps ? "0.000 TND" : "SELON ZONE / GPS");
+    const resto = state.selectedRestaurant || {};
+      const restoLat = Number(resto.lat ?? resto.latitude ?? 33.7222531);
+      const restoLng = Number(resto.lng ?? resto.longitude ?? 10.7437356);
+      const clientLat = Number(state.gps?.lat ?? state.lat);
+      const clientLng = Number(state.gps?.lng ?? state.lng);
+      const hasGps = Number.isFinite(clientLat) && Number.isFinite(clientLng);
+      let rawFee = 0;
+      if (hasGps && Number.isFinite(restoLat) && Number.isFinite(restoLng)) {
+        const toRad = (deg) => (deg * Math.PI) / 180;
+        const dLat = toRad(clientLat - restoLat);
+        const dLng = toRad(clientLng - restoLng);
+        const a =
+          Math.sin(dLat / 2) ** 2 +
+          Math.cos(toRad(restoLat)) * Math.cos(toRad(clientLat)) * Math.sin(dLng / 2) ** 2;
+        const distanceKm = 6371 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        const units100m = Math.ceil(distanceKm * 10);
+        rawFee = Number((units100m * 0.1).toFixed(3));
+      }
+      const feeText = hasGps ? `${rawFee.toFixed(3)} TND` : "SELON ZONE / GPS";
       if (el.checkoutDeliveryFee) el.checkoutDeliveryFee.textContent = feeText;
       el.cartTotal.textContent = `${(total + rawFee).toFixed(3)} TND`;
-    }
 
     function showFeedback(targetEl, message, isOk = true) {
       targetEl.textContent = message;
@@ -1268,7 +1233,9 @@
           const mapUrl = `https://maps.google.com/?q=${lat},${lng}`;
           state.gps = { lat, lng, mapUrl };
           el.gpsStatus.innerHTML = `Position enregistrée : <a href="${escapeHtml(mapUrl)}" target="_blank" rel="noopener" style="color: var(--gold-soft);">${lat}, ${lng}</a>`;
-          renderCheckoutCart();
+         state.lat = Number(lat);
+        state.lng = Number(lng);
+        renderCheckoutCart();
         },
         () => {
           el.gpsStatus.textContent = "Position non obtenue. Vous pouvez saisir votre adresse manuellement.";
