@@ -833,14 +833,6 @@
           frais_livraison: "3.000",
           statut: "ouvert"
         },
-        {
-          id: "ajim-grill",
-          nom: "AJIM GRILL & SNACK",
-          zone: "Ajim",
-          specialite: "SANDWICHS, GRILLADES & BOWLS",
-          frais_livraison: "2.500",
-          statut: "ouvert"
-        }
       ],
       menus: [
         {
@@ -1012,7 +1004,7 @@
 
     function mergeWithFallback(sheetList, fallbackList, idKeys) {
       const cleanSheet = Array.isArray(sheetList) ? sheetList : [];
-      if (!cleanSheet.length) return [...fallbackList];
+      if (!cleanSheet.length) return [];
 
       const existingKeys = new Set(
         cleanSheet.map((item) => normalizeText(getField(item, idKeys, "")))
@@ -1023,7 +1015,7 @@
         return fbKey && !existingKeys.has(fbKey);
       });
 
-      return [...cleanSheet, ...extras];
+      return [...cleanSheet];
     }
 
     function renderPubs() {
