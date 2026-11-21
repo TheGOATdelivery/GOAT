@@ -1344,6 +1344,29 @@
 
     initParticles();
     fetchSheetData();}
+    async function syncGoatSheet() {
+  try {
+    const res = await fetch(APPS_SCRIPT_URL);
+    const d = await res.json();
+    if (d && d.ok !== false && typeof state !== "undefined") {
+      state.restaurants = d.restaurants || [];
+      state.menus = d.menus || [];
+      state.pubs = d.pubs || [];
+      if (typeof renderRestaurants === "function") renderRestaurants();
+    }
+  } catch (err) {
+    console.error("syncGoatSheet error:", err);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  syncGoatSheet();
+  document.querySelectorAll("button").forEach(btn => {
+    if (/actualiser/i.test(btn.textContent || "")) {
+      btn.addEventListener("click", syncGoatSheet);
+    }
+  });
+});
   </script>
 </body>
 </html>
