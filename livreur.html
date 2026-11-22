@@ -769,7 +769,6 @@
       const rawPhone = String(order.client_telephone || order.telephone || order.tel || order.phone || "").trim();
 const telClean = rawPhone.replace(/[^\d+]/g, "");
         const mapsUrl = getMapsUrl(order);
-        const telClean = String(order.client_telephone || "").replace(/\s+/g, "");
 
         let actionsHtml = "";
         if (currentTab === "available") {
