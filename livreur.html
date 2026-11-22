@@ -738,13 +738,15 @@
     }
 
     function getMapsUrl(order) {
-      if (order.gps_lien) return order.gps_lien;
-      if (order.gps_lat && order.gps_lng) {
-        return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(order.gps_lat + "," + order.gps_lng)}`;
-      }
-      const q = [order.adress, order.zone, "Djerba"].filter(Boolean).join(", ");
-      return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
-    }
+  const rawBlob = [order.gps_lien, order.gps_lat && order.gps_lng ? `${order.gps_lat},${order.gps_lng}` : '', order.gps, order.adress, order.zone].filter(Boolean).join(" ");
+  if (order.gps_lien && /^https?:\/\//i.test(String(order.gps_lien).trim())) return String(order.gps_lien).trim();
+  const urlMatch = rawBlob.match(/https?:\/\/[^\s"'<>]+/i);
+  if (urlMatch) return urlMatch[0];
+  const coordMatch = rawBlob.match(/(-?\d{1,2}\.\d+)\s*,\s*(-?\d{1,3}\.\d+)/);
+  if (coordMatch) return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${coordMatch[1]},${coordMatch[2]}`)}`;
+  const q = [order.adress, order.zone, "Ajim, Djerba, Tunisie"].filter(Boolean).join(", ");
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
+}
 
     function renderOrders() {
       const container = document.getElementById("ordersList");
@@ -764,7 +766,8 @@
       }
 
       container.innerHTML = list.map(order => {
-        const totalCalc = order.total || (Number(order.sous_total || 0) + Number(order.frais_livraison || 0));
+      const rawPhone = String(order.client_telephone || order.telephone || order.tel || order.phone || "").trim();
+const telClean = rawPhone.replace(/[^\d+]/g, "");
         const mapsUrl = getMapsUrl(order);
         const telClean = String(order.client_telephone || "").replace(/\s+/g, "");
 
@@ -779,8 +782,14 @@
           `;
         } else if (currentTab === "active") {
           const stLower = String(order.statut || "").toLowerCase();
-const isPrep = stLower.includes("accept") || stLower.includes("prep"); const isRoute = stLower.includes("route") || stLower.includes("en_cours"); actionBtn = isRoute ? `<button class="action-btn btn-green full" onclick="updateStatus('${escapeAttr(order.ref)}', 'livree')">✅ MARQUER LIVRÉE</button>` : (isPrep ? `<button class="action-btn btn-gold full" onclick="updateStatus('${escapeAttr(order.ref)}', 'en_route')">🛵 EN ROUTE</button>` : `<button class="action-btn btn-gold full" onclick="updateStatus('${escapeAttr(order.ref)}', 'en_preparation')">🍳 EN PRÉPARATION</button>`);
-const nextBtn = isRoute ? `<button class="action-btn btn-green full" onclick="updateStatus('${escapeAttr(order.ref)}', 'livree')">✅ MARQUER LIVRÉE</button>` : (isPrep ? `<button class="action-btn btn-gold full" onclick="updateStatus('${escapeAttr(order.ref)}', 'en_route')">🛵 EN ROUTE</button>` : `<button class="action-btn btn-gold full" onclick="updateStatus('${escapeAttr(order.ref)}', 'en_preparation')">🍳 EN PRÉPARATION</button>`); const callHref = String(order.client_telephone || order.telephone || order.tel || telClean || '').replace(/[^\d+]/g, '');
+const isDonePrep = stLower.includes("prep");
+const isRoute = stLower.includes("route") || stLower.includes("en_cours");
+const nextBtn = isRoute
+  ? `<button class="action-btn btn-green full" onclick="updateStatus('${escapeAttr(order.ref)}', 'livree')">✅ MARQUER LIVRÉE</button>`
+  : (isDonePrep
+    ? `<button class="action-btn btn-gold full" onclick="updateStatus('${escapeAttr(order.ref)}', 'en_route')">🛵 EN ROUTE</button>`
+    : `<button class="action-btn btn-gold full" onclick="updateStatus('${escapeAttr(order.ref)}', 'en_preparation')">🍳 EN PRÉPARATION</button>`);
+const callHref = telClean;
           actionsHtml = `
             <div class="actions-grid">
               ${nextBtn}
