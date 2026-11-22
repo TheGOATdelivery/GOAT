@@ -154,12 +154,13 @@
       margin-top: 12px;
       padding: 10px 12px;
       border-radius: 10px;
-      background: rgba(231, 76, 60, 0.16);
-      border: 1px solid rgba(231, 76, 60, 0.45);
-      color: #ff9d92;
+      background: rgba(231, 76, 60, 0.18);
+      border: 1px solid rgba(231, 76, 60, 0.5);
+      color: #ffb4ab;
       font-size: 13px;
       text-align: center;
       display: none;
+      word-break: break-word;
     }
 
     .topbar {
@@ -541,14 +542,75 @@
       return Number(n || 0).toFixed(3) + " DT";
     }
 
+    function parseNum(val) {
+      if (val === undefined || val === null || val === "") return NaN;
+      const cleaned = String(val).replace(",", ".").replace(/[^\d.-]/g, "");
+      const num = Number(cleaned);
+      return Number.isFinite(num) ? num : NaN;
+    }
+
+    function extractClientPhone(order) {
+      const candidates = [
+        order.client_telephone,
+        order.client_tel,
+        order.telephone,
+        order.tel,
+        order.phone,
+        order.mobile,
+        order.gsm,
+        order.num_tel,
+        order.numero
+      ];
+      for (const c of candidates) {
+        const str = String(c || "").trim();
+        if (!str) continue;
+        const match = str.match(/(\+?\d[\d\s\-().]{6,15}\d)/);
+        if (match) {
+          const digits = match[1].replace(/[^\d+]/g, "");
+          if (digits.length >= 8) return { display: match[1].trim(), tel: digits };
+        }
+      }
+      const fallbackText = [order.adress, order.notes].filter(Boolean).join(" ");
+      const tnMatch = fallbackText.match(/\b([2459]\d{7})\b/);
+      if (tnMatch) return { display: tnMatch[1], tel: tnMatch[1] };
+      return { display: "", tel: "" };
+    }
+
+    function getOrderAmounts(order) {
+      const sousRaw = parseNum(order.sous_total !== undefined ? order.sous_total : (order.subtotal || order.montant_articles));
+      const fraisRaw = parseNum(
+        order.frais_livraison !== undefined ? order.frais_livraison :
+        (order.livraison !== undefined ? order.livraison :
+        (order.frais !== undefined ? order.frais : order.delivery_fee))
+      );
+      const totalRaw = parseNum(order.total !== undefined ? order.total : order.montant_total);
+
+      const sousTotal = Number.isFinite(sousRaw) ? sousRaw : 0;
+      let frais = Number.isFinite(fraisRaw) ? fraisRaw : 0;
+      let total = Number.isFinite(totalRaw) ? totalRaw : (sousTotal + frais);
+
+      if (Number.isFinite(totalRaw) && Number.isFinite(sousRaw) && totalRaw > sousRaw) {
+        const diff = Number((totalRaw - sousRaw).toFixed(3));
+        if (!Number.isFinite(fraisRaw) || fraisRaw < diff) {
+          frais = diff;
+        }
+      } else if (!Number.isFinite(totalRaw)) {
+        total = Number((sousTotal + frais).toFixed(3));
+      }
+
+      return { sousTotal, frais, total };
+    }
+
     function ensureAudioContext() {
-      if (!audioCtx) {
-        const Ctx = window.AudioContext || window.webkitAudioContext;
-        if (Ctx) audioCtx = new Ctx();
-      }
-      if (audioCtx && audioCtx.state === "suspended") {
-        audioCtx.resume().catch(() => {});
-      }
+      try {
+        if (!audioCtx) {
+          const Ctx = window.AudioContext || window.webkitAudioContext;
+          if (Ctx) audioCtx = new Ctx();
+        }
+        if (audioCtx && audioCtx.state === "suspended") {
+          audioCtx.resume().catch(() => {});
+        }
+      } catch (_) {}
     }
 
     function playSingleTone() {
@@ -594,22 +656,36 @@
     }
 
     async function apiCall(payload) {
-      const res = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify(payload)
-      });
-      const text = await res.text();
-      let data = null;
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000);
       try {
-        data = JSON.parse(text);
-      } catch (_) {
-        throw new Error("Réponse invalide du serveur.");
+        const res = await fetch(API_URL, {
+          method: "POST",
+          mode: "cors",
+          redirect: "follow",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload),
+          signal: controller.signal
+        });
+        const text = await res.text();
+        let data = null;
+        try {
+          data = JSON.parse(text);
+        } catch (_) {
+          throw new Error("Réponse non JSON (" + res.status + "): " + text.slice(0, 120));
+        }
+        if (!data || data.ok === false) {
+          throw new Error((data && (data.error || data.message)) || "Erreur serveur");
+        }
+        return data;
+      } catch (err) {
+        if (err && err.name === "AbortError") {
+          throw new Error("Délai dépassé (serveur lent ou réseau).");
+        }
+        throw new Error((err && err.message) || "Erreur réseau");
+      } finally {
+        clearTimeout(timeoutId);
       }
-      if (!data || !data.ok) {
-        throw new Error((data && data.error) || "Erreur serveur");
-      }
-      return data;
     }
 
     document.getElementById("loginForm").addEventListener("submit", async (e) => {
@@ -623,7 +699,9 @@
       btn.textContent = "Connexion...";
 
       try {
+        session = null;
         localStorage.removeItem(STORAGE_KEY);
+
         const identifier = document.getElementById("loginId").value.trim();
         const code_pin = document.getElementById("loginPin").value.trim();
         const data = await apiCall({
@@ -632,11 +710,12 @@
           code_pin
         });
 
+        const lv = data.livreur || {};
         session = {
-          livreur_id: data.livreur.id,
-          session_token: data.session_token,
-          zone: data.livreur.zone,
-          telephone: data.livreur.telephone
+          livreur_id: lv.id || lv.livreur_id || identifier,
+          session_token: data.session_token || data.token || "",
+          zone: lv.zone || "TOUTES",
+          telephone: lv.telephone || ""
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
         openDashboard();
@@ -774,12 +853,10 @@
       }
 
       container.innerHTML = list.map(order => {
-        const rawPhone = String(order.client_telephone || order.telephone || order.tel || order.phone || "").trim();
-        const telClean = rawPhone.replace(/[^\d+]/g, "");
+        const phoneInfo = extractClientPhone(order);
+        const telClean = phoneInfo.tel;
         const mapsUrl = getMapsUrl(order);
-        const totalCalc = (order.total !== undefined && order.total !== null && order.total !== "")
-          ? Number(order.total)
-          : (Number(order.sous_total || 0) + Number(order.frais_livraison || 0));
+        const { sousTotal, frais, total } = getOrderAmounts(order);
 
         let actionsHtml = "";
         if (currentTab === "available") {
@@ -799,13 +876,14 @@
             : (isDonePrep
               ? `<button class="action-btn btn-gold full" onclick="updateStatus('${escapeAttr(order.ref)}', 'en_route')">🛵 EN ROUTE</button>`
               : `<button class="action-btn btn-gold full" onclick="updateStatus('${escapeAttr(order.ref)}', 'en_preparation')">🍳 EN PRÉPARATION</button>`);
-          const callHref = telClean;
+          const callHref = telClean ? `tel:${escapeAttr(telClean)}` : "#";
+          const callAttr = telClean ? "" : `onclick="showToast('Numéro client non disponible'); return false;"`;
 
           actionsHtml = `
             <div class="actions-grid">
               ${nextBtn}
               <a class="action-btn btn-blue" href="${escapeAttr(mapsUrl)}" target="_blank" rel="noopener">📍 Maps</a>
-              <a class="action-btn btn-outline" href="${callHref ? `tel:${escapeAttr(callHref)}` : "#"}">📞 Appeler</a>
+              <a class="action-btn btn-outline" href="${callHref}" ${callAttr}>📞 Appeler</a>
             </div>
           `;
         }
@@ -817,14 +895,14 @@
               <span class="order-badge">${escapeHtml(order.statut || "nouvelle")}</span>
             </div>
             <div class="order-row"><strong>Restaurant :</strong> ${escapeHtml(order.restaurant || "-")}</div>
-            <div class="order-row"><strong>Client :</strong> ${escapeHtml(order.client_nom || "-")} ${rawPhone ? `(${escapeHtml(rawPhone)})` : ""}</div>
+            <div class="order-row"><strong>Client :</strong> ${escapeHtml(order.client_nom || "-")} ${phoneInfo.display ? `(${escapeHtml(phoneInfo.display)})` : ""}</div>
             <div class="order-row"><strong>Adresse :</strong> ${escapeHtml(order.adress || "-")}</div>
             ${order.items ? `<div class="items-box">${escapeHtml(order.items)}</div>` : ""}
             ${order.notes ? `<div class="order-row"><strong>Note :</strong> ${escapeHtml(order.notes)}</div>` : ""}
             <div class="money-bar">
-              <span class="money-chip">Commande: <strong>${fmtMoney(order.sous_total)}</strong></span>
-              <span class="money-chip">Livraison: <strong>${fmtMoney(order.frais_livraison)}</strong></span>
-              <span class="money-chip">Total: <strong>${fmtMoney(totalCalc)}</strong></span>
+              <span class="money-chip">Commande: <strong>${fmtMoney(sousTotal)}</strong></span>
+              <span class="money-chip">Livraison: <strong>${fmtMoney(frais)}</strong></span>
+              <span class="money-chip">Total: <strong>${fmtMoney(total)}</strong></span>
             </div>
             ${actionsHtml}
           </article>
