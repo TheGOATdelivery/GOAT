@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>THE GOAT — Espace Livreur</title>
+  <style>
+    :root {
+      --bg-olive: #182218;
+      --bg-card: #223022;
+      --bg-card-soft: #2a3b2a;
+      --gold: #d4af37;
+      --copper: #c87d4b;
+      --cream: #f4efe2;
+      --muted: #b7c2b0;
+      --green: #2ecc71;
+      --red: #e74c3c;
+      --blue: #3498db;
+      --border: rgba(212, 175, 55, 0.22);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(180deg, #121a12 0%, var(--bg-olive) 100%);
+      color: var(--cream);
+      min-height: 100vh;
+      padding-bottom: 36px;
+    }
+
+    /* LOGIN SCREEN */
+    .login-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 400px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 26px 22px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+    }
+
+    .brand-box {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+
+    .brand-badge {
+      display: inline-block;
+      background: rgba(212, 175, 55, 0.14);
+      color: var(--gold);
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      margin-bottom: 10px;
+    }
+
+    .brand-title {
+      font-size: 30px;
+      font-weight: 900;
+      color: var(--gold);
+      letter-spacing: 1px;
+    }
+
+    .brand-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .field input {
+      width: 100%;
+      padding: 13px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: #141d14;
+      color: var(--cream);
+      font-size: 16px;
+      outline: none;
+    }
+
+    .field input:focus {
+      border-color: var(--gold);
+    }
+
+    .btn {
+      width: 100%;
+      border: none;
+      border-radius: 13px;
+      padding: 13px 16px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.12s ease, opacity 0.15s ease;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold), var(--copper));
+      color: #131a13;
+    }
+
+    .btn-green {
+      background: var(--green);
+      color: #0d1911;
+    }
+
+    .btn-blue {
+      background: var(--blue);
+      color: #fff;
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--cream);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .error-msg {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: rgba(231, 76, 60, 0.16);
+      border: 1px solid rgba(231, 76, 60, 0.45);
+      color: #ff9d92;
+      font-size: 13px;
+      text-align: center;
+      display: none;
+    }
+
+    /* TOP HEADER */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(20, 29, 20, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .top-brand {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top-brand .logo {
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--gold);
+      line-height: 1.1;
+    }
+
+    .top-brand .driver-meta {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pill-btn {
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--cream);
+      padding: 8px 11px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .pill-btn.dispo-on {
+      background: rgba(46, 204, 113, 0.18);
+      border-color: var(--green);
+      color: #7ef2ad;
+    }
+
+    .pill-btn.dispo-off {
+      background: rgba(231, 76, 60, 0.18);
+      border-color: var(--red);
+      color: #ff9d92;
+    }
+
+    .pill-btn.sound-on {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 14px 14px 0;
+    }
+
+    /* ALERT BANNER */
+    .alert-banner {
+      display: none;
+      background: linear-gradient(135deg, #c87d4b, #d4af37);
+      color: #131a13;
+      padding: 12px 14px;
+      border-radius: 14px;
+      margin-bottom: 14px;
+      font-weight: 800;
+      font-size: 14px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: 0 8px 24px rgba(212, 175, 55, 0.28);
+    }
+
+    /* DAILY STATS */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .stat-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 12px 14px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .stat-val {
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--gold);
+      margin-top: 4px;
+    }
+
+    .stat-val.green {
+      color: #7ef2ad;
+    }
+
+    /* TABS */
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .tab-btn {
+      background: var(--bg-card);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--muted);
+      padding: 11px 8px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .tab-btn.active {
+      background: var(--bg-card-soft);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    /* ORDER CARDS */
+    .order-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 15px;
+      margin-bottom: 12px;
+    }
+
+    .order-card.new-order {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.25);
+    }
+
+    .order-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .order-ref {
+      font-weight: 900;
+      font-size: 15px;
+      color: var(--gold);
+    }
+
+    .order-badge {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(212, 175, 55, 0.16);
+      color: var(--gold);
+    }
+
+    .order-row {
+      font-size: 14px;
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+
+    .order-row strong {
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .items-box {
+      background: #151e15;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 13px;
+      color: var(--cream);
+      margin: 8px 0 10px;
+      border-left: 3px solid var(--copper);
+    }
+
+    .money-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 13px;
+      margin-bottom: 12px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .money-chip {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 5px 9px;
+      border-radius: 8px;
+    }
+
+    .actions-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .actions-grid .full {
+      grid-column: 1 / -1;
+    }
+
+    .action-btn {
+      padding: 11px 12px;
+      border-radius: 11px;
+      border: none;
+      font-weight: 800;
+      font-size: 13px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 36px 18px;
+      background: var(--bg-card);
+      border: 1px dashed rgba(255, 255, 255, 0.16);
+      border-radius: 16px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #111811;
+      color: var(--cream);
+      border: 1px solid var(--gold);
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      z-index: 99;
+      display: none;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOGIN -->
+  <div id="loginScreen" class="login-wrap">
+    <div class="login-card">
+      <div class="brand-box">
+        <div class="brand-badge">DJERBA DELIVERY</div>
+        <div class="brand-title">THE GOAT</div>
+        <div class="brand-sub">Espace Livreur — Connexion sécurisée</div>
+      </div>
+
+      <form id="loginForm">
+        <div class="field">
+          <label for="loginId">ID Livreur ou Téléphone</label>
+          <input id="loginId" type="text" placeholder="Ex: SBOUI ou 28011006" required autocomplete="username" />
+        </div>
+        <div class="field">
+          <label for="loginPin">Code PIN</label>
+          <input id="loginPin" type="password" inputmode="numeric" placeholder="Ex: 1234" required autocomplete="current-password" />
+        </div>
+        <button type="submit" class="btn btn-gold" id="loginBtn">Se connecter</button>
+        <div id="loginError" class="error-msg"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboardScreen" style="display: none;">
+    <header class="topbar">
+      <div class="top-brand">
+        <div class="logo">THE GOAT</div>
+        <div class="driver-meta" id="driverInfo">Livreur • Zone</div>
+      </div>
+      <div class="top-actions">
+        <button id="soundToggleBtn" class="pill-btn sound-on" title="Son">🔔 Son ON</button>
+        <button id="dispoToggleBtn" class="pill-btn dispo-on">DISPO</button>
+        <button id="logoutBtn" class="pill-btn">Quitter</button>
+      </div>
+    </header>
+
+    <main class="container">
+      <div id="alertBanner" class="alert-banner">
+        <span id="alertText">Nouvelle commande disponible !</span>
+        <button class="pill-btn" onclick="stopAlertSound()">Stop</button>
+      </div>
+
+      <section class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-label">Livrées aujourd'hui</div>
+          <div class="stat-val" id="statCount">0</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Livraison (Frais) aujourd'hui</div>
+          <div class="stat-val green" id="statFrais">0.000 DT</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Commandes (Sous-total) aujourd'hui</div>
+          <div class="stat-val" id="statSousTotal">0.000 DT</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Total encaissé aujourd'hui</div>
+          <div class="stat-val" id="statTotal">0.000 DT</div>
+        </div>
+      </section>
+
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="available" onclick="switchTab('available')">
+          Nouvelles (<span id="countAvailable">0</span>)
+        </button>
+        <button class="tab-btn" data-tab="active" onclick="switchTab('active')">
+          En cours (<span id="countActive">0</span>)
+        </button>
+        <button class="tab-btn" data-tab="completed" onclick="switchTab('completed')">
+          Aujourd'hui (<span id="countCompleted">0</span>)
+        </button>
+      </div>
+
+      <section id="ordersList"></section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    // حط هنا رابط الـ Web App (/exec) متاع مشروع THE GOAT
+    const API_URL = "COLLE_ICI_TON_WEB_APP_URL";
+    const POLL_INTERVAL_MS = 8000;
+
+    const STORAGE_KEY = "the_goat_livreur_session_v1";
+
+    let session = null;
+    let currentTab = "available";
+    let dashboardData = {
+      available_orders: [],
+      active_orders: [],
+      today_completed_orders: [],
+      stats_today: { count_delivered: 0, sous_total: 0, frais_livraison: 0, total: 0 }
+    };
+
+    let knownAvailableRefs = new Set();
+    let soundEnabled = true;
+    let alertTimer = null;
+    let audioCtx = null;
+    let pollTimer = null;
+
+    function showToast(msg) {
+      const el = document.getElementById("toast");
+      el.textContent = msg;
+      el.style.display = "block";
+      clearTimeout(el._t);
+      el._t = setTimeout(() => { el.style.display = "none"; }, 2600);
+    }
+
+    function fmtMoney(n) {
+      return Number(n || 0).toFixed(3) + " DT";
+    }
+
+    function ensureAudioContext() {
+      if (!audioCtx) {
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        if (Ctx) audioCtx = new Ctx();
+      }
+      if (audioCtx && audioCtx.state === "suspended") {
+        audioCtx.resume().catch(() => {});
+      }
+    }
+
+    function playSingleTone() {
+      if (!soundEnabled) return;
+      ensureAudioContext();
+      if (!audioCtx) return;
+
+      const now = audioCtx.currentTime;
+      const notes = [880, 1174.66, 880, 1318.51];
+      notes.forEach((freq, i) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = "triangle";
+        osc.frequency.setValueAtTime(freq, now + i * 0.14);
+
+        gain.gain.setValueAtTime(0.001, now + i * 0.14);
+        gain.gain.exponentialRampToValueAtTime(0.35, now + i * 0.14 + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.14 + 0.13);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now + i * 0.14);
+        osc.stop(now + i * 0.14 + 0.14);
+      });
+    }
+
+    function startAlertSound(message) {
+      if (!soundEnabled) return;
+      const banner = document.getElementById("alertBanner");
+      const text = document.getElementById("alertText");
+      text.textContent = message || "Nouvelle commande disponible !";
+      banner.style.display = "flex";
+
+      playSingleTone();
+      clearInterval(alertTimer);
+      alertTimer = setInterval(playSingleTone, 2400);
+    }
+
+    function stopAlertSound() {
+      clearInterval(alertTimer);
+      alertTimer = null;
+      document.getElementById("alertBanner").style.display = "none";
+    }
+
+    async function apiCall(payload) {
+      if (!API_URL || API_URL.indexOf("COLLE_ICI") === 0) {
+        throw new Error("Ajoutez d'abord votre lien Web App dans API_URL.");
+      }
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (!data.ok) {
+        throw new Error(data.error || "Erreur serveur");
+      }
+      return data;
+    }
+
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      ensureAudioContext();
+
+      const errEl = document.getElementById("loginError");
+      const btn = document.getElementById("loginBtn");
+      errEl.style.display = "none";
+      btn.disabled = true;
+      btn.textContent = "Connexion...";
+
+      try {
+        const identifier = document.getElementById("loginId").value.trim();
+        const code_pin = document.getElementById("loginPin").value.trim();
+        const data = await apiCall({
+          action: "login_livreur",
+          identifier,
+          code_pin
+        });
+
+        session = {
+          livreur_id: data.livreur.id,
+          session_token: data.session_token,
+          zone: data.livreur.zone,
+          telephone: data.livreur.telephone
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
+        openDashboard();
+      } catch (err) {
+        errEl.textContent = err.message;
+        errEl.style.display = "block";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Se connecter";
+      }
+    });
+
+    function openDashboard() {
+      document.getElementById("loginScreen").style.display = "none";
+      document.getElementById("dashboardScreen").style.display = "block";
+      refreshDashboard(true);
+      clearInterval(pollTimer);
+      pollTimer = setInterval(() => refreshDashboard(false), POLL_INTERVAL_MS);
+    }
+
+    async function refreshDashboard(isInitial) {
+      if (!session) return;
+      try {
+        const data = await apiCall({
+          action: "get_livreur_dashboard",
+          livreur_id: session.livreur_id,
+          session_token: session.session_token
+        });
+
+        dashboardData = data;
+        renderHeaderAndStats(data);
+        checkNewOrders(data.available_orders || [], isInitial);
+        renderOrders();
+      } catch (err) {
+        if (String(err.message || "").toLowerCase().includes("session")) {
+          logout(false);
+        }
+      }
+    }
+
+    function checkNewOrders(availList, isInitial) {
+      const nextRefs = new Set(availList.map(o => o.ref));
+      let hasBrandNew = false;
+
+      if (!isInitial) {
+        availList.forEach(o => {
+          if (!knownAvailableRefs.has(o.ref)) {
+            hasBrandNew = true;
+          }
+        });
+      }
+
+      knownAvailableRefs = nextRefs;
+
+      if (hasBrandNew && availList.length > 0) {
+        startAlertSound("Nouvelle commande (" + availList[0].ref + ") !");
+      } else if (availList.length === 0) {
+        stopAlertSound();
+      }
+    }
+
+    function renderHeaderAndStats(data) {
+      const lv = data.livreur || {};
+      document.getElementById("driverInfo").textContent =
+        `${lv.id || session.livreur_id} • Zone: ${lv.zone || "TOUTES"}`;
+
+      const dispBtn = document.getElementById("dispoToggleBtn");
+      if (lv.isDispo) {
+        dispBtn.textContent = "DISPO";
+        dispBtn.className = "pill-btn dispo-on";
+      } else {
+        dispBtn.textContent = "HORS LIGNE";
+        dispBtn.className = "pill-btn dispo-off";
+      }
+
+      const st = data.stats_today || {};
+      document.getElementById("statCount").textContent = st.count_delivered || 0;
+      document.getElementById("statFrais").textContent = fmtMoney(st.frais_livraison);
+      document.getElementById("statSousTotal").textContent = fmtMoney(st.sous_total);
+      document.getElementById("statTotal").textContent = fmtMoney(st.total);
+
+      document.getElementById("countAvailable").textContent = (data.available_orders || []).length;
+      document.getElementById("countActive").textContent = (data.active_orders || []).length;
+      document.getElementById("countCompleted").textContent = (data.today_completed_orders || []).length;
+    }
+
+    function switchTab(tab) {
+      currentTab = tab;
+      document.querySelectorAll(".tab-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.tab === tab);
+      });
+      renderOrders();
+    }
+
+    function getMapsUrl(order) {
+      if (order.gps_lien) return order.gps_lien;
+      if (order.gps_lat && order.gps_lng) {
+        return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(order.gps_lat + "," + order.gps_lng)}`;
+      }
+      const q = [order.adress, order.zone, "Djerba"].filter(Boolean).join(", ");
+      return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
+    }
+
+    function renderOrders() {
+      const container = document.getElementById("ordersList");
+      let list = [];
+      if (currentTab === "available") list = dashboardData.available_orders || [];
+      else if (currentTab === "active") list = dashboardData.active_orders || [];
+      else list = dashboardData.today_completed_orders || [];
+
+      if (!list.length) {
+        const emptyMsgs = {
+          available: "Aucune nouvelle commande disponible pour le moment.",
+          active: "Aucune commande en cours.",
+          completed: "Aucune commande livrée aujourd'hui."
+        };
+        container.innerHTML = `<div class="empty-state">${emptyMsgs[currentTab]}</div>`;
+        return;
+      }
+
+      container.innerHTML = list.map(order => {
+        const totalCalc = order.total || (Number(order.sous_total || 0) + Number(order.frais_livraison || 0));
+        const mapsUrl = getMapsUrl(order);
+        const telClean = String(order.client_telephone || "").replace(/\s+/g, "");
+
+        let actionsHtml = "";
+        if (currentTab === "available") {
+          actionsHtml = `
+            <div class="actions-grid">
+              <button class="action-btn btn-green full" onclick="acceptOrder('${escapeAttr(order.ref)}')">
+                ✅ ACCEPTER LA COMMANDE
+              </button>
+            </div>
+          `;
+        } else if (currentTab === "active") {
+          const stLower = String(order.statut || "").toLowerCase();
+          const nextBtn = (stLower.includes("route") || stLower.includes("en_cours"))
+            ? `<button class="action-btn btn-green full" onclick="updateStatus('${escapeAttr(order.ref)}', 'livree')">📦 MARQUER LIVRÉE</button>`
+            : `<button class="action-btn btn-gold full" onclick="updateStatus('${escapeAttr(order.ref)}', 'en_route')">🛵 EN ROUTE</button>`;
+
+          actionsHtml = `
+            <div class="actions-grid">
+              ${nextBtn}
+              <a class="action-btn btn-blue" href="${escapeAttr(mapsUrl)}" target="_blank" rel="noopener">📍 Maps</a>
+              ${telClean ? `<a class="action-btn btn-outline" href="tel:${escapeAttr(telClean)}">📞 Appeler</a>` : ""}
+            </div>
+          `;
+        }
+
+        return `
+          <article class="order-card ${currentTab === "available" ? "new-order" : ""}">
+            <div class="order-top">
+              <span class="order-ref">#${escapeHtml(order.ref || "SANS-REF")} • ${escapeHtml(order.zone || "")}</span>
+              <span class="order-badge">${escapeHtml(order.statut || "nouvelle")}</span>
+            </div>
+            <div class="order-row"><strong>Restaurant :</strong> ${escapeHtml(order.restaurant || "-")}</div>
+            <div class="order-row"><strong>Client :</strong> ${escapeHtml(order.client_nom || "-")} ${order.client_telephone ? `(${escapeHtml(order.client_telephone)})` : ""}</div>
+            <div class="order-row"><strong>Adresse :</strong> ${escapeHtml(order.adress || "-")}</div>
+            ${order.items ? `<div class="items-box">${escapeHtml(order.items)}</div>` : ""}
+            ${order.notes ? `<div class="order-row"><strong>Note :</strong> ${escapeHtml(order.notes)}</div>` : ""}
+            <div class="money-bar">
+              <span class="money-chip">Commande: <strong>${fmtMoney(order.sous_total)}</strong></span>
+              <span class="money-chip">Livraison: <strong>${fmtMoney(order.frais_livraison)}</strong></span>
+              <span class="money-chip">Total: <strong>${fmtMoney(totalCalc)}</strong></span>
+            </div>
+            ${actionsHtml}
+          </article>
+        `;
+      }).join("");
+    }
+
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function escapeAttr(str) {
+      return String(str || "").replace(/'/g, "&#39;").replace(/"/g, "&quot;");
+    }
+
+    async function acceptOrder(ref) {
+      stopAlertSound();
+      try {
+        await apiCall({
+          action: "accept_order",
+          livreur_id: session.livreur_id,
+          session_token: session.session_token,
+          ref
+        });
+        showToast("Commande acceptée !");
+        switchTab("active");
+        await refreshDashboard(false);
+      } catch (err) {
+        showToast(err.message);
+        await refreshDashboard(false);
+      }
+    }
+
+    async function updateStatus(ref, statut) {
+      try {
+        await apiCall({
+          action: "update_order_status",
+          livreur_id: session.livreur_id,
+          session_token: session.session_token,
+          ref,
+          statut
+        });
+        showToast(statut === "livree" ? "Commande livrée !" : "Statut mis à jour");
+        await refreshDashboard(false);
+      } catch (err) {
+        showToast(err.message);
+      }
+    }
+
+    document.getElementById("dispoToggleBtn").addEventListener("click", async () => {
+      const currentlyDispo = !!(dashboardData.livreur && dashboardData.livreur.isDispo);
+      const nextStatus = currentlyDispo ? "hors_ligne" : "dispo";
+      try {
+        await apiCall({
+          action: "toggle_disponible",
+          livreur_id: session.livreur_id,
+          session_token: session.session_token,
+          disponible: nextStatus
+        });
+        showToast(nextStatus === "dispo" ? "Vous êtes DISPO" : "Vous êtes HORS LIGNE");
+        await refreshDashboard(false);
+      } catch (err) {
+        showToast(err.message);
+      }
+    });
+
+    document.getElementById("soundToggleBtn").addEventListener("click", () => {
+      soundEnabled = !soundEnabled;
+      const btn = document.getElementById("soundToggleBtn");
+      if (soundEnabled) {
+        btn.textContent = "🔔 Son ON";
+        btn.className = "pill-btn sound-on";
+        playSingleTone();
+      } else {
+        stopAlertSound();
+        btn.textContent = "🔕 Son OFF";
+        btn.className = "pill-btn";
+      }
+    });
+
+    async function logout(callServer = true) {
+      clearInterval(pollTimer);
+      stopAlertSound();
+      if (callServer && session) {
+        try {
+          await apiCall({
+            action: "logout_livreur",
+            livreur_id: session.livreur_id
+          });
+        } catch (_) {}
+      }
+      session = null;
+      localStorage.removeItem(STORAGE_KEY);
+      document.getElementById("dashboardScreen").style.display = "none";
+      document.getElementById("loginScreen").style.display = "flex";
+    }
+
+    document.getElementById("logoutBtn").addEventListener("click", () => logout(true));
+
+    (function init() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          session = JSON.parse(saved);
+          if (session && session.livreur_id) {
+            openDashboard();
+          }
+        } catch (_) {}
+      }
+    })();
+  </script>
+</body>
+</html>
