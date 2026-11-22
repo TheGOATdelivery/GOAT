@@ -34,7 +34,6 @@
       padding-bottom: 36px;
     }
 
-    /* LOGIN SCREEN */
     .login-wrap {
       min-height: 100vh;
       display: flex;
@@ -163,7 +162,6 @@
       display: none;
     }
 
-    /* TOP HEADER */
     .topbar {
       position: sticky;
       top: 0;
@@ -236,7 +234,6 @@
       padding: 14px 14px 0;
     }
 
-    /* ALERT BANNER */
     .alert-banner {
       display: none;
       background: linear-gradient(135deg, #c87d4b, #d4af37);
@@ -252,7 +249,6 @@
       box-shadow: 0 8px 24px rgba(212, 175, 55, 0.28);
     }
 
-    /* DAILY STATS */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -283,7 +279,6 @@
       color: #7ef2ad;
     }
 
-    /* TABS */
     .tabs {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -308,7 +303,6 @@
       color: var(--gold);
     }
 
-    /* ORDER CARDS */
     .order-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
@@ -436,7 +430,6 @@
 </head>
 <body>
 
-  <!-- LOGIN -->
   <div id="loginScreen" class="login-wrap">
     <div class="login-card">
       <div class="brand-box">
@@ -460,7 +453,6 @@
     </div>
   </div>
 
-  <!-- DASHBOARD -->
   <div id="dashboardScreen" style="display: none;">
     <header class="topbar">
       <div class="top-brand">
@@ -602,17 +594,20 @@
     }
 
     async function apiCall(payload) {
-      if (!API_URL || API_URL.indexOf("COLLE_ICI") === 0) {
-        throw new Error("Ajoutez d'abord votre lien Web App dans API_URL.");
-      }
       const res = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify(payload)
       });
-      const data = await res.json();
-      if (!data.ok) {
-        throw new Error(data.error || "Erreur serveur");
+      const text = await res.text();
+      let data = null;
+      try {
+        data = JSON.parse(text);
+      } catch (_) {
+        throw new Error("Réponse invalide du serveur.");
+      }
+      if (!data || !data.ok) {
+        throw new Error((data && data.error) || "Erreur serveur");
       }
       return data;
     }
@@ -628,6 +623,7 @@
       btn.textContent = "Connexion...";
 
       try {
+        localStorage.removeItem(STORAGE_KEY);
         const identifier = document.getElementById("loginId").value.trim();
         const code_pin = document.getElementById("loginPin").value.trim();
         const data = await apiCall({
@@ -645,7 +641,7 @@
         localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
         openDashboard();
       } catch (err) {
-        errEl.textContent = err.message;
+        errEl.textContent = err.message || "Identifiants incorrects.";
         errEl.style.display = "block";
       } finally {
         btn.disabled = false;
@@ -675,7 +671,8 @@
         checkNewOrders(data.available_orders || [], isInitial);
         renderOrders();
       } catch (err) {
-        if (String(err.message || "").toLowerCase().includes("session")) {
+        const msg = String(err.message || "").toLowerCase();
+        if (msg.includes("session") || msg.includes("token") || msg.includes("expire") || msg.includes("invalide")) {
           logout(false);
         }
       }
@@ -724,4 +721,228 @@
 
       document.getElementById("countAvailable").textContent = (data.available_orders || []).length;
       document.getElementById("countActive").textContent = (data.active_orders || []).length;
-      document.getElementById("countCompleted").textContent = (data.today_completed_orders
+      document.getElementById("countCompleted").textContent = (data.today_completed_orders || []).length;
+    }
+
+    function switchTab(tab) {
+      currentTab = tab;
+      document.querySelectorAll(".tab-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.tab === tab);
+      });
+      renderOrders();
+    }
+
+    function getMapsUrl(order) {
+      const rawBlob = [
+        order.gps_lien,
+        order.gps_lat && order.gps_lng ? `${order.gps_lat},${order.gps_lng}` : "",
+        order.gps,
+        order.adress,
+        order.zone
+      ].filter(Boolean).join(" ");
+
+      if (order.gps_lien && /^https?:\/\//i.test(String(order.gps_lien).trim())) {
+        return String(order.gps_lien).trim();
+      }
+      const urlMatch = rawBlob.match(/https?:\/\/[^\s"'<>]+/i);
+      if (urlMatch) return urlMatch[0];
+
+      const coordMatch = rawBlob.match(/(-?\d{1,2}\.\d+)\s*,\s*(-?\d{1,3}\.\d+)/);
+      if (coordMatch) {
+        return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${coordMatch[1]},${coordMatch[2]}`)}`;
+      }
+
+      const q = [order.adress, order.zone, "Ajim, Djerba, Tunisie"].filter(Boolean).join(", ");
+      return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
+    }
+
+    function renderOrders() {
+      const container = document.getElementById("ordersList");
+      let list = [];
+      if (currentTab === "available") list = dashboardData.available_orders || [];
+      else if (currentTab === "active") list = dashboardData.active_orders || [];
+      else list = dashboardData.today_completed_orders || [];
+
+      if (!list.length) {
+        const emptyMsgs = {
+          available: "Aucune nouvelle commande disponible pour le moment.",
+          active: "Aucune commande en cours.",
+          completed: "Aucune commande livrée aujourd'hui."
+        };
+        container.innerHTML = `<div class="empty-state">${emptyMsgs[currentTab]}</div>`;
+        return;
+      }
+
+      container.innerHTML = list.map(order => {
+        const rawPhone = String(order.client_telephone || order.telephone || order.tel || order.phone || "").trim();
+        const telClean = rawPhone.replace(/[^\d+]/g, "");
+        const mapsUrl = getMapsUrl(order);
+        const totalCalc = (order.total !== undefined && order.total !== null && order.total !== "")
+          ? Number(order.total)
+          : (Number(order.sous_total || 0) + Number(order.frais_livraison || 0));
+
+        let actionsHtml = "";
+        if (currentTab === "available") {
+          actionsHtml = `
+            <div class="actions-grid">
+              <button class="action-btn btn-green full" onclick="acceptOrder('${escapeAttr(order.ref)}')">
+                ✅ ACCEPTER LA COMMANDE
+              </button>
+            </div>
+          `;
+        } else if (currentTab === "active") {
+          const stLower = String(order.statut || "").toLowerCase();
+          const isDonePrep = stLower.includes("prep");
+          const isRoute = stLower.includes("route") || stLower.includes("en_cours");
+          const nextBtn = isRoute
+            ? `<button class="action-btn btn-green full" onclick="updateStatus('${escapeAttr(order.ref)}', 'livree')">✅ MARQUER LIVRÉE</button>`
+            : (isDonePrep
+              ? `<button class="action-btn btn-gold full" onclick="updateStatus('${escapeAttr(order.ref)}', 'en_route')">🛵 EN ROUTE</button>`
+              : `<button class="action-btn btn-gold full" onclick="updateStatus('${escapeAttr(order.ref)}', 'en_preparation')">🍳 EN PRÉPARATION</button>`);
+          const callHref = telClean;
+
+          actionsHtml = `
+            <div class="actions-grid">
+              ${nextBtn}
+              <a class="action-btn btn-blue" href="${escapeAttr(mapsUrl)}" target="_blank" rel="noopener">📍 Maps</a>
+              <a class="action-btn btn-outline" href="${callHref ? `tel:${escapeAttr(callHref)}` : "#"}">📞 Appeler</a>
+            </div>
+          `;
+        }
+
+        return `
+          <article class="order-card ${currentTab === "available" ? "new-order" : ""}">
+            <div class="order-top">
+              <span class="order-ref">#${escapeHtml(order.ref || "SANS-REF")} • ${escapeHtml(order.zone || "")}</span>
+              <span class="order-badge">${escapeHtml(order.statut || "nouvelle")}</span>
+            </div>
+            <div class="order-row"><strong>Restaurant :</strong> ${escapeHtml(order.restaurant || "-")}</div>
+            <div class="order-row"><strong>Client :</strong> ${escapeHtml(order.client_nom || "-")} ${rawPhone ? `(${escapeHtml(rawPhone)})` : ""}</div>
+            <div class="order-row"><strong>Adresse :</strong> ${escapeHtml(order.adress || "-")}</div>
+            ${order.items ? `<div class="items-box">${escapeHtml(order.items)}</div>` : ""}
+            ${order.notes ? `<div class="order-row"><strong>Note :</strong> ${escapeHtml(order.notes)}</div>` : ""}
+            <div class="money-bar">
+              <span class="money-chip">Commande: <strong>${fmtMoney(order.sous_total)}</strong></span>
+              <span class="money-chip">Livraison: <strong>${fmtMoney(order.frais_livraison)}</strong></span>
+              <span class="money-chip">Total: <strong>${fmtMoney(totalCalc)}</strong></span>
+            </div>
+            ${actionsHtml}
+          </article>
+        `;
+      }).join("");
+    }
+
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function escapeAttr(str) {
+      return String(str || "").replace(/'/g, "&#39;").replace(/"/g, "&quot;");
+    }
+
+    async function acceptOrder(ref) {
+      stopAlertSound();
+      try {
+        await apiCall({
+          action: "accept_order",
+          livreur_id: session.livreur_id,
+          session_token: session.session_token,
+          ref
+        });
+        showToast("Commande acceptée !");
+        switchTab("active");
+        await refreshDashboard(false);
+      } catch (err) {
+        showToast(err.message);
+        await refreshDashboard(false);
+      }
+    }
+
+    async function updateStatus(ref, statut) {
+      try {
+        await apiCall({
+          action: "update_order_status",
+          livreur_id: session.livreur_id,
+          session_token: session.session_token,
+          ref,
+          statut
+        });
+        showToast(statut === "livree" ? "Commande livrée !" : "Statut mis à jour");
+        await refreshDashboard(false);
+      } catch (err) {
+        showToast(err.message);
+      }
+    }
+
+    document.getElementById("dispoToggleBtn").addEventListener("click", async () => {
+      const currentlyDispo = !!(dashboardData.livreur && dashboardData.livreur.isDispo);
+      const nextStatus = currentlyDispo ? "hors_ligne" : "dispo";
+      try {
+        await apiCall({
+          action: "toggle_disponible",
+          livreur_id: session.livreur_id,
+          session_token: session.session_token,
+          disponible: nextStatus
+        });
+        showToast(nextStatus === "dispo" ? "Vous êtes DISPO" : "Vous êtes HORS LIGNE");
+        await refreshDashboard(false);
+      } catch (err) {
+        showToast(err.message);
+      }
+    });
+
+    document.getElementById("soundToggleBtn").addEventListener("click", () => {
+      soundEnabled = !soundEnabled;
+      const btn = document.getElementById("soundToggleBtn");
+      if (soundEnabled) {
+        btn.textContent = "🔔 Son ON";
+        btn.className = "pill-btn sound-on";
+        playSingleTone();
+      } else {
+        stopAlertSound();
+        btn.textContent = "🔕 Son OFF";
+        btn.className = "pill-btn";
+      }
+    });
+
+    async function logout(callServer = true) {
+      clearInterval(pollTimer);
+      stopAlertSound();
+      if (callServer && session) {
+        try {
+          await apiCall({
+            action: "logout_livreur",
+            livreur_id: session.livreur_id
+          });
+        } catch (_) {}
+      }
+      session = null;
+      localStorage.removeItem(STORAGE_KEY);
+      document.getElementById("dashboardScreen").style.display = "none";
+      document.getElementById("loginScreen").style.display = "flex";
+    }
+
+    document.getElementById("logoutBtn").addEventListener("click", () => logout(true));
+
+    (function init() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          session = JSON.parse(saved);
+          if (session && session.livreur_id && session.session_token) {
+            openDashboard();
+          } else {
+            localStorage.removeItem(STORAGE_KEY);
+          }
+        } catch (_) {
+          localStorage.removeItem(STORAGE_KEY);
+        }
+      }
+    })();
+  </script>
+</body>
+</html>
