@@ -359,6 +359,7 @@
       color: var(--cream);
       margin: 8px 0 10px;
       border-left: 3px solid var(--copper);
+      line-height: 1.5;
     }
 
     .money-bar {
@@ -514,6 +515,7 @@
     const API_URL = "https://script.google.com/macros/s/AKfycbybbw3yxfctVXCSC5u3xlV0qy1BAxeX0LI1L9qnSkanU0RNW3VhLPcbMZ4QaiG2D4Z7/exec";
     const POLL_INTERVAL_MS = 8000;
     const STORAGE_KEY = "the_goat_livreur_session_v1";
+    const LK = "tg_saved_livreur_v1";
 
     let session = null;
     let currentTab = "available";
@@ -549,17 +551,70 @@
       return Number.isFinite(num) ? num : NaN;
     }
 
+    function formatItemsHtml(rawItems) {
+      if (!rawItems) return "";
+      if (Array.isArray(rawItems)) {
+        return rawItems.map(it => {
+          const name = String(it.name || it.nom || it.title || it.key || "Article").trim();
+          const qty = Number(it.qty || it.quantite || 1) || 1;
+          const price = parseNum(it.price || it.prix);
+          const linePrice = Number.isFinite(price) ? ` (${(price * qty).toFixed(3)} DT)` : "";
+          return `${escapeHtml(name)} × ${qty}${linePrice}`;
+        }).join("<br>");
+      }
+      const str = String(rawItems).trim();
+      if (str.startsWith("[") || str.startsWith("{")) {
+        try {
+          const parsed = JSON.parse(str);
+          if (Array.isArray(parsed) && parsed.length) {
+            return formatItemsHtml(parsed);
+          }
+        } catch (_) {}
+      }
+      return escapeHtml(str).replace(/\n/g, "<br>");
+    }
+
+    function extractClientName(order) {
+      const nested = (order && typeof order.client === "object" && order.client) || {};
+      const candidates = [
+        order.client_nom,
+        order.client_name,
+        order.nom_client,
+        order.nom,
+        order.name,
+        order.customer_name,
+        nested.nom,
+        nested.name,
+        typeof order.client === "string" ? order.client : ""
+      ];
+      for (const c of candidates) {
+        const str = String(c || "").trim();
+        if (str && str !== "-" && !/^\+?\d[\d\s\-]{6,}$/.test(str)) {
+          return str;
+        }
+      }
+      return "-";
+    }
+
     function extractClientPhone(order) {
+      const nested = (order && typeof order.client === "object" && order.client) || {};
       const candidates = [
         order.client_telephone,
         order.client_tel,
+        order.clientPhone,
+        order.client_phone,
         order.telephone,
         order.tel,
         order.phone,
+        order.phone_number,
         order.mobile,
         order.gsm,
         order.num_tel,
-        order.numero
+        order.numero,
+        nested.telephone,
+        nested.tel,
+        nested.phone,
+        nested.mobile
       ];
       for (const c of candidates) {
         const str = String(c || "").trim();
@@ -570,13 +625,17 @@
           if (digits.length >= 8) return { display: match[1].trim(), tel: digits };
         }
       }
-      const fallbackText = [order.adress, order.notes].filter(Boolean).join(" ");
+      const fallbackText = [
+        typeof order.client === "string" ? order.client : "",
+        order.adress,
+        order.notes
+      ].filter(Boolean).join(" ");
       const tnMatch = fallbackText.match(/\b([2459]\d{7})\b/);
       if (tnMatch) return { display: tnMatch[1], tel: tnMatch[1] };
       return { display: "", tel: "" };
     }
 
-    function getOrderAmounts(order) {
+    function getOrderAmounts(order, parsedItemsSubtotal) {
       const sousRaw = parseNum(order.sous_total !== undefined ? order.sous_total : (order.subtotal || order.montant_articles));
       const fraisRaw = parseNum(
         order.frais_livraison !== undefined ? order.frais_livraison :
@@ -585,20 +644,38 @@
       );
       const totalRaw = parseNum(order.total !== undefined ? order.total : order.montant_total);
 
-      const sousTotal = Number.isFinite(sousRaw) ? sousRaw : 0;
+      const sousTotal = Number.isFinite(sousRaw) && sousRaw > 0
+        ? sousRaw
+        : (Number.isFinite(parsedItemsSubtotal) && parsedItemsSubtotal > 0 ? parsedItemsSubtotal : (Number.isFinite(sousRaw) ? sousRaw : 0));
       let frais = Number.isFinite(fraisRaw) ? fraisRaw : 0;
       let total = Number.isFinite(totalRaw) ? totalRaw : (sousTotal + frais);
 
-      if (Number.isFinite(totalRaw) && Number.isFinite(sousRaw) && totalRaw > sousRaw) {
-        const diff = Number((totalRaw - sousRaw).toFixed(3));
+      if (Number.isFinite(totalRaw) && sousTotal > 0 && totalRaw > sousTotal) {
+        const diff = Number((totalRaw - sousTotal).toFixed(3));
         if (!Number.isFinite(fraisRaw) || fraisRaw < diff) {
           frais = diff;
         }
-      } else if (!Number.isFinite(totalRaw)) {
+      } else if (!Number.isFinite(totalRaw) || totalRaw <= 0) {
         total = Number((sousTotal + frais).toFixed(3));
       }
 
       return { sousTotal, frais, total };
+    }
+
+    function calcItemsSubtotal(rawItems) {
+      let arr = [];
+      if (Array.isArray(rawItems)) arr = rawItems;
+      else if (typeof rawItems === "string" && (rawItems.trim().startsWith("["))) {
+        try { const p = JSON.parse(rawItems); if (Array.isArray(p)) arr = p; } catch (_) {}
+      }
+      if (!arr.length) return NaN;
+      let sum = 0;
+      for (const it of arr) {
+        const pr = parseNum(it.price || it.prix);
+        const q = Number(it.qty || it.quantite || 1) || 1;
+        if (Number.isFinite(pr)) sum += pr * q;
+      }
+      return sum > 0 ? Number(sum.toFixed(3)) : NaN;
     }
 
     function ensureAudioContext() {
@@ -657,7 +734,7 @@
 
     async function apiCall(payload) {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 15000);
+      const timeoutId = setTimeout(() => controller.abort(), 28000);
       try {
         const res = await fetch(API_URL, {
           method: "POST",
@@ -704,6 +781,10 @@
 
         const identifier = document.getElementById("loginId").value.trim();
         const code_pin = document.getElementById("loginPin").value.trim();
+        try {
+          localStorage.setItem(LK, JSON.stringify({ identifier, code_pin }));
+        } catch (_) {}
+
         const data = await apiCall({
           action: "login_livreur",
           identifier,
@@ -853,10 +934,13 @@
       }
 
       container.innerHTML = list.map(order => {
+        const clientName = extractClientName(order);
         const phoneInfo = extractClientPhone(order);
         const telClean = phoneInfo.tel;
         const mapsUrl = getMapsUrl(order);
-        const { sousTotal, frais, total } = getOrderAmounts(order);
+        const parsedSubtotal = calcItemsSubtotal(order.items);
+        const { sousTotal, frais, total } = getOrderAmounts(order, parsedSubtotal);
+        const itemsHtml = formatItemsHtml(order.items);
 
         let actionsHtml = "";
         if (currentTab === "available") {
@@ -895,9 +979,9 @@
               <span class="order-badge">${escapeHtml(order.statut || "nouvelle")}</span>
             </div>
             <div class="order-row"><strong>Restaurant :</strong> ${escapeHtml(order.restaurant || "-")}</div>
-            <div class="order-row"><strong>Client :</strong> ${escapeHtml(order.client_nom || "-")} ${phoneInfo.display ? `(${escapeHtml(phoneInfo.display)})` : ""}</div>
+            <div class="order-row"><strong>Client :</strong> ${escapeHtml(clientName)} ${phoneInfo.display ? `(${escapeHtml(phoneInfo.display)})` : ""}</div>
             <div class="order-row"><strong>Adresse :</strong> ${escapeHtml(order.adress || "-")}</div>
-            ${order.items ? `<div class="items-box">${escapeHtml(order.items)}</div>` : ""}
+            ${itemsHtml ? `<div class="items-box">${itemsHtml}</div>` : ""}
             ${order.notes ? `<div class="order-row"><strong>Note :</strong> ${escapeHtml(order.notes)}</div>` : ""}
             <div class="money-bar">
               <span class="money-chip">Commande: <strong>${fmtMoney(sousTotal)}</strong></span>
@@ -1007,6 +1091,16 @@
     document.getElementById("logoutBtn").addEventListener("click", () => logout(true));
 
     (function init() {
+      try {
+        const savedLv = JSON.parse(localStorage.getItem(LK) || "{}");
+        if (savedLv.identifier && !document.getElementById("loginId").value) {
+          document.getElementById("loginId").value = savedLv.identifier;
+        }
+        if (savedLv.code_pin && !document.getElementById("loginPin").value) {
+          document.getElementById("loginPin").value = savedLv.code_pin;
+        }
+      } catch (_) {}
+
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         try {
@@ -1022,6 +1116,5 @@
       }
     })();
   </script>
-  <script>(function(){const LK='tg_saved_livreur_v1';function readLv(){try{return JSON.parse(localStorage.getItem(LK)||'{}')||{};}catch(_){return {};}}function writeLv(d){try{const next=Object.assign({},readLv(),d);localStorage.setItem(LK,JSON.stringify(next));return next;}catch(_){return d;}}function fillLv(){const d=readLv();const idEl=document.getElementById('loginId');const pinEl=document.getElementById('loginPin');if(idEl&&!String(idEl.value||'').trim()&&d.identifier){idEl.value=d.identifier;idEl.dispatchEvent(new Event('input',{bubbles:true}));}if(pinEl&&!String(pinEl.value||'').trim()&&d.code_pin){pinEl.value=d.code_pin;pinEl.dispatchEvent(new Event('input',{bubbles:true}));}}function saveLv(){const idEl=document.getElementById('loginId');const pinEl=document.getElementById('loginPin');const patch={};if(idEl&&String(idEl.value||'').trim())patch.identifier=String(idEl.value||'').trim();if(pinEl&&String(pinEl.value||'').trim())patch.code_pin=String(pinEl.value||'').trim();if(Object.keys(patch).length)writeLv(patch);}document.addEventListener('DOMContentLoaded',()=>{fillLv();const form=document.getElementById('loginForm');if(form){form.addEventListener('submit',saveLv,true);}document.addEventListener('input',saveLv,true);setTimeout(fillLv,400);});})();</script>
 </body>
 </html>
