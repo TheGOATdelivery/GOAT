@@ -1022,5 +1022,6 @@
       }
     })();
   </script>
+  <script>(function(){const LK='tg_saved_livreur_v1';function readLv(){try{return JSON.parse(localStorage.getItem(LK)||'{}')||{};}catch(_){return {};}}function writeLv(d){try{const next=Object.assign({},readLv(),d);localStorage.setItem(LK,JSON.stringify(next));return next;}catch(_){return d;}}function fillLv(){const d=readLv();const idEl=document.getElementById('loginId');const pinEl=document.getElementById('loginPin');if(idEl&&!String(idEl.value||'').trim()&&d.identifier){idEl.value=d.identifier;idEl.dispatchEvent(new Event('input',{bubbles:true}));}if(pinEl&&!String(pinEl.value||'').trim()&&d.code_pin){pinEl.value=d.code_pin;pinEl.dispatchEvent(new Event('input',{bubbles:true}));}}function saveLv(){const idEl=document.getElementById('loginId');const pinEl=document.getElementById('loginPin');const patch={};if(idEl&&String(idEl.value||'').trim())patch.identifier=String(idEl.value||'').trim();if(pinEl&&String(pinEl.value||'').trim())patch.code_pin=String(pinEl.value||'').trim();if(Object.keys(patch).length)writeLv(patch);}document.addEventListener('DOMContentLoaded',()=>{fillLv();const form=document.getElementById('loginForm');if(form){form.addEventListener('submit',saveLv,true);}document.addEventListener('input',saveLv,true);setTimeout(fillLv,400);});})();</script>
 </body>
 </html>
