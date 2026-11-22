@@ -28,7 +28,7 @@
       --radius-sm: 10px;
     }
 
-    * {
+    *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
@@ -930,7 +930,16 @@
           <div class="feedback-msg" id="orderFeedback"></div>
         </form>
       </section>
-      <div id="clientOrderTracker" style="display:none; margin-top:16px; padding:14px; border-radius:12px; border:1px solid #d4af37; background:#141414; color:#f5f5f5;"><div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;"><strong>Suivi de commande : <span id="trackerRef">-</span></strong><span id="trackerBadge" style="padding:4px 10px; border-radius:999px; background:#262626; font-size:12px;">En attente</span></div><p id="trackerMessage" style="margin:8px 0 6px; font-size:14px; color:#e5e5e5;"></p><small id="trackerMeta" style="display:block; color:#a3a3a3;"></small><button type="button" id="trackerRefreshBtn" style="margin-top:10px; padding:8px 12px; border-radius:8px; border:none; background:#d4af37; color:#111; font-weight:600; cursor:pointer;">Actualiser le statut</button></div>
+
+      <div id="clientOrderTracker" style="display:none; margin-top:16px; padding:14px; border-radius:12px; border:1px solid #d4af37; background:#141414; color:#f5f5f5;">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
+          <strong>Suivi de commande : <span id="trackerRef">-</span></strong>
+          <span id="trackerBadge" style="padding:4px 10px; border-radius:999px; background:#262626; font-size:12px;">En attente</span>
+        </div>
+        <p id="trackerMessage" style="margin:8px 0 6px; font-size:14px; color:#e5e5e5;"></p>
+        <small id="trackerMeta" style="display:block; color:#a3a3a3;"></small>
+        <button type="button" id="trackerRefreshBtn" style="margin-top:10px; padding:8px 12px; border-radius:8px; border:none; background:#d4af37; color:#111; font-weight:600; cursor:pointer;">Actualiser le statut</button>
+      </div>
     </div>
 
     <section class="highlights-grid" aria-label="Points forts du service">
@@ -967,7 +976,7 @@
     const FALLBACK_DATA = {
       restaurants: [
         {
-          id: "big-ben",
+          id: "1",
           nom: "LA FAMEUSE BIG BEN",
           zone: "Ajim",
           type: "restaurant",
@@ -975,40 +984,40 @@
           logo: "./logo.png",
           lat: 33.7222531,
           lng: 10.7437356,
-          statut: "ouvert"
+          statut: "open"
         },
         {
-          id: "the-smile",
+          id: "2",
           nom: "THE SMILE",
           zone: "Ajim",
           type: "café",
           specialite: "CAFÉ & BOISSONS",
           logo: "",
-          lat: 33.7222531,
-          lng: 10.7437356,
-          statut: "ouvert"
+          lat: 33.7234007,
+          lng: 10.7500552,
+          statut: "open"
         },
         {
-          id: "cafe-ben-yedder",
+          id: "3",
           nom: "CAFE BEN YEDDER",
           zone: "Houmt Souk",
           type: "café",
           specialite: "CAFÉ & BOISSONS",
           logo: "",
-          lat: 33.8757,
-          lng: 10.8574,
-          statut: "ouvert"
+          lat: 33.8758101,
+          lng: 10.8561549,
+          statut: "open"
         },
         {
-          id: "pizza-gambour",
+          id: "4",
           nom: "PIZZA GAMBOUR",
           zone: "Houmt Souk",
           type: "restaurant",
           specialite: "PIZZA & FAST FOOD",
           logo: "",
-          lat: 33.8757,
-          lng: 10.8574,
-          statut: "ouvert"
+          lat: 33.8767539,
+          lng: 10.857842,
+          statut: "open"
         }
       ],
       menus: [],
@@ -1205,7 +1214,7 @@
     }
 
     function getMenuItemCategoryKey(item) {
-      const rawCat = String(getField(item, ["categorie", "catégorie", "category", "type", "famille"], "")).trim();
+      const rawCat = String(getField(item, ["catégorie", "categorie", "category", "type", "famille"], "")).trim();
       const norm = normalizeText(rawCat);
       if (!norm) return "autres";
       if (norm === "pizza" || norm === "pizzas") return "pizza";
@@ -1218,7 +1227,7 @@
     }
 
     function getMenuItemCategoryLabel(catKey, sampleItem) {
-      const rawCat = String(getField(sampleItem, ["categorie", "catégorie", "category", "type", "famille"], "")).trim();
+      const rawCat = String(getField(sampleItem, ["catégorie", "categorie", "category", "type", "famille"], "")).trim();
       const map = {
         pizza: "PIZZAS",
         tabouna: "TABOUNA",
@@ -1232,19 +1241,19 @@
       return toUpper(rawCat || catKey);
     }
 
-    function formatPrice(val) {
+    function parsePriceNum(val) {
+      if (typeof val === "number") return Number.isFinite(val) ? val : 0;
       const cleaned = String(val ?? "0").replace(",", ".").replace(/[^\d.-]/g, "");
-      const num = parseFloat(cleaned) || 0;
-      return `${num.toFixed(3)} TND`;
+      const n = parseFloat(cleaned);
+      return Number.isFinite(n) ? n : 0;
     }
 
-    function parsePriceNum(val) {
-      const cleaned = String(val ?? "0").replace(",", ".").replace(/[^\d.-]/g, "");
-      return parseFloat(cleaned) || 0;
+    function formatPrice(val) {
+      return `${parsePriceNum(val).toFixed(3)} TND`;
     }
 
     function isRestaurantOpen(r) {
-      const raw = normalizeText(getField(r, ["statut", "status", "etat", "état", "ouvert", "disponible"], "ouvert"));
+      const raw = normalizeText(getField(r, ["statut", "status", "etat", "état", "ouvert", "disponible"], "open"));
       return !["ferme", "fermé", "closed", "false", "0", "non", "inactif"].includes(raw);
     }
 
@@ -1407,11 +1416,11 @@
     function getRestaurantMenus() {
       const resto = state.selectedRestaurant;
       if (!resto) return [];
-      const restoId = normalizeText(getRestaurantId(resto));
+      const restoId = String(getField(resto, ["id", "resto_id", "restaurant_id"], "")).trim();
       const restoName = normalizeText(getField(resto, ["nom", "name", "restaurant", "titre"], ""));
 
       return (state.menus || []).filter((m) => {
-        const itemRestoId = normalizeText(getField(m, ["restaurant_id", "resto_id", "id_restaurant"], ""));
+        const itemRestoId = String(getField(m, ["restaurant_id", "resto_id", "id_restaurant"], "")).trim();
         const itemRestoName = normalizeText(getField(m, ["restaurant", "resto", "nom_restaurant"], ""));
         if (restoId && itemRestoId && itemRestoId === restoId) return true;
         if (restoName && itemRestoName && itemRestoName === restoName) return true;
@@ -1553,298 +1562,4 @@
         titleEl.textContent = catObj.label;
 
         const gridEl = document.createElement("div");
-        gridEl.className = "menu-grid";
-        catObj.entries.forEach(({ item, idx }) => {
-          gridEl.appendChild(buildMenuCard(item, idx));
-        });
-
-        block.appendChild(titleEl);
-        block.appendChild(gridEl);
-        el.menuCategoriesContainer.appendChild(block);
-      });
-    }
-
-    function getCartTotals() {
-      const list = Object.values(state.cart);
-      const count = list.reduce((sum, item) => sum + item.qty, 0);
-      const subtotal = list.reduce((sum, item) => sum + item.qty * item.price, 0);
-      return { list, count, subtotal };
-    }
-
-    function updateStep2Summary() {
-      const { count, subtotal } = getCartTotals();
-      el.step2SummaryCount.textContent = `${count} ARTICLE(S) DANS LE PANIER`;
-      el.step2SummaryTotal.textContent = formatPrice(subtotal);
-    }
-
-    function computeDeliveryFee(distanceKm) {
-      if (typeof distanceKm !== "number" || Number.isNaN(distanceKm)) {
-        return null;
-      }
-      const stepsOver = Math.max(0, Math.ceil(distanceKm / 0.5));
-      return 1.5 + stepsOver * 0.5;
-    }
-
-    function haversineKm(lat1, lng1, lat2, lng2) {
-      const R = 6371;
-      const toRad = (deg) => (deg * Math.PI) / 180;
-      const dLat = toRad(lat2 - lat1);
-      const dLng = toRad(lng2 - lng1);
-      const a =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-        Math.sin(dLng / 2) * Math.sin(dLng / 2);
-      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    }
-
-    function renderCheckoutCart() {
-      const { list, subtotal } = getCartTotals();
-      if (!list.length) {
-        el.cartItems.innerHTML = `<p class="empty-state">Votre panier est vide.</p>`;
-        el.cartTotal.textContent = formatPrice(0);
-        el.checkoutDeliveryFee.textContent = formatPrice(0);
-        return;
-      }
-
-      el.cartItems.innerHTML = list
-        .map(
-          (item) => `
-          <div class="cart-item">
-            <span>${escapeHtml(item.name)} × ${item.qty}</span>
-            <strong>${formatPrice(item.qty * item.price)}</strong>
-          </div>
-        `
-        )
-        .join("");
-
-      const r = state.selectedRestaurant;
-      const rLat = parseFloat(getField(r, ["lat", "latitude"], ""));
-      const rLng = parseFloat(getField(r, ["lng", "lon", "longitude"], ""));
-      const cLat = parseFloat(state.gps.lat);
-      const cLng = parseFloat(state.gps.lng);
-
-      if (!Number.isNaN(rLat) && !Number.isNaN(rLng) && !Number.isNaN(cLat) && !Number.isNaN(cLng)) {
-        const dist = haversineKm(rLat, rLng, cLat, cLng);
-        if (dist > MAX_DELIVERY_KM) {
-          el.checkoutDeliveryFee.textContent = "HORS ZONE";
-          el.cartTotal.textContent = formatPrice(subtotal);
-          showFeedback(el.orderFeedback, OUT_OF_ZONE_MSG, false);
-          return;
-        }
-       const h = new Date().getHours(); const isNight = (h >= 21 || h < 5); const extraFee = (isNight ? 1 : 0) + (window.TG_EXTRA_FEE ? 1 : 0); const fee = computeDeliveryFee(dist) + extraFee;
-        el.checkoutDeliveryFee.textContent = formatPrice(fee);
-        el.cartTotal.textContent = formatPrice(subtotal + fee);
-      } else {
-        el.checkoutDeliveryFee.textContent = "SELON ZONE / GPS";
-        el.cartTotal.textContent = formatPrice(subtotal);
-      }
-    }
-
-    function showFeedback(targetEl, msg, isOk) {
-      targetEl.textContent = msg;
-      targetEl.className = `feedback-msg show ${isOk ? "feedback-ok" : "feedback-err"}`;
-    }
-
-    async function loadStoreData() {
-      try {
-        const url = `${APPS_SCRIPT_URL}?action=get_init&_t=${Date.now()}`;
-        const res = await fetch(url, { method: "GET", cache: "no-store" });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-
-        const rawRestos = extractArray(data, ["restaurants", "etablissements", "établissements", "lieux", "stores"]);
-        const rawMenus = extractArray(data, ["menus", "plats", "articles", "items"]);
-        const rawPubs = extractArray(data, ["pubs", "pub", "publicites", "publicités", "annonces", "offres"]);
-
-        state.restaurants = mergeWithFallback(rawRestos, FALLBACK_DATA.restaurants);
-        state.menus = mergeWithFallback(rawMenus, FALLBACK_DATA.menus);
-        state.pubs = rawPubs;
-      } catch (err) {
-        state.restaurants = [...FALLBACK_DATA.restaurants];
-        state.menus = [...FALLBACK_DATA.menus];
-        state.pubs = [...FALLBACK_DATA.pubs];
-      }
-
-      renderPubs();
-      renderRestaurants();
-      if (state.step === 2) renderMenus();
-      if (state.step === 3) renderCheckoutCart();
-    }
-
-    function bindEvents() {
-      el.brandHomeBtn.addEventListener("click", () => {
-        state.selectedRestaurant = null;
-        state.selectedMenuCategory = "ALL";
-        state.cart = {};
-        goToStep(1);
-      });
-
-      el.zoneBtns.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          el.zoneBtns.forEach((b) => b.classList.remove("active"));
-          btn.classList.add("active");
-          state.zone = btn.dataset.zone;
-          renderRestaurants();
-        });
-      });
-
-      el.reloadDataBtn.addEventListener("click", async () => {
-        el.reloadDataBtn.disabled = true;
-        el.reloadDataBtn.textContent = "CHARGEMENT...";
-        await loadStoreData();
-        el.reloadDataBtn.disabled = false;
-        el.reloadDataBtn.textContent = "ACTUALISER";
-      });
-
-      el.backToRestaurantsBtn.addEventListener("click", () => {
-        state.selectedMenuCategory = "ALL";
-        state.cart = {};
-        goToStep(1);
-      });
-
-      el.confirmCartBtn.addEventListener("click", () => {
-        const { count } = getCartTotals();
-        if (count <= 0) {
-          showFeedback(el.menuFeedback, "Veuillez ajouter au moins un article avant de continuer.", false);
-          return;
-        }
-        el.menuFeedback.className = "feedback-msg";
-        goToStep(3);
-      });
-
-      el.backToMenuBtn.addEventListener("click", () => {
-        el.orderFeedback.className = "feedback-msg";
-        goToStep(2);
-      });
-
-      el.gpsBtn.addEventListener("click", () => {
-        if (!navigator.geolocation) {
-          el.gpsStatus.textContent = "La géolocalisation n'est pas supportée par ce navigateur.";
-          return;
-        }
-        el.gpsBtn.disabled = true;
-        el.gpsStatus.textContent = "Recherche de votre position GPS...";
-
-        navigator.geolocation.getCurrentPosition(
-          (pos) => {
-            const lat = pos.coords.latitude.toFixed(6);
-            const lng = pos.coords.longitude.toFixed(6);
-            state.gps = {
-              lat,
-              lng,
-              mapUrl: `https://maps.google.com/?q=${lat},${lng}`
-            };
-            el.gpsStatus.textContent = `Position enregistrée (${lat}, ${lng})`;
-            el.gpsBtn.disabled = false;
-            renderCheckoutCart();
-          },
-          () => {
-            el.gpsStatus.textContent = "Impossible d'obtenir la position GPS. Vérifiez les autorisations.";
-            el.gpsBtn.disabled = false;
-          },
-          { enableHighAccuracy: true, timeout: 10000 }
-        );
-      });
-
-      el.orderForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        el.orderFeedback.className = "feedback-msg";
-
-        const { list, subtotal } = getCartTotals();
-        if (!list.length) {
-          showFeedback(el.orderFeedback, "Votre panier est vide.", false);
-          return;
-        }
-
-        const r = state.selectedRestaurant;
-        const rLat = parseFloat(getField(r, ["lat", "latitude"], ""));
-        const rLng = parseFloat(getField(r, ["lng", "lon", "longitude"], ""));
-        const cLat = parseFloat(state.gps.lat);
-        const cLng = parseFloat(state.gps.lng);
-
-        let deliveryFee = 0;
-        if (!Number.isNaN(rLat) && !Number.isNaN(rLng) && !Number.isNaN(cLat) && !Number.isNaN(cLng)) {
-          const dist = haversineKm(rLat, rLng, cLat, cLng);
-          if (dist > MAX_DELIVERY_KM) {
-            showFeedback(el.orderFeedback, OUT_OF_ZONE_MSG, false);
-            return;
-          }
-          deliveryFee = computeDeliveryFee(dist) || 0;
-        }
-
-        const payload = {
-          action: "create_order",
-          zone: state.zone,
-          restaurant: getField(r, ["nom", "name", "restaurant", "titre"], ""),
-          restaurant_id: getRestaurantId(r),
-          client_name: document.getElementById("clientName").value.trim(),
-          client_phone: document.getElementById("clientPhone").value.trim(),
-          client_address: document.getElementById("clientAddress").value.trim(),
-          notes: document.getElementById("orderNotes").value.trim(),
-          lat: state.gps.lat,
-          lng: state.gps.lng,
-          map_url: state.gps.mapUrl,
-          items: list,
-          subtotal: subtotal.toFixed(3),
-          delivery_fee: deliveryFee.toFixed(3),
-          total: (subtotal + deliveryFee).toFixed(3)
-        };
-
-        el.submitOrderBtn.disabled = true;
-        el.submitOrderBtn.textContent = "ENVOI EN COURS...";
-
-        try {
-          const res = await fetch(APPS_SCRIPT_URL, {
-            method: "POST",
-            headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify(payload)
-          });
-          const data = await res.json().catch(() => ({}));
-          if (res.ok && data.ok !== false) {
-            showFeedback(el.orderFeedback, "Commande envoyée avec succès ! Nous préparons votre livraison.", true);
-            state.cart = {};
-            el.orderForm.reset();
-            state.gps = { lat: "", lng: "", mapUrl: "" };
-            el.gpsStatus.textContent = "Position GPS non renseignée.";
-            const createdRef = (data && (data.ref || data.order_ref || (data.order && data.order.ref))) || (payload && payload.ref) || ''; if (window.startClientOrderTracking && createdRef) { window.startClientOrderTracking(createdRef); }
-            renderCheckoutCart();
-          } else {
-            showFeedback(el.orderFeedback, data.error || "Erreur lors de l'envoi de la commande.", false);
-          }
-        } catch (err) {
-          showFeedback(el.orderFeedback, "Erreur réseau lors de l'envoi de la commande.", false);
-        } finally {
-          el.submitOrderBtn.disabled = false;
-          el.submitOrderBtn.textContent = "VALIDER LA COMMANDE";
-        }
-      });
-    }
-
-    initParticles();
-    bindEvents();
-    loadStoreData();
-  </script>
-  <div id="clientOrderTracker" style="display:none;margin:16px auto;max-width:680px;padding:14px 16px;border-radius:12px;border:1px solid #e5e7eb;background:#fff;box-shadow:0 4px 14px rgba(0,0,0,.06);font-family:inherit"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><strong>Suivi de commande <span id="trackerRef"></span></strong><span id="trackerBadge" style="padding:4px 10px;border-radius:999px;background:#fef3c7;color:#92400e;font-weight:700;font-size:13px"></span></div><p id="trackerMessage" style="margin:8px 0 6px;color:#374151"></p><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px;color:#6b7280"><span id="trackerMeta"></span><button id="trackerRefreshBtn" type="button" style="padding:5px 10px;border-radius:8px;border:1px solid #d1d5db;background:#f9fafb;cursor:pointer">Actualiser</button></div></div>
-<script>(function(){const K='tg_last_order_ref';let T=null;const M={nouvelle:{l:'Nouvelle commande',m:'Votre commande est enregistrée et en attente d’un livreur.'},acceptee:{l:'Acceptée',m:'Un livreur a accepté votre commande.'},en_preparation:{l:'En préparation',m:'Le restaurant prépare votre commande.'},en_route:{l:'En route',m:'Le livreur est en route vers votre adresse.'},livree:{l:'Livrée',m:'Votre commande a bien été livrée. Bon appétit !'}};function U(){return (typeof APPS_SCRIPT_URL!=='undefined'&&APPS_SCRIPT_URL)||'';}function R(o){const b=document.getElementById('clientOrderTracker');if(!b||!o)return;b.style.display='block';const s=String(o.statut||'nouvelle').toLowerCase().replace(/\s+/g,'_');const info=M[s]||{l:o.statut||'En cours',m:'Mise à jour de votre commande en cours.'};document.getElementById('trackerRef').textContent=o.ref?'#'+o.ref:'';document.getElementById('trackerBadge').textContent=info.l;document.getElementById('trackerMessage').textContent=info.m;document.getElementById('trackerMeta').textContent=`Restaurant : ${o.restaurant||'-'} • Zone : ${o.zone||'-'} • Total : ${Number(o.total||0).toFixed(3)} TND`;}async function F(ref){const u=U();if(!u||!ref)return;try{const sep=u.includes('?')?'&':'?';const res=await fetch(`${u}${sep}action=get_order_status&ref=${encodeURIComponent(ref)}`);const d=await res.json();if(d&&d.ok&&d.order)R(d.order);}catch(_){}}window.startClientOrderTracking=function(ref){if(!ref)return;try{localStorage.setItem(K,String(ref).trim());}catch(_){}F(ref);if(T)clearInterval(T);T=setInterval(()=>F(ref),6000);};window.setExtraFee=function(on){window.TG_EXTRA_FEE=!!on;if(typeof renderCheckoutCart==='function')renderCheckoutCart();return window.TG_EXTRA_FEE;};const origFetch=window.fetch;if(typeof origFetch==='function'){window.fetch=async function(...args){const res=await origFetch.apply(this,args);try{const data=await res.clone().json();const ref=data&&(data.ref||data.order_ref||(data.order&&data.order.ref));if(ref&&(data.ok!==false))window.startClientOrderTracking(ref);}catch(_){}return res;};}document.addEventListener('DOMContentLoaded',()=>{const btn=document.getElementById('trackerRefreshBtn');if(btn)btn.addEventListener('click',()=>{const s=localStorage.getItem(K);if(s)F(s);});try{const s=localStorage.getItem(K);if(s)window.startClientOrderTracking(s);}catch(_){}});})();</script>
-<div id="clientOrderTracker" style="display:none;margin:18px auto;max-width:680px;padding:18px;border-radius:18px;border:1px solid rgba(212,175,55,0.35);background:linear-gradient(180deg,#1d291d 0%,#141c14 100%);color:#f4efe2;box-shadow:0 12px 28px rgba(0,0,0,0.45);font-family:inherit">
-  <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px">
-    <div style="font-weight:800;font-size:15px;color:#f4efe2">Suivi de commande <span id="trackerRef" style="color:#d4af37"></span></div>
-    <span id="trackerBadge" style="padding:5px 12px;border-radius:999px;background:#facc15;color:#182218;font-weight:900;font-size:12px;letter-spacing:0.3px">En attente</span>
-  </div>
-  <div id="trackerSteps" style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:12px 0">
-    <div data-step="attente" style="padding:7px 6px;border-radius:10px;text-align:center;font-size:11px;font-weight:800;background:#facc15;color:#182218">1. En attente</div>
-    <div data-step="preparation" style="padding:7px 6px;border-radius:10px;text-align:center;font-size:11px;font-weight:700;background:rgba(255,255,255,0.06);color:#b7c2b0">2. En préparation</div>
-    <div data-step="route" style="padding:7px 6px;border-radius:10px;text-align:center;font-size:11px;font-weight:700;background:rgba(255,255,255,0.06);color:#b7c2b0">3. En route</div>
-    <div data-step="livre" style="padding:7px 6px;border-radius:10px;text-align:center;font-size:11px;font-weight:700;background:rgba(255,255,255,0.06);color:#b7c2b0">4. Livré</div>
-  </div>
-  <div id="trackerClient" style="margin:8px 0 6px;padding:9px 12px;border-radius:10px;background:rgba(255,255,255,0.05);font-size:13px;color:#f4efe2;font-weight:700"></div>
-  <p id="trackerMessage" style="margin:6px 0 10px;color:#e5e7eb;font-size:14px;line-height:1.45"></p>
-  <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:12px;color:#b7c2b0;border-top:1px solid rgba(255,255,255,0.08);padding-top:10px">
-    <span id="trackerMeta"></span>
-    <button id="trackerRefreshBtn" type="button" style="padding:7px 13px;border-radius:10px;border:none;background:linear-gradient(135deg,#d4af37,#c87d4b);color:#131a13;font-weight:800;cursor:pointer">Actualiser le statut</button>
-  </div>
-</div>
-<script>(function(){const K='tg_last_order_ref';let T=null;const M={nouvelle:{l:'En attente',idx:0,bg:'#facc15',fg:'#182218',m:'Votre commande est en attente de prise en charge par un livreur.'},acceptee:{l:'En attente',idx:0,bg:'#facc15',fg:'#182218',m:'Commande acceptée par le livreur, préparation en cours.'},en_preparation:{l:'En préparation',idx:1,bg:'#fb923c',fg:'#182218',m:'Votre commande est en préparation.'},en_route:{l:'En route',idx:2,bg:'#38bdf8',fg:'#0f172a',m:'Le livreur est en route vers votre adresse.'},livree:{l:'Livré',idx:3,bg:'#4ade80',fg:'#0f172a',m:'Votre commande a bien été livrée. Bon appétit !'}};function U(){return (typeof APPS_SCRIPT_URL!=='undefined'&&APPS_SCRIPT_URL)||'';}function pickClientName(o){const n=(o&&typeof o.client==='object'&&o.client)||{};const c=[o.client_nom,o.client_name,o.nom_client,o.nom,o.name,o.customer_name,n.nom,n.name,typeof o.client==='string'?o.client:''];for(const x of c){const s=String(x||'').trim();if(s&&s!=='-'&&!/^\+?\d[\d\s\-]{6,}$/.test(s))return s;}return '-';}function pickClientPhone(o){const n=(o&&typeof o.client==='object'&&o.client)||{};const c=[o.client_telephone,o.client_tel,o.clientPhone,o.client_phone,o.telephone,o.tel,o.phone,o.phone_number,o.mobile,o.gsm,o.num_tel,o.numero,n.telephone,n.tel,n.phone,n.mobile];for(const x of c){const s=String(x||'').trim();if(!s)continue;const m=s.match(/(\+?\d[\d\s\-().]{6,15}\d)/);if(m&&m[1].replace(/[^\d+]/g,'').length>=8)return m[1].trim();}const fb=[typeof o.client==='string'?o.client:'',o.adress,o.adresse,o.notes].filter(Boolean).join(' ');const tn=fb.match(/\b([2459]\d{7})\b/);return tn?tn[1]:'-';}function paintSteps(activeIdx){const wrap=document.getElementById('trackerSteps');if(!wrap)return;const els=wrap.querySelectorAll('[data-step]');els.forEach((el,i)=>{if(i<activeIdx){el.style.background='rgba(74,222,128,0.22)';el.style.color='#86efac';}else if(i===activeIdx){el.style.background='#facc15';el.style.color='#182218';}else{el.style.background='rgba(255,255,255,0.06)';el.style.color='#b7c2b0';}});}function R(o){const b=document.getElementById('clientOrderTracker');if(!b||!o)return;b.style.display='block';const raw=String(o.statut||'nouvelle').toLowerCase().trim().replace(/\s+/g,'_');const s=raw.includes('livr')?'livree':raw.includes('route')||raw.includes('en_cours')?'en_route':raw.includes('prep')?'en_preparation':raw.includes('accept')?'acceptee':'nouvelle';const info=M[s]||M.nouvelle;document.getElementById('trackerRef').textContent=o.ref?'#'+o.ref:'';const badge=document.getElementById('trackerBadge');badge.textContent=info.l;badge.style.background=info.bg;badge.style.color=info.fg;paintSteps(info.idx);const cname=pickClientName(o);const cphone=pickClientPhone(o);document.getElementById('trackerClient').textContent=`Client : ${cname} • Tél : ${cphone}`;document.getElementById('trackerMessage').textContent=info.m;document.getElementById('trackerMeta').textContent=`Restaurant : ${o.restaurant||'-'} • Zone : ${o.zone||'-'} • Total : ${Number(o.total||0).toFixed(3)} TND`;}async function F(ref){const u=U();if(!u||!ref)return;try{const sep=u.includes('?')?'&':'?';const res=await fetch(`${u}${sep}action=get_order_status&ref=${encodeURIComponent(ref)}`);const d=await res.json();if(d&&d.ok&&d.order)R(d.order);}catch(_){}}window.startClientOrderTracking=function(ref){if(!ref)return;try{localStorage.setItem(K,String(ref).trim());}catch(_){}F(ref);if(T)clearInterval(T);T=setInterval(()=>F(ref),6000);};window.setExtraFee=function(on){window.TG_EXTRA_FEE=!!on;if(typeof renderCheckoutCart==='function')renderCheckoutCart();return window.TG_EXTRA_FEE;};const origFetch=window.fetch;if(typeof origFetch==='function'){window.fetch=async function(...args){const res=await origFetch.apply(this,args);try{const data=await res.clone().json();const ref=data&&(data.ref||data.order_ref||(data.order&&data.order.ref));if(ref&&(data.ok!==false))window.startClientOrderTracking(ref);}catch(_){}return res;};}document.addEventListener('DOMContentLoaded',()=>{const btn=document.getElementById('trackerRefreshBtn');if(btn)btn.addEventListener('click',()=>{const s=localStorage.getItem(K);if(s)F(s);});try{const s=localStorage.getItem(K);if(s)window.startClientOrderTracking(s);}catch(_){}});})();</script>
-<script>(function(){const SK='tg_saved_client_v1';function readSaved(){try{return JSON.parse(localStorage.getItem(SK)||'{}')||{};}catch(_){return {};}}function writeSaved(d){try{const cur=readSaved();const next=Object.assign({},cur,d);localStorage.setItem(SK,JSON.stringify(next));return next;}catch(_){return d;}}function fillInputs(){const saved=readSaved();const inputs=document.querySelectorAll('input,textarea,select');inputs.forEach(el=>{if(el.type==='password'||el.type==='hidden')return;const key=((el.name||'')+' '+(el.id||'')+' '+(el.placeholder||'')).toLowerCase();const val=String(el.value||'').trim();if(!val){if((key.includes('nom')||key.includes('client')||key.includes('name'))&&!key.includes('prenom')&&saved.client_nom){el.value=saved.client_nom;el.dispatchEvent(new Event('input',{bubbles:true}));}else if((key.includes('tel')||key.includes('phone')||key.includes('num')||key.includes('mobile')||el.type==='tel')&&saved.client_telephone){el.value=saved.client_telephone;el.dispatchEvent(new Event('input',{bubbles:true}));}else if((key.includes('adress')||key.includes('adresse')||key.includes('lieu'))&&saved.adress){el.value=saved.adress;el.dispatchEvent(new Event('input',{bubbles:true}));}}});}function harvestInputs(){const patch={};const inputs=document.querySelectorAll('input,textarea,select');inputs.forEach(el=>{if(el.type==='password'||el.type==='hidden')return;const key=((el.name||'')+' '+(el.id||'')+' '+(el.placeholder||'')).toLowerCase();const val=String(el.value||'').trim();if(!val)return;if((key.includes('nom')||key.includes('client')||key.includes('name'))&&!key.includes('prenom')&&val.length>=2&&!/^\+?\d[\d\s\-]{6,}$/.test(val)){patch.client_nom=val;}if((key.includes('tel')||key.includes('phone')||key.includes('num')||key.includes('mobile')||el.type==='tel')){const m=val.match(/(\+?\d[\d\s\-().]{6,15}\d)/);if(m&&m[1].replace(/[^\d+]/g,'').length>=8)patch.client_telephone=m[1].trim();}if((key.includes('adress')||key.includes('adresse')||key.includes('lieu'))&&val.length>=3){patch.adress=val;}});if(Object.keys(patch).length)writeSaved(patch);}const origFetch=window.fetch;if(typeof origFetch==='function'){window.fetch=async function(input,init){harvestInputs();const saved=readSaved();if(init&&typeof init.body==='string'){try{const parsed=JSON.parse(init.body);if(parsed&&typeof parsed==='object'){let changed=false;if(!parsed.client_nom&&!parsed.nom&&saved.client_nom){parsed.client_nom=saved.client_nom;changed=true;}if(!parsed.client_telephone&&!parsed.telephone&&!parsed.tel&&saved.client_telephone){parsed.client_telephone=saved.client_telephone;changed=true;}if(!parsed.adress&&!parsed.adresse&&saved.adress){parsed.adress=saved.adress;changed=true;}if(changed){init=Object.assign({},init,{body:JSON.stringify(parsed)});}}}catch(_){}}return origFetch.call(this,input,init);};}document.addEventListener('DOMContentLoaded',()=>{fillInputs();document.addEventListener('input',harvestInputs,true);document.addEventListener('change',harvestInputs,true);setTimeout(fillInputs,600);setTimeout(fillInputs,1800);});window.getSavedClient=readSaved;window.saveClientProfile=writeSaved;})();</script>
-</body>
-</html>
+        gridEl.className = "menu-
