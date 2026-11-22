@@ -780,12 +780,12 @@
         } else if (currentTab === "active") {
           const stLower = String(order.statut || "").toLowerCase();
 const isPrep = stLower.includes("accept") || stLower.includes("prep"); const isRoute = stLower.includes("route") || stLower.includes("en_cours"); actionBtn = isRoute ? `<button class="action-btn btn-green full" onclick="updateStatus('${escapeAttr(order.ref)}', 'livree')">✅ MARQUER LIVRÉE</button>` : (isPrep ? `<button class="action-btn btn-gold full" onclick="updateStatus('${escapeAttr(order.ref)}', 'en_route')">🛵 EN ROUTE</button>` : `<button class="action-btn btn-gold full" onclick="updateStatus('${escapeAttr(order.ref)}', 'en_preparation')">🍳 EN PRÉPARATION</button>`);
-
+const nextBtn = isRoute ? `<button class="action-btn btn-green full" onclick="updateStatus('${escapeAttr(order.ref)}', 'livree')">✅ MARQUER LIVRÉE</button>` : (isPrep ? `<button class="action-btn btn-gold full" onclick="updateStatus('${escapeAttr(order.ref)}', 'en_route')">🛵 EN ROUTE</button>` : `<button class="action-btn btn-gold full" onclick="updateStatus('${escapeAttr(order.ref)}', 'en_preparation')">🍳 EN PRÉPARATION</button>`); const callHref = String(order.client_telephone || order.telephone || order.tel || telClean || '').replace(/[^\d+]/g, '');
           actionsHtml = `
             <div class="actions-grid">
               ${nextBtn}
               <a class="action-btn btn-blue" href="${escapeAttr(mapsUrl)}" target="_blank" rel="noopener">📍 Maps</a>
-              ${telClean ? `<a class="action-btn btn-outline" href="tel:${escapeAttr(telClean)}">📞 Appeler</a>` : ""}
+              <a class="action-btn btn-outline" href="${callHref ? `tel:${escapeAttr(callHref)}` : '#'}">📞 Appeler</a>
             </div>
           `;
         }
