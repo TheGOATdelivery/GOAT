@@ -779,9 +779,7 @@
           `;
         } else if (currentTab === "active") {
           const stLower = String(order.statut || "").toLowerCase();
-          const nextBtn = (stLower.includes("route") || stLower.includes("en_cours"))
-            ? `<button class="action-btn btn-green full" onclick="updateStatus('${escapeAttr(order.ref)}', 'livree')">📦 MARQUER LIVRÉE</button>`
-            : `<button class="action-btn btn-gold full" onclick="updateStatus('${escapeAttr(order.ref)}', 'en_route')">🛵 EN ROUTE</button>`;
+const isPrep = stLower.includes("accept") || stLower.includes("prep"); const isRoute = stLower.includes("route") || stLower.includes("en_cours"); actionBtn = isRoute ? `<button class="action-btn btn-green full" onclick="updateStatus('${escapeAttr(order.ref)}', 'livree')">✅ MARQUER LIVRÉE</button>` : (isPrep ? `<button class="action-btn btn-gold full" onclick="updateStatus('${escapeAttr(order.ref)}', 'en_route')">🛵 EN ROUTE</button>` : `<button class="action-btn btn-gold full" onclick="updateStatus('${escapeAttr(order.ref)}', 'en_preparation')">🍳 EN PRÉPARATION</button>`);
 
           actionsHtml = `
             <div class="actions-grid">
