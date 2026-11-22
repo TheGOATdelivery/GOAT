@@ -532,6 +532,11 @@
     let audioCtx = null;
     let pollTimer = null;
 
+    function isDispoValue(val) {
+      const s = String(val || "").trim().toLowerCase();
+      return ["dispo", "disponible", "oui", "1", "true", "actif"].includes(s);
+    }
+
     function showToast(msg) {
       const el = document.getElementById("toast");
       el.textContent = msg;
@@ -826,6 +831,10 @@
           session_token: session.session_token
         });
 
+        if (data.livreur && typeof data.livreur.isDispo !== "boolean") {
+          data.livreur.isDispo = isDispoValue(data.livreur.disponible);
+        }
+
         dashboardData = data;
         renderHeaderAndStats(data);
         checkNewOrders(data.available_orders || [], isInitial);
@@ -861,11 +870,13 @@
 
     function renderHeaderAndStats(data) {
       const lv = data.livreur || {};
+      const dispoFlag = typeof lv.isDispo === "boolean" ? lv.isDispo : isDispoValue(lv.disponible);
+
       document.getElementById("driverInfo").textContent =
-        `${lv.id || session.livreur_id} • Zone: ${lv.zone || "TOUTES"}`;
+        `${lv.id || session.livreur_id} • Zone: ${lv.zone || session.zone || "TOUTES"}`;
 
       const dispBtn = document.getElementById("dispoToggleBtn");
-      if (lv.isDispo) {
+      if (dispoFlag) {
         dispBtn.textContent = "DISPO";
         dispBtn.className = "pill-btn dispo-on";
       } else {
@@ -1041,16 +1052,26 @@
     }
 
     document.getElementById("dispoToggleBtn").addEventListener("click", async () => {
-      const currentlyDispo = !!(dashboardData.livreur && dashboardData.livreur.isDispo);
-      const nextStatus = currentlyDispo ? "hors_ligne" : "dispo";
+      const currentFlag = dashboardData.livreur && typeof dashboardData.livreur.isDispo === "boolean"
+        ? dashboardData.livreur.isDispo
+        : isDispoValue(dashboardData.livreur && dashboardData.livreur.disponible);
+      const nextStatus = currentFlag ? "hors_ligne" : "dispo";
+
       try {
-        await apiCall({
+        const res = await apiCall({
           action: "toggle_disponible",
           livreur_id: session.livreur_id,
           session_token: session.session_token,
           disponible: nextStatus
         });
-        showToast(nextStatus === "dispo" ? "Vous êtes DISPO" : "Vous êtes HORS LIGNE");
+
+        const appliedStatus = (res && res.disponible) || nextStatus;
+        if (!dashboardData.livreur) dashboardData.livreur = {};
+        dashboardData.livreur.disponible = appliedStatus;
+        dashboardData.livreur.isDispo = isDispoValue(appliedStatus);
+        renderHeaderAndStats(dashboardData);
+
+        showToast(dashboardData.livreur.isDispo ? "Vous êtes DISPO" : "Vous êtes HORS LIGNE");
         await refreshDashboard(false);
       } catch (err) {
         showToast(err.message);
@@ -1078,11 +1099,13 @@
         try {
           await apiCall({
             action: "logout_livreur",
-            livreur_id: session.livreur_id
+            livreur_id: session.livreur_id,
+            session_token: session.session_token
           });
         } catch (_) {}
       }
       session = null;
+      knownAvailableRefs = new Set();
       localStorage.removeItem(STORAGE_KEY);
       document.getElementById("dashboardScreen").style.display = "none";
       document.getElementById("loginScreen").style.display = "flex";
