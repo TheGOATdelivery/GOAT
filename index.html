@@ -920,27 +920,33 @@
       return String(str ?? "").trim().toLocaleUpperCase("fr-FR");
     }
     function normalizeImageUrl(val) {
-      let cleaned = String(val ?? "").trim();
-      if (!cleaned) return "";
-      const driveFileMatch = cleaned.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-      if (driveFileMatch && driveFileMatch[1]) {
-        return `https://drive.google.com/uc?export=view&id=${driveFileMatch[1]}`;
-      }
-      const driveOpenMatch = cleaned.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-      if (cleaned.includes("drive.google.com") && driveOpenMatch && driveOpenMatch[1]) {
-        return `https://drive.google.com/uc?export=view&id=${driveOpenMatch[1]}`;
-      }
-      if (cleaned.includes("dropbox.com")) {
-        cleaned = cleaned.replace("www.dropbox.com", "dl.dropboxusercontent.com").replace(/[?&]dl=0\b/, "");
-      }
-      if (/^https?:\/\//i.test(cleaned) || cleaned.startsWith("./") || cleaned.startsWith("/")) {
-        return cleaned;
-      }
-      if (/^[a-zA-Z0-9_./-]+\.(png|jpe?g|webp|gif|svg)$/i.test(cleaned)) {
-        return cleaned.startsWith(".") ? cleaned : `./${cleaned}`;
-      }
-      return "";
-    }
+  let cleaned = String(val ?? "").trim();
+  if (!cleaned) return "";
+
+  const driveFileMatch = cleaned.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+  if (driveFileMatch && driveFileMatch[1]) {
+    return `https://drive.google.com/thumbnail?id=${driveFileMatch[1]}&sz=w400`;
+  }
+
+  const driveIdMatch = cleaned.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if (cleaned.includes("drive.google.com") && driveIdMatch && driveIdMatch[1]) {
+    return `https://drive.google.com/thumbnail?id=${driveIdMatch[1]}&sz=w400`;
+  }
+
+  if (cleaned.includes("dropbox.com")) {
+    cleaned = cleaned.replace("www.dropbox.com", "dl.dropboxusercontent.com").replace(/[?&]dl=0\b/, "");
+  }
+
+  if (/^https?:\/\//i.test(cleaned) || cleaned.startsWith("./") || cleaned.startsWith("/")) {
+    return cleaned;
+  }
+
+  if (/^[a-zA-Z0-9_./-]+\.(png|jpe?g|webp|gif|svg)$/i.test(cleaned)) {
+    return cleaned.startsWith(".") ? cleaned : `./${cleaned}`;
+  }
+
+  return "";
+}
     function initParticles() {
       const layer = document.getElementById("particlesLayer");
       if (!layer || layer.childElementCount > 0) return;
