@@ -865,56 +865,11 @@
     const MAX_DELIVERY_KM = 12;
     const OUT_OF_ZONE_MSG =
       "Désolé, votre localisation est hors de notre secteur de livraison actuel (Ajim / Houmt Souk).";
-    const FALLBACK_DATA = {
-      restaurants: [
-        {
-          id: "1",
-          nom: "LA FAMEUSE BIG BEN",
-          zone: "Ajim",
-          type: "restaurant",
-          specialite: "BURGERS, BOWLS, TACOS & CIABATTA",
-          logo: "./logo.png",
-          lat: 33.7222531,
-          lng: 10.7437356,
-          statut: "open"
-        },
-        {
-          id: "2",
-          nom: "THE SMILE",
-          zone: "Ajim",
-          type: "café",
-          specialite: "CAFÉ & BOISSONS",
-          logo: "",
-          lat: 33.7234007,
-          lng: 10.7500552,
-          statut: "open"
-        },
-        {
-          id: "3",
-          nom: "CAFE BEN YEDDER",
-          zone: "Houmt Souk",
-          type: "café",
-          specialite: "CAFÉ & BOISSONS",
-          logo: "",
-          lat: 33.8758101,
-          lng: 10.8561549,
-          statut: "open"
-        },
-        {
-          id: "4",
-          nom: "PIZZA GAMBOUR",
-          zone: "Houmt Souk",
-          type: "restaurant",
-          specialite: "PIZZA & FAST FOOD",
-          logo: "",
-          lat: 33.8767539,
-          lng: 10.857842,
-          statut: "open"
-        }
-      ],
-      menus: [],
-      pubs: []
-    };
+   const FALLBACK_DATA = {
+  restaurants: [],
+  menus: [],
+  pubs: []
+};
     const state = {
       step: 1,
       zone: "Ajim",
@@ -1208,14 +1163,17 @@
         return !z || z === targetZone || z.includes(targetZone);
       });
       el.dynamicCategoriesContainer.innerHTML = "";
-      if (!filtered.length) {
+     if (!filtered.length) {
         el.dynamicCategoriesContainer.innerHTML = `
-          <div class="category-group">
-            <div class="section-heading"><span>ÉTABLISSEMENTS — ${escapeHtml(zoneUpper)}</span></div>
-            <p class="empty-state">Aucun établissement trouvé pour ${escapeHtml(zoneUpper)}.</p>
+          <div class="category-group" style="text-align: center; padding: 36px 16px;">
+            <div class="section-heading" style="justify-content: center;">
+              <span>COMING SOON — ${escapeHtml(zoneUpper)}</span>
+            </div>
+            <p class="empty-state">Bientôt disponible dans votre zone. Restez connectés !</p>
           </div>
         `;
         return;
+      }
       }
       const groupsMap = new Map();
       const preferredOrder = ["restaurant", "cafe", "patisserie", "boutique", "pharmacie"];
