@@ -1089,10 +1089,9 @@
       return [];
     }
     function mergeWithFallback(sheetList, fallbackList) {
-      const cleanSheet = Array.isArray(sheetList) ? sheetList : [];
-      if (!cleanSheet.length) return [...fallbackList];
-      return cleanSheet;
-    }
+        const cleanSheet = Array.isArray(sheetList) ? sheetList : [];
+        return cleanSheet;
+      }
     function renderPubs() {
       const activePubs = (state.pubs || []).filter(isActivePub);
       if (!activePubs.length) {
