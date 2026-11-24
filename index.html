@@ -1136,8 +1136,8 @@
       const rawLogo = getField(r, ["logo", "photo", "image", "img", "logo_url", "image_url", "photo_url"], "");
       const safeLogo = normalizeImageUrl(rawLogo);
       const logoHtml = safeLogo
-        ? `<img src="${escapeHtml(safeLogo)}" alt="${escapeHtml(name)}" class="resto-logo" loading="lazy" onerror="this.outerHTML='<div class=\\'resto-logo-placeholder\\'>${initial}</div>'" />`
-        : `<div class="resto-logo-placeholder">${initial}</div>`;
+       ? `<img src="${escapeHtml(safeLogo)}" alt="${escapeHtml(name)}" class="resto-logo" referrerpolicy="no-referrer">`
+: `<div class="resto-logo-placeholder">${initial}</div>`;
       const card = document.createElement("div");
       card.className = "resto-card";
       card.innerHTML = `
