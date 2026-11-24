@@ -1070,8 +1070,53 @@
       return `${parsePriceNum(val).toFixed(3)} TND`;
     }
     function isRestaurantOpen(r) {
-      const raw = normalizeText(getField(r, ["statut", "status", "etat", "état", "ouvert", "disponible"], "open"));
-      return !["ferme", "fermé", "closed", "false", "0", "non", "inactif"].includes(raw);
+      const reposRaw = String(getField(r, ["repos", "jour_repos", "jour de repos", "conge", "congé", "ferme_jour", "jour_ferme"], "")).trim();
+      if (reposRaw) {
+        const dayNamesByIndex = {
+          0: ["dimanche", "sunday", "الاحد", "الأحد", "احد", "أحد"],
+          1: ["lundi", "monday", "الاثنين", "الإثنين", "اثنين", "إثنين"],
+          2: ["mardi", "tuesday", "الثلاثاء", "ثلاثاء"],
+          3: ["mercredi", "wednesday", "الاربعاء", "الأربعاء", "اربعاء", "أربعاء"],
+          4: ["jeudi", "thursday", "الخميس", "خميس"],
+          5: ["vendredi", "friday", "الجمعة", "جمعة"],
+          6: ["samedi", "saturday", "السبت", "سبت"]
+        };
+        const todayIndex = new Date().getDay();
+        const todayAliases = dayNamesByIndex[todayIndex] || [];
+        const reposTokens = normalizeText(reposRaw)
+          .split(/[,;/|&+\-\s]+/)
+          .map((t) => t.trim())
+          .filter(Boolean);
+        const normalizedAliases = todayAliases.map((a) => normalizeText(a));
+        if (reposTokens.some((tok) => normalizedAliases.includes(tok))) {
+          return false;
+        }
+      }
+
+      const raw = String(getField(r, ["statut", "status", "etat", "état", "ouvert", "disponible"], "open")).trim();
+      const norm = normalizeText(raw);
+      if (["ferme", "fermé", "closed", "false", "0", "non", "inactif"].includes(norm)) {
+        return false;
+      }
+
+      const rangeMatch = norm.match(/(\d{1,2})(?::(\d{2}))?\s*h?\s*(?:-|–|—|a|à|to)\s*(\d{1,2})(?::(\d{2}))?\s*h?/);
+      if (rangeMatch) {
+        const startH = parseInt(rangeMatch[1], 10);
+        const startM = parseInt(rangeMatch[2] || "0", 10);
+        const endH = parseInt(rangeMatch[3], 10);
+        const endM = parseInt(rangeMatch[4] || "0", 10);
+        const now = new Date();
+        const nowMins = now.getHours() * 60 + now.getMinutes();
+        const startMins = startH * 60 + startM;
+        const endMins = endH * 60 + endM;
+        if (endMins >= startMins) {
+          return nowMins >= startMins && nowMins < endMins;
+        } else {
+          return nowMins >= startMins || nowMins < endMins;
+        }
+      }
+
+      return true;
     }
     function isActivePub(p) {
       const raw = normalizeText(getField(p, ["actif", "active", "statut", "status", "etat", "état"], "actif"));
