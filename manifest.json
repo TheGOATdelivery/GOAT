@@ -1,0 +1,25 @@
+{
+  "name": "THE GOAT — Djerba Delivery",
+  "short_name": "THE GOAT",
+  "description": "Vos établissements préférés livrés rapidement à Djerba (Ajim & Houmt Souk).",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#181f13",
+  "theme_color": "#232b1c",
+  "icons": [
+    {
+      "src": "./logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
