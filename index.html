@@ -752,12 +752,6 @@
           <div class="brand-sub">DJERBA DELIVERY</div>
         </div>
       </div>
-      <div style="display:flex; align-items:center; gap:8px;">
-        <button type="button" class="btn btn-ghost" id="soundToggleBtn" aria-label="Son">🔊</button>
-        <button type="button" class="btn btn-gold-outline" id="openBillPayBtn">
-          PAIEMENT DE FACTURE
-        </button>
-      </div>
     </div>
   </header>
   <main class="container">
@@ -769,7 +763,7 @@
     <section class="bill-banner" id="billBanner" aria-label="Service de paiement de factures">
       <div>
         <div class="bill-banner-title">PAIEMENT DE FACTURES À DOMICILE</div>
-        <div class="bill-banner-desc">Espèces uniquement (pas de chèques) : notre livreur récupère votre facture et le montant chez vous (+ 5.000 TND de livraison) puis va la régler.</div>
+        <div class="bill-banner-desc">Service de règlement de factures sécurisé et transparent : nous récupérons votre facture originale et réglons le montant exact chez vous en espèces, avec confirmation claire avant tout paiement.</div>
       </div>
       <button type="button" class="btn btn-copper" id="billBannerBtn">
         PAYER UNE FACTURE
@@ -994,13 +988,10 @@
       selectedMenuCategory: "ALL",
       cart: {},
       gps: { lat: "", lng: "", mapUrl: "" },
-      billGps: { lat: "", lng: "", mapUrl: "" },
-      soundEnabled: true
+      billGps: { lat: "", lng: "", mapUrl: "" }
     };
     const el = {
       brandHomeBtn: document.getElementById("brandHomeBtn"),
-      soundToggleBtn: document.getElementById("soundToggleBtn"),
-      openBillPayBtn: document.getElementById("openBillPayBtn"),
       billBanner: document.getElementById("billBanner"),
       billBannerBtn: document.getElementById("billBannerBtn"),
       zoneSelectorWrap: document.getElementById("zoneSelectorWrap"),
@@ -1047,42 +1038,6 @@
       billFeedback: document.getElementById("billFeedback")
     };
 
-    // === كود الصوت (Web Audio API) ===
-    let audioCtx = null;
-    let welcomePlayed = false;
-    function getAudioContext_() {
-      if (!state.soundEnabled) return null;
-      const Ctx = window.AudioContext || window.webkitAudioContext;
-      if (!Ctx) return null;
-      if (!audioCtx) audioCtx = new Ctx();
-      if (audioCtx.state === "suspended") {
-        audioCtx.resume().catch(() => {});
-      }
-      return audioCtx;
-    }
-    function playGoatSound(type = "welcome") {
-      if (!state.soundEnabled) return;
-      try {
-        const ctx = getAudioContext_();
-        if (!ctx) return;
-        const now = ctx.currentTime;
-        const freqs = type === "success" ? [523.25, 659.25, 783.99] : [440, 554.37, 659.25];
-        freqs.forEach((f, idx) => {
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.type = "sine";
-          osc.frequency.setValueAtTime(f, now + idx * 0.08);
-          gain.gain.setValueAtTime(0.0001, now + idx * 0.08);
-          gain.gain.exponentialRampToValueAtTime(0.08, now + idx * 0.08 + 0.02);
-          gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.08 + 0.24);
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.start(now + idx * 0.08);
-          osc.stop(now + idx * 0.08 + 0.26);
-        });
-      } catch (_) {}
-    }
-
     function escapeHtml(str) {
       return String(str ?? "")
         .replace(/&/g, "&amp;")
@@ -1105,7 +1060,7 @@
         return `https://drive.google.com/thumbnail?id=${driveIdMatch[1]}&sz=w400`;
       }
       if (cleaned.includes("dropbox.com")) {
-        cleaned = cleaned.replace("www.dropbox.com", "dl.dropboxusercontent.com").replace(/[?&]dl=0\b/, "");
+        cleaned = cleaned.replace("www.dropbox.com", "dl.dropboxusercontent.com").replace(/[?&]dl=0 /, "");
       }
       if (/^https?:\/\//i.test(cleaned) || cleaned.startsWith("./") || cleaned.startsWith("/")) {
         return cleaned;
@@ -1171,7 +1126,7 @@
         .trim()
         .toLowerCase()
         .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "");
+        .replace(/[̀-ͯ]/g, "");
     }
     function getField(obj, keys, fallback = "") {
       if (!obj || typeof obj !== "object") return fallback;
@@ -1693,33 +1648,12 @@
       if (state.step === 4) updateBillTotals();
     }
     function bindEvents() {
-      const unlockOnce = () => {
-        if (!welcomePlayed && state.soundEnabled) {
-          welcomePlayed = true;
-          playGoatSound("welcome");
-        }
-      };
-      document.addEventListener("pointerdown", unlockOnce, { once: true });
-
-      if (el.soundToggleBtn) {
-        el.soundToggleBtn.addEventListener("click", () => {
-          state.soundEnabled = !state.soundEnabled;
-          el.soundToggleBtn.textContent = state.soundEnabled ? "🔊" : "🔇";
-          if (state.soundEnabled) playGoatSound("welcome");
-        });
-      }
       el.brandHomeBtn.addEventListener("click", () => {
         state.selectedRestaurant = null;
         state.selectedMenuCategory = "ALL";
         state.cart = {};
         goToStep(1);
       });
-      if (el.openBillPayBtn) {
-        el.openBillPayBtn.addEventListener("click", () => {
-          el.billFeedback.className = "feedback-msg";
-          goToStep(4);
-        });
-      }
       if (el.billBannerBtn) {
         el.billBannerBtn.addEventListener("click", () => {
           el.billFeedback.className = "feedback-msg";
@@ -1810,7 +1744,6 @@
             });
             const data = await res.json().catch(() => ({}));
             if (res.ok && data.ok !== false) {
-              playGoatSound("success");
               showFeedback(
                 el.billFeedback,
                 `Demande enregistrée (${totalCash.toFixed(3)} TND en espèces uniquement + facture originale à remettre au livreur).`,
@@ -1955,7 +1888,6 @@
           });
           const data = await res.json().catch(() => ({}));
           if (res.ok && data.ok !== false) {
-            playGoatSound("success");
             showFeedback(el.orderFeedback, "Commande envoyée avec succès ! Nous préparons votre livraison.", true);
             state.cart = {};
             el.orderForm.reset();
@@ -1985,9 +1917,6 @@
     initParticles();
     bindEvents();
     loadStoreData();
-    window.addEventListener("load", () => {
-      playGoatSound("welcome");
-    });
   </script>
   <script>
     (function () {
@@ -2053,4 +1982,3 @@
     })();
   </script>
 </body>
-</html>
