@@ -909,11 +909,11 @@
       if (!cleaned) return "";
       const driveFileMatch = cleaned.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
       if (driveFileMatch && driveFileMatch[1]) {
-        return `https://lh3.googleusercontent.com/d/${driveFileMatch[1]}=w800`;
+        return `https://drive.google.com/thumbnail?id=${driveFileMatch[1]}&sz=w400`;
       }
       const driveIdMatch = cleaned.match(/[?&]id=([a-zA-Z0-9_-]+)/);
       if (cleaned.includes("drive.google.com") && driveIdMatch && driveIdMatch[1]) {
-        return `https://lh3.googleusercontent.com/d/${driveIdMatch[1]}=w800`;
+        return `https://drive.google.com/thumbnail?id=${driveIdMatch[1]}&sz=w400`;
       }
       if (cleaned.includes("dropbox.com")) {
         cleaned = cleaned.replace("www.dropbox.com", "dl.dropboxusercontent.com").replace(/[?&]dl=0\b/, "");
@@ -938,11 +938,7 @@
       if (isVideoUrl(safeUrl)) {
         return `<video src="${escapedUrl}" class="${escapedClass}" autoplay loop muted playsinline controls preload="metadata"></video>`;
       }
-      const driveMatch = safeUrl.match(/googleusercontent\.com\/d\/([a-zA-Z0-9_-]+)/);
-      const fallbackAttr = driveMatch
-        ? ` onerror="if(!this.dataset.tried){this.dataset.tried='1';this.src='https://drive.google.com/thumbnail?id=${driveMatch[1]}&sz=w600';}"`
-        : "";
-      return `<img src="${escapedUrl}" alt="${escapedAlt}" class="${escapedClass}" referrerpolicy="no-referrer"${fallbackAttr} />`;
+      return `<img src="${escapedUrl}" alt="${escapedAlt}" class="${escapedClass}" referrerpolicy="no-referrer" />`;
     }
     function initParticles() {
       const layer = document.getElementById("particlesLayer");
