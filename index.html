@@ -763,7 +763,7 @@
     <section class="bill-banner" id="billBanner" aria-label="Service de paiement de factures">
       <div>
         <div class="bill-banner-title">PAIEMENT DE FACTURES À DOMICILE</div>
-        <div class="bill-banner-desc">Service de règlement de factures sécurisé et transparent : nous récupérons votre facture et réglons le montant exact chez vous en espèces, avec confirmation claire aprés tout paiement.</div>
+        <div class="bill-banner-desc">Votre temps est précieux et votre confiance est notre priorité : un service fiable, clair et sécurisé pour régler vos factures en toute sérénité, sans stress ni complications.</div>
       </div>
       <button type="button" class="btn btn-copper" id="billBannerBtn">
         PAYER UNE FACTURE
@@ -1060,7 +1060,7 @@
         return `https://drive.google.com/thumbnail?id=${driveIdMatch[1]}&sz=w400`;
       }
       if (cleaned.includes("dropbox.com")) {
-        cleaned = cleaned.replace("www.dropbox.com", "dl.dropboxusercontent.com").replace(/[?&]dl=0 /, "");
+        cleaned = cleaned.replace("www.dropbox.com", "dl.dropboxusercontent.com").replace(/[?&]dl=0\b/, "");
       }
       if (/^https?:\/\//i.test(cleaned) || cleaned.startsWith("./") || cleaned.startsWith("/")) {
         return cleaned;
@@ -1126,7 +1126,7 @@
         .trim()
         .toLowerCase()
         .normalize("NFD")
-        .replace(/[̀-ͯ]/g, "");
+        .replace(/[\u0300-\u036f]/g, "");
     }
     function getField(obj, keys, fallback = "") {
       if (!obj || typeof obj !== "object") return fallback;
@@ -1982,3 +1982,4 @@
     })();
   </script>
 </body>
+</html>
