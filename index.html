@@ -763,7 +763,7 @@
     <section class="bill-banner" id="billBanner" aria-label="Service de paiement de factures">
       <div>
         <div class="bill-banner-title">PAIEMENT DE FACTURES À DOMICILE</div>
-        <div class="bill-banner-desc">Votre temps est précieux et votre confiance est notre priorité : un service fiable, clair et sécurisé pour régler vos factures en toute sérénité, sans stress ni complications.</div>
+        <div class="bill-banner-desc">Votre confiance est notre priorité : un service fiable, transparent et sécurisé, avec remise d'un reçu officiel à chaque étape (+ 5.000 TND de livraison en espèces uniquement, sans chèques).</div>
       </div>
       <button type="button" class="btn btn-copper" id="billBannerBtn">
         PAYER UNE FACTURE
@@ -868,7 +868,7 @@
           </button>
         </div>
         <div class="bill-note-box">
-          Espèces uniquement (pas de chèques) : le client remet la facture originale et le montant en espèces (+ 5.000 TND de livraison) au livreur qui se charge du règlement.
+          Engagement confiance &amp; sécurité : votre facture et votre argent sont pris en charge avec rigueur et traçabilité complète, avec remise d'un reçu officiel. Règlement en espèces uniquement (pas de chèques) : vous remettez la facture originale et le montant en espèces (+ 5.000 TND de livraison) au livreur qui se charge du paiement.
         </div>
         <form id="billForm" style="margin-top: 16px;">
           <div class="form-grid">
@@ -965,6 +965,9 @@
     <footer class="site-footer">
       THE GOAT — DJERBA DELIVERY • AJIM &amp; HOUMT SOUK
     </footer>
+    <div style="display:flex; justify-content:center; margin-top:16px; margin-bottom:10px;">
+      <button type="button" class="btn btn-ghost" id="soundToggleBtn" aria-label="Son">🔊 SON ACTIVÉ</button>
+    </div>
   </main>
   <script>
     const APPS_SCRIPT_URL =
@@ -1038,6 +1041,41 @@
       billFeedback: document.getElementById("billFeedback")
     };
 
+    let audioCtx = null;
+    let soundEnabled = true;
+    let welcomePlayed = false;
+    function getAudioContext_() {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return null;
+      if (!audioCtx) audioCtx = new Ctx();
+      if (audioCtx.state === "suspended") {
+        audioCtx.resume().catch(() => {});
+      }
+      return audioCtx;
+    }
+    function playGoatSound(type = "welcome") {
+      if (!soundEnabled) return;
+      try {
+        const ctx = getAudioContext_();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+        const notes = type === "success" ? [523.25, 659.25, 783.99] : [440, 554.37, 659.25];
+        notes.forEach((freq, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(freq, now + i * 0.08);
+          gain.gain.setValueAtTime(0.0001, now + i * 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.09, now + i * 0.08 + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.08 + 0.24);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + i * 0.08);
+          osc.stop(now + i * 0.08 + 0.25);
+        });
+      } catch (_) {}
+    }
+
     function escapeHtml(str) {
       return String(str ?? "")
         .replace(/&/g, "&amp;")
@@ -1060,7 +1098,7 @@
         return `https://drive.google.com/thumbnail?id=${driveIdMatch[1]}&sz=w400`;
       }
       if (cleaned.includes("dropbox.com")) {
-        cleaned = cleaned.replace("www.dropbox.com", "dl.dropboxusercontent.com").replace(/[?&]dl=0\b/, "");
+        cleaned = cleaned.replace("www.dropbox.com", "dl.dropboxusercontent.com").replace(/[?&]dl=0 /, "");
       }
       if (/^https?:\/\//i.test(cleaned) || cleaned.startsWith("./") || cleaned.startsWith("/")) {
         return cleaned;
@@ -1126,7 +1164,7 @@
         .trim()
         .toLowerCase()
         .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "");
+        .replace(/[̀-ͯ]/g, "");
     }
     function getField(obj, keys, fallback = "") {
       if (!obj || typeof obj !== "object") return fallback;
@@ -1648,6 +1686,29 @@
       if (state.step === 4) updateBillTotals();
     }
     function bindEvents() {
+      const soundBtn = document.getElementById("soundToggleBtn");
+      if (soundBtn) {
+        const refreshSoundLabel = () => {
+          soundBtn.textContent = soundEnabled ? "🔊 SON ACTIVÉ" : "🔇 SON COUPÉ";
+        };
+        refreshSoundLabel();
+        soundBtn.addEventListener("click", () => {
+          soundEnabled = !soundEnabled;
+          getAudioContext_();
+          refreshSoundLabel();
+          if (soundEnabled) {
+            playGoatSound("welcome");
+          }
+        });
+      }
+      document.addEventListener("pointerdown", () => {
+        getAudioContext_();
+        if (!welcomePlayed && soundEnabled) {
+          welcomePlayed = true;
+          playGoatSound("welcome");
+        }
+      }, { once: true });
+
       el.brandHomeBtn.addEventListener("click", () => {
         state.selectedRestaurant = null;
         state.selectedMenuCategory = "ALL";
@@ -1744,6 +1805,7 @@
             });
             const data = await res.json().catch(() => ({}));
             if (res.ok && data.ok !== false) {
+              if (typeof playGoatSound === "function") playGoatSound("success");
               showFeedback(
                 el.billFeedback,
                 `Demande enregistrée (${totalCash.toFixed(3)} TND en espèces uniquement + facture originale à remettre au livreur).`,
@@ -1888,6 +1950,7 @@
           });
           const data = await res.json().catch(() => ({}));
           if (res.ok && data.ok !== false) {
+            if (typeof playGoatSound === "function") playGoatSound("success");
             showFeedback(el.orderFeedback, "Commande envoyée avec succès ! Nous préparons votre livraison.", true);
             state.cart = {};
             el.orderForm.reset();
