@@ -948,6 +948,16 @@
         <button type="button" id="trackerRefreshBtn" style="margin-top:10px; padding:8px 12px; border-radius:8px; border:none; background:#d4af37; color:#111; font-weight:600; cursor:pointer;">Actualiser le statut</button>
       </div>
     </div>
+          <div id="clientBillTracker" style="display:none; margin-top:16px; padding:14px; border-radius:12px; border:1px solid #d4af37; background:#141414; color:#f5f5f5;">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
+          <strong>Suivi de facture : <span id="billTrackerRef">-</span></strong>
+          <span id="billTrackerBadge" style="padding:4px 10px; border-radius:999px; background:#262626; font-size:12px;">Demande en attente</span>
+        </div>
+        <p id="billTrackerMessage" style="margin:8px 0 6px; font-size:14px; color:#e5e5e5;"></p>
+        <small id="billTrackerMeta" style="display:block; color:#a3a3a3;"></small>
+        <button type="button" id="billTrackerRefreshBtn" style="margin-top:10px; padding:8px 12px; border-radius:8px; border:none; background:#d4af37; color:#111; font-weight:600; cursor:pointer;">Actualiser le statut</button>
+      </div>
+
     <section class="highlights-grid" aria-label="Points forts du service">
       <div class="highlight-card">
         <div class="highlight-icon" aria-hidden="true">🍽️</div>
@@ -1811,9 +1821,14 @@
               if (typeof playGoatSound === "function") playGoatSound("success");
               showFeedback(
                 el.billFeedback,
-                `Demande enregistrée (${totalCash.toFixed(3)} TND en espèces uniquement + facture originale à remettre au livreur).`,
+                `Demande enregistrée (${totalCash.toFixed(3)} TND en espèces uniquement + facture à remettre au livreur).`,
                 true
               );
+                            const billRefVal = String(payload.reference_facture || payload.ref || billRef || el.billRef?.value || "").trim();
+              if (billRefVal && typeof window.startClientBillTracking === "function") {
+                window.startClientBillTracking(billRefVal);
+              }
+
               el.billForm.reset();
               if (el.billZone) el.billZone.value = zoneVal;
               state.billGps = { lat: "", lng: "", mapUrl: "" };
@@ -2046,6 +2061,96 @@
         } catch (_) {}
       });
     })();
+      <script>
+    (function () {
+      const K = "tg_last_bill_ref";
+      let T = null;
+      const S = {
+        demande_en_attente: {
+          l: "Demande en attente",
+          m: "Votre demande de facture est enregistrée et en attente de prise en charge."
+        },
+        en_attente: {
+          l: "Demande en attente",
+          m: "Votre demande de facture est enregistrée et en attente de prise en charge."
+        },
+        demande_acceptee: {
+          l: "Demande acceptée",
+          m: "Votre demande est acceptée ; la collecte du montant en espèces et de la facture est en cours."
+        },
+        acceptee: {
+          l: "Demande acceptée",
+          m: "Votre demande est acceptée ; la collecte du montant en espèces et de la facture est en cours."
+        },
+        en_cours_de_reglement: {
+          l: "En cours de règlement",
+          m: "La démarche de paiement de votre facture est en cours."
+        },
+        en_route: {
+          l: "En cours de règlement",
+          m: "La démarche de paiement de votre facture est en cours."
+        },
+        facture_payee: {
+          l: "Facture payée",
+          m: "Votre facture a bien été réglée."
+        },
+        payee: {
+          l: "Facture payée",
+          m: "Votre facture a bien été réglée."
+        }
+      };
+      function U() {
+        return (typeof APPS_SCRIPT_URL !== "undefined" && APPS_SCRIPT_URL) || "";
+      }
+      function R(f) {
+        const b = document.getElementById("clientBillTracker");
+        if (!b || !f) return;
+        b.style.display = "block";
+        const key = String(f.statut || "demande_en_attente").toLowerCase().trim().replace(/\s+/g, "_");
+        const info = S[key] || {
+          l: f.statut || "Demande en attente",
+          m: "Mise à jour du suivi de votre facture en cours."
+        };
+        document.getElementById("billTrackerRef").textContent = f.ref ? "#" + f.ref : "-";
+        document.getElementById("billTrackerBadge").textContent = info.l;
+        document.getElementById("billTrackerMessage").textContent = info.m;
+        document.getElementById("billTrackerMeta").textContent =
+          `Type : ${f.type || "-"} • Zone : ${f.zone || "-"} • Total : ${Number(f.total || 0).toFixed(3)} TND`;
+      }
+      async function F(ref) {
+        const u = U();
+        if (!u || !ref) return;
+        try {
+          const sep = u.includes("?") ? "&" : "?";
+          const res = await fetch(`${u}${sep}action=get_bill_status&ref=${encodeURIComponent(ref)}`);
+          const d = await res.json();
+          if (d && d.ok && (d.facture || d.bill)) R(d.facture || d.bill);
+        } catch (_) {}
+      }
+      window.startClientBillTracking = function (ref) {
+        if (!ref) return;
+        try { localStorage.setItem(K, String(ref).trim()); } catch (_) {}
+        R({ ref: String(ref).trim(), statut: "demande_en_attente" });
+        F(ref);
+        if (T) clearInterval(T);
+        T = setInterval(() => F(ref), 6000);
+      };
+      document.addEventListener("DOMContentLoaded", () => {
+        const btn = document.getElementById("billTrackerRefreshBtn");
+        if (btn) {
+          btn.addEventListener("click", () => {
+            const s = localStorage.getItem(K);
+            if (s) F(s);
+          });
+        }
+        try {
+          const s = localStorage.getItem(K);
+          if (s) window.startClientBillTracking(s);
+        } catch (_) {}
+      });
+    })();
+  </script>
+
   </script>
 </body>
 </html>
