@@ -2152,5 +2152,84 @@
   </script>
 
   </script>
+  <div id="tg-surcharge-panel" style="font-family: sans-serif; border: 1px solid #ddd; padding: 14px; border-radius: 10px; max-width: 420px; background: #fff;">
+  <h3 style="margin-top: 0;">الزيادات (Majorations)</h3>
+
+  <p id="tg-night-status">زيادة الليل (21:00 - 05:00): ...</p>
+
+  <label style="display: flex; align-items: center; gap: 8px; margin: 10px 0; cursor: pointer;">
+    <input type="checkbox" id="tg-condition-toggle" onchange="toggleConditionSurcharge(this.checked)">
+    <span>تفعيل زيادة المطر / السخانة / الذروة</span>
+  </label>
+
+  <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid #eee;">
+    <div>المبلغ الأساسي: <strong id="tg-base-display">10.000</strong> TND</div>
+    <div>مجموع الزيادات: <strong id="tg-extra-display">0.000</strong> TND</div>
+    <div style="font-size: 1.15em; margin-top: 6px;">المجموع النهائي: <strong id="tg-total-display">10.000</strong> TND</div>
+  </div>
+</div>
+
+<script>
+  const TG_NIGHT_FEE = 1.500;      // قيمة زيادة الليل (من 21:00 إلى 05:00)
+  const TG_CONDITION_FEE = 1.500;  // قيمة زيادة المطر / السخانة / الذروة
+
+  let tgBaseAmount = 10.000;       // المبلغ الأساسي (يُحدَّث حسب الطلب أو الفاتورة)
+  window.TG_EXTRA_FEE = false;     // تحكّم يدوي: true = مفعّلة، false = مطفية
+
+  function isNightTime(date = new Date()) {
+    const hour = date.getHours();
+    return hour >= 21 || hour < 5;
+  }
+
+  function calculateTotalWithSurcharges(baseAmount, date = new Date()) {
+    const base = Number(baseAmount) || 0;
+    const nightFee = isNightTime(date) ? TG_NIGHT_FEE : 0;
+    const conditionFee = window.TG_EXTRA_FEE ? TG_CONDITION_FEE : 0;
+    const totalSurcharge = Number((nightFee + conditionFee).toFixed(3));
+    const finalTotal = Number((base + totalSurcharge).toFixed(3));
+
+    return {
+      base: base.toFixed(3),
+      nightActive: isNightTime(date),
+      nightFee: nightFee.toFixed(3),
+      conditionActive: Boolean(window.TG_EXTRA_FEE),
+      conditionFee: conditionFee.toFixed(3),
+      totalSurcharge: totalSurcharge.toFixed(3),
+      finalTotal: finalTotal.toFixed(3)
+    };
+  }
+
+  function toggleConditionSurcharge(isChecked) {
+    window.TG_EXTRA_FEE = Boolean(isChecked);
+    refreshSurchargeUI();
+  }
+
+  function setBaseAmount(newAmount) {
+    tgBaseAmount = Number(newAmount) || 0;
+    refreshSurchargeUI();
+  }
+
+  function refreshSurchargeUI() {
+    const info = calculateTotalWithSurcharges(tgBaseAmount);
+    const nightEl = document.getElementById("tg-night-status");
+    const toggleEl = document.getElementById("tg-condition-toggle");
+    const baseEl = document.getElementById("tg-base-display");
+    const extraEl = document.getElementById("tg-extra-display");
+    const totalEl = document.getElementById("tg-total-display");
+
+    if (nightEl) {
+      nightEl.textContent = info.nightActive
+        ? `زيادة الليل (21:00 - 05:00): مفعّلة (+${info.nightFee} TND)`
+        : `زيادة الليل (21:00 - 05:00): غير مفعّلة الآن (0.000 TND)`;
+    }
+    if (toggleEl) toggleEl.checked = info.conditionActive;
+    if (baseEl) baseEl.textContent = info.base;
+    if (extraEl) extraEl.textContent = info.totalSurcharge;
+    if (totalEl) totalEl.textContent = info.finalTotal;
+  }
+
+  refreshSurchargeUI();
+</script>
+
 </body>
 </html>
