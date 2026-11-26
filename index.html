@@ -593,6 +593,14 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       font-size: 0.9rem;
     }
+    .surcharge-line {
+      margin-top: 6px;
+      display: none;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.86rem;
+      color: var(--gold-soft);
+    }
     .form-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -743,6 +751,7 @@
   <div class="marble-bg" aria-hidden="true"></div>
   <div class="marble-veins" aria-hidden="true"></div>
   <div class="particles-layer" id="particlesLayer" aria-hidden="true"></div>
+
   <header class="topbar">
     <div class="topbar-inner">
       <div class="brand-stack" id="brandHomeBtn">
@@ -754,12 +763,15 @@
       </div>
     </div>
   </header>
+
   <main class="container">
     <section class="hero-section">
       <h1 class="hero-title">MORE THAN JUST FOOD</h1>
       <p class="hero-subtitle">Vos établissements préférés livrés rapidement à Djerba</p>
     </section>
+
     <section class="pub-section" id="pubSection" aria-label="Offres et publicités"></section>
+
     <section class="bill-banner" id="billBanner" aria-label="Service de paiement de factures">
       <div>
         <div class="bill-banner-title">PAIEMENT DE FACTURES À DOMICILE</div>
@@ -769,6 +781,7 @@
         PAYER UNE FACTURE
       </button>
     </section>
+
     <div class="zone-selector-wrap" id="zoneSelectorWrap">
       <div class="zone-label">Choisissez votre zone</div>
       <div class="zone-tabs" role="tablist" aria-label="Zones de livraison">
@@ -780,6 +793,7 @@
         </button>
       </div>
     </div>
+
     <div id="orderFlow">
       <section id="stepRestaurants">
         <div style="display: flex; justify-content: flex-end; margin-bottom: 14px;">
@@ -787,6 +801,7 @@
         </div>
         <div id="dynamicCategoriesContainer"></div>
       </section>
+
       <section id="stepMenu" class="hidden">
         <div class="menu-header-bar">
           <button class="btn btn-ghost" id="backToRestaurantsBtn" type="button">
@@ -807,6 +822,7 @@
         </div>
         <div class="feedback-msg" id="menuFeedback"></div>
       </section>
+
       <section id="stepCheckout" class="panel hidden">
         <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 12px;">
           <h2 style="font-family: 'Cinzel', serif; color: var(--gold-soft); font-size: 1.12rem; text-transform: uppercase;">
@@ -816,6 +832,7 @@
             ← RETOUR AU MENU
           </button>
         </div>
+
         <form id="orderForm" style="margin-top: 16px;">
           <div class="form-grid">
             <div class="input-group">
@@ -831,25 +848,35 @@
               <input class="input" id="clientAddress" name="clientAddress" type="text" required placeholder="Rue, quartier ou point de repère" />
             </div>
           </div>
+
           <div class="input-group" style="margin-top: 12px;">
             <label for="orderNotes">Notes de commande / Paiement (optionnel)</label>
             <textarea id="orderNotes" name="orderNotes" rows="2" placeholder="Paiement à la livraison, sans piment, appeler à l'arrivée..."></textarea>
           </div>
+
           <div class="gps-row">
             <button type="button" class="btn btn-gold-outline" id="gpsBtn">
               ME LOCALISER (GPS)
             </button>
             <span class="gps-status" id="gpsStatus">Position GPS non renseignée.</span>
           </div>
+
           <div id="cartItems" style="margin-top: 14px;"></div>
+
           <div style="margin-top: 12px; display: flex; justify-content: space-between; font-size: 0.92rem; color: var(--text-muted);">
             <span>FRAIS DE LIVRAISON</span>
             <span id="checkoutDeliveryFee">SELON ZONE / GPS</span>
           </div>
+          <div id="checkoutSurchargeRow" class="surcharge-line">
+            <span id="checkoutSurchargeLabel">MAJORATION</span>
+            <span id="checkoutSurchargeAmount">+0.000 TND</span>
+          </div>
+
           <div style="margin-top: 10px; display: flex; justify-content: space-between; font-weight: 700; color: var(--gold-soft);">
             <span>TOTAL À PAYER</span>
             <span id="cartTotal">0.000 TND</span>
           </div>
+
           <div style="margin-top: 16px; display: flex; justify-content: flex-end;">
             <button type="submit" class="btn btn-copper" id="submitOrderBtn">
               VALIDER LA COMMANDE
@@ -858,6 +885,7 @@
           <div class="feedback-msg" id="orderFeedback"></div>
         </form>
       </section>
+
       <section id="stepBillPay" class="panel hidden">
         <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 12px;">
           <h2 style="font-family: 'Cinzel', serif; color: var(--gold-soft); font-size: 1.12rem; text-transform: uppercase;">
@@ -867,9 +895,11 @@
             ← RETOUR
           </button>
         </div>
+
         <div class="bill-note-box">
           Paiement uniquement en espèces et au comptant, sans chèques, virements, cartes ni paiements différés ; les documents et montants doivent être complets et exacts, et seules les factures ordinaires sont acceptées, hors amendes, litiges ou démarches particulières, sans aucune responsabilité en cas de pièce ou donnée manquante.
         </div>
+
         <form id="billForm" style="margin-top: 16px;">
           <div class="form-grid">
             <div class="input-group">
@@ -909,35 +939,46 @@
               <input class="input" id="billClientAddress" name="billClientAddress" type="text" required placeholder="Rue, quartier ou repère" />
             </div>
           </div>
+
           <div class="input-group" style="margin-top: 12px;">
             <label for="billNotes">Notes / Précisions (optionnel)</label>
             <textarea id="billNotes" name="billNotes" rows="2" placeholder="Espèces uniquement + facture à remettre au livreur..."></textarea>
           </div>
+
           <div class="gps-row">
             <button type="button" class="btn btn-gold-outline" id="billGpsBtn">
               ME LOCALISER (GPS)
             </button>
             <span class="gps-status" id="billGpsStatus">Position GPS non renseignée.</span>
           </div>
+
           <div style="margin-top: 14px; display: flex; justify-content: space-between; font-size: 0.92rem; color: var(--text-muted);">
             <span>LIVRAISON / FRAIS FIXES (ESPÈCES UNIQUEMENT)</span>
             <span id="billServiceFeeDisplay">5.000 TND</span>
           </div>
+          <div id="billSurchargeRow" class="surcharge-line">
+            <span id="billSurchargeLabel">MAJORATION</span>
+            <span id="billSurchargeAmount">+0.000 TND</span>
+          </div>
+
           <div style="margin-top: 8px; display: flex; justify-content: space-between; font-weight: 700; color: var(--gold-soft);">
             <span>TOTAL ESPÈCES À REMETTRE AVEC LA FACTURE</span>
             <span id="billTotalDisplay">5.000 TND</span>
           </div>
+
           <div style="margin-top: 16px; display: flex; justify-content: flex-end;">
             <button type="submit" class="btn btn-copper" id="submitBillBtn">
               ENVOYER LA DEMANDE
             </button>
           </div>
+
           <div class="bill-note-box" style="margin-top: 12px;">
-  Engagement confiance &amp; sécurité : votre facture et votre argent sont pris en charge avec rigueur et traçabilité complète, avec remise d'un reçu officiel.
-</div>
+            Engagement confiance &amp; sécurité : votre facture et votre argent sont pris en charge avec rigueur et traçabilité complète, avec remise d'un reçu officiel.
+          </div>
           <div class="feedback-msg" id="billFeedback"></div>
         </form>
       </section>
+
       <div id="clientOrderTracker" style="display:none; margin-top:16px; padding:14px; border-radius:12px; border:1px solid #d4af37; background:#141414; color:#f5f5f5;">
         <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
           <strong>Suivi de commande : <span id="trackerRef">-</span></strong>
@@ -947,8 +988,8 @@
         <small id="trackerMeta" style="display:block; color:#a3a3a3;"></small>
         <button type="button" id="trackerRefreshBtn" style="margin-top:10px; padding:8px 12px; border-radius:8px; border:none; background:#d4af37; color:#111; font-weight:600; cursor:pointer;">Actualiser le statut</button>
       </div>
-    </div>
-          <div id="clientBillTracker" style="display:none; margin-top:16px; padding:14px; border-radius:12px; border:1px solid #d4af37; background:#141414; color:#f5f5f5;">
+
+      <div id="clientBillTracker" style="display:none; margin-top:16px; padding:14px; border-radius:12px; border:1px solid #d4af37; background:#141414; color:#f5f5f5;">
         <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
           <strong>Suivi de facture : <span id="billTrackerRef">-</span></strong>
           <span id="billTrackerBadge" style="padding:4px 10px; border-radius:999px; background:#262626; font-size:12px;">Demande en attente</span>
@@ -957,6 +998,7 @@
         <small id="billTrackerMeta" style="display:block; color:#a3a3a3;"></small>
         <button type="button" id="billTrackerRefreshBtn" style="margin-top:10px; padding:8px 12px; border-radius:8px; border:none; background:#d4af37; color:#111; font-weight:600; cursor:pointer;">Actualiser le statut</button>
       </div>
+    </div>
 
     <section class="highlights-grid" aria-label="Points forts du service">
       <div class="highlight-card">
@@ -975,18 +1017,29 @@
         <div class="highlight-desc">Service local fiable et attentif à Djerba.</div>
       </div>
     </section>
+
     <footer class="site-footer">
       THE GOAT — DJERBA DELIVERY • AJIM &amp; HOUMT SOUK
     </footer>
+
     <div style="display:flex; justify-content:center; margin-top:16px; margin-bottom:10px;">
       <button type="button" class="btn btn-ghost" id="soundToggleBtn" aria-label="Son">🔊 SON ACTIVÉ</button>
     </div>
   </main>
+
   <script>
     const APPS_SCRIPT_URL =
       "https://script.google.com/macros/s/AKfycbybbw3yxfctVXCSC5u3xlV0qy1BAxeX0LI1L9qnSkanU0RNW3VhLPcbMZ4QaiG2D4Z7/exec";
     const MAX_DELIVERY_KM = 12;
     const BILL_SERVICE_FEE_TND = 5.0; // ثابت 5 دنانير لكل فاتورة
+
+    // إعدادات الزيادات (Majorations)
+    const NIGHT_START_HOUR = 20;      // بداية الليل (20:00 شتاءً)
+    const NIGHT_END_HOUR = 5;         // نهاية الليل (05:00 صباحاً)
+    const NIGHT_SURCHARGE_TND = 1.0;  // قيمة زيادة الليل (TND)
+    const EXTRA_CONDITION_TND = 1.0;  // قيمة زيادة الظروف الخاصة (مطر / سخانة / ذروة)
+    window.TG_EXTRA_FEE = Boolean(window.TG_EXTRA_FEE); // false افتراضياً، ما تطلع إلا ما تشغلها أنت
+
     const OUT_OF_ZONE_MSG =
       "Désolé, votre localisation est hors de notre secteur de livraison actuel (Ajim / Houmt Souk).";
     const FALLBACK_DATA = {
@@ -1031,6 +1084,9 @@
       cartItems: document.getElementById("cartItems"),
       cartTotal: document.getElementById("cartTotal"),
       checkoutDeliveryFee: document.getElementById("checkoutDeliveryFee"),
+      checkoutSurchargeRow: document.getElementById("checkoutSurchargeRow"),
+      checkoutSurchargeLabel: document.getElementById("checkoutSurchargeLabel"),
+      checkoutSurchargeAmount: document.getElementById("checkoutSurchargeAmount"),
       gpsBtn: document.getElementById("gpsBtn"),
       gpsStatus: document.getElementById("gpsStatus"),
       orderForm: document.getElementById("orderForm"),
@@ -1049,10 +1105,49 @@
       billGpsBtn: document.getElementById("billGpsBtn"),
       billGpsStatus: document.getElementById("billGpsStatus"),
       billServiceFeeDisplay: document.getElementById("billServiceFeeDisplay"),
+      billSurchargeRow: document.getElementById("billSurchargeRow"),
+      billSurchargeLabel: document.getElementById("billSurchargeLabel"),
+      billSurchargeAmount: document.getElementById("billSurchargeAmount"),
       billTotalDisplay: document.getElementById("billTotalDisplay"),
       submitBillBtn: document.getElementById("submitBillBtn"),
       billFeedback: document.getElementById("billFeedback")
     };
+
+    function getActiveSurcharges(dateObj = new Date()) {
+      const h = dateObj.getHours();
+      const nightActive =
+        NIGHT_START_HOUR > NIGHT_END_HOUR
+          ? h >= NIGHT_START_HOUR || h < NIGHT_END_HOUR
+          : h >= NIGHT_START_HOUR && h < NIGHT_END_HOUR;
+      const conditionActive = Boolean(window.TG_EXTRA_FEE);
+      const nightFee = nightActive ? NIGHT_SURCHARGE_TND : 0;
+      const conditionFee = conditionActive ? EXTRA_CONDITION_TND : 0;
+      const total = Number((nightFee + conditionFee).toFixed(3));
+      const parts = [];
+      if (nightActive) parts.push("MAJORATION NUIT");
+      if (conditionActive) parts.push("MAJORATION CONDITIONS");
+      return {
+        nightActive,
+        conditionActive,
+        nightFee,
+        conditionFee,
+        total,
+        label: parts.join(" + ")
+      };
+    }
+
+    function updateSurchargeRowUI(rowEl, labelEl, amountEl, info) {
+      if (!rowEl || !labelEl || !amountEl) return;
+      if (!info.nightActive && !info.conditionActive) {
+        rowEl.style.display = "none";
+        labelEl.textContent = "";
+        amountEl.textContent = "+0.000 TND";
+        return;
+      }
+      rowEl.style.display = "flex";
+      labelEl.textContent = info.label;
+      amountEl.textContent = `+${info.total.toFixed(3)} TND`;
+    }
 
     let audioCtx = null;
     let soundEnabled = true;
@@ -1177,7 +1272,7 @@
         .trim()
         .toLowerCase()
         .normalize("NFD")
-        .replace(/[̀-ͯ]/g, "");
+        .replace(/[\u0300-\u036f]/g, "");
     }
     function getField(obj, keys, fallback = "") {
       if (!obj || typeof obj !== "object") return fallback;
@@ -1600,16 +1695,18 @@
       el.step2SummaryCount.textContent = `${count} ARTICLE(S) DANS LE PANIER`;
       el.step2SummaryTotal.textContent = formatPrice(subtotal);
     }
-    function computeDeliveryFee(distanceKm) {
+    function computeBaseDeliveryFee(distanceKm) {
       if (typeof distanceKm !== "number" || Number.isNaN(distanceKm)) {
         return null;
       }
       const stepsOver = Math.max(0, Math.ceil(distanceKm / 0.5));
-      const baseFee = 1.5 + stepsOver * 0.5;
-      const h = new Date().getHours();
-      const isNight = h >= 21 || h < 5;
-      const extraFee = (isNight ? 1 : 0) + (window.TG_EXTRA_FEE ? 1 : 0);
-      return Number((baseFee + extraFee).toFixed(3));
+      return Number((1.5 + stepsOver * 0.5).toFixed(3));
+    }
+    function computeDeliveryFee(distanceKm) {
+      const baseFee = computeBaseDeliveryFee(distanceKm);
+      if (baseFee === null) return null;
+      const surchargeInfo = getActiveSurcharges();
+      return Number((baseFee + surchargeInfo.total).toFixed(3));
     }
     function haversineKm(lat1, lng1, lat2, lng2) {
       const R = 6371;
@@ -1624,6 +1721,13 @@
     }
     function renderCheckoutCart() {
       const { list, subtotal } = getCartTotals();
+      const surchargeInfo = getActiveSurcharges();
+      updateSurchargeRowUI(
+        el.checkoutSurchargeRow,
+        el.checkoutSurchargeLabel,
+        el.checkoutSurchargeAmount,
+        surchargeInfo
+      );
       if (!list.length) {
         el.cartItems.innerHTML = `<p class="empty-state">Votre panier est vide.</p>`;
         el.cartTotal.textContent = formatPrice(0);
@@ -1653,22 +1757,30 @@
           showFeedback(el.orderFeedback, OUT_OF_ZONE_MSG, false);
           return;
         }
-        const fee = computeDeliveryFee(dist) || 0;
-        el.checkoutDeliveryFee.textContent = formatPrice(fee);
-        el.cartTotal.textContent = formatPrice(subtotal + fee);
+        const baseFee = computeBaseDeliveryFee(dist) || 0;
+        const totalDelivery = Number((baseFee + surchargeInfo.total).toFixed(3));
+        el.checkoutDeliveryFee.textContent = formatPrice(baseFee);
+        el.cartTotal.textContent = formatPrice(subtotal + totalDelivery);
       } else {
         el.checkoutDeliveryFee.textContent = "SELON ZONE / GPS";
-        el.cartTotal.textContent = formatPrice(subtotal);
+        el.cartTotal.textContent = formatPrice(subtotal + surchargeInfo.total);
       }
     }
     function updateBillTotals() {
       const billAmt = Math.max(0, parsePriceNum(el.billAmount ? el.billAmount.value : 0));
       const serviceFee = Math.max(0, parsePriceNum(BILL_SERVICE_FEE_TND));
+      const surchargeInfo = getActiveSurcharges();
+      updateSurchargeRowUI(
+        el.billSurchargeRow,
+        el.billSurchargeLabel,
+        el.billSurchargeAmount,
+        surchargeInfo
+      );
       if (el.billServiceFeeDisplay) {
         el.billServiceFeeDisplay.textContent = formatPrice(serviceFee);
       }
       if (el.billTotalDisplay) {
-        el.billTotalDisplay.textContent = formatPrice(billAmt + serviceFee);
+        el.billTotalDisplay.textContent = formatPrice(billAmt + serviceFee + surchargeInfo.total);
       }
     }
     function showFeedback(targetEl, msg, isOk) {
@@ -1776,7 +1888,8 @@
           e.preventDefault();
           el.billFeedback.className = "feedback-msg";
           const billAmt = Math.max(0, parsePriceNum(el.billAmount.value));
-          const serviceFee = Math.max(0, parsePriceNum(BILL_SERVICE_FEE_TND));
+          const surchargeInfo = getActiveSurcharges();
+          const serviceFee = Number((Math.max(0, parsePriceNum(BILL_SERVICE_FEE_TND)) + surchargeInfo.total).toFixed(3));
           const totalCash = Number((billAmt + serviceFee).toFixed(3));
           const clientNom = el.billClientName.value.trim();
           const clientTel = el.billClientPhone.value.trim();
@@ -1794,6 +1907,8 @@
             reference_facture: billRef,
             montant_facture: billAmt.toFixed(3),
             frais_service: serviceFee.toFixed(3),
+            majoration: surchargeInfo.total.toFixed(3),
+            majoration_detail: surchargeInfo.label || "AUCUNE",
             total_especes: totalCash.toFixed(3),
             mode_paiement: "especes_uniquement_avec_facture",
             client_nom: clientNom,
@@ -1824,7 +1939,7 @@
                 `Demande enregistrée (${totalCash.toFixed(3)} TND en espèces uniquement + facture à remettre au livreur).`,
                 true
               );
-                            const billRefVal = String(payload.reference_facture || payload.ref || billRef || el.billRef?.value || "").trim();
+              const billRefVal = String(payload.reference_facture || payload.ref || billRef || el.billRef?.value || "").trim();
               if (billRefVal && typeof window.startClientBillTracking === "function") {
                 window.startClientBillTracking(billRefVal);
               }
@@ -1918,14 +2033,15 @@
         const rLng = parseFloat(String(getField(r, ["lng", "lon", "longitude"], "")).replace(",", "."));
         const cLat = parseFloat(state.gps.lat);
         const cLng = parseFloat(state.gps.lng);
-        let deliveryFee = 0;
+        const surchargeInfo = getActiveSurcharges();
+        let deliveryFee = surchargeInfo.total;
         if (!Number.isNaN(rLat) && !Number.isNaN(rLng) && !Number.isNaN(cLat) && !Number.isNaN(cLng)) {
           const dist = haversineKm(rLat, rLng, cLat, cLng);
           if (dist > MAX_DELIVERY_KM) {
             showFeedback(el.orderFeedback, OUT_OF_ZONE_MSG, false);
             return;
           }
-          deliveryFee = computeDeliveryFee(dist) || 0;
+          deliveryFee = computeDeliveryFee(dist) || surchargeInfo.total;
         }
         const sousTotalNum = Number(subtotal.toFixed(3));
         const fraisNum = Number(deliveryFee.toFixed(3));
@@ -1954,6 +2070,8 @@
           items: list,
           sous_total: sousTotalNum.toFixed(3),
           frais_livraison: fraisNum.toFixed(3),
+          majoration: surchargeInfo.total.toFixed(3),
+          majoration_detail: surchargeInfo.label || "AUCUNE",
           total: totalNum.toFixed(3),
           subtotal: sousTotalNum.toFixed(3),
           delivery_fee: fraisNum.toFixed(3)
@@ -1999,6 +2117,7 @@
     bindEvents();
     loadStoreData();
   </script>
+
   <script>
     (function () {
       const K = "tg_last_order_ref";
@@ -2045,6 +2164,7 @@
       window.setExtraFee = function (on) {
         window.TG_EXTRA_FEE = !!on;
         if (typeof renderCheckoutCart === "function") renderCheckoutCart();
+        if (typeof updateBillTotals === "function") updateBillTotals();
         return window.TG_EXTRA_FEE;
       };
       document.addEventListener("DOMContentLoaded", () => {
@@ -2061,7 +2181,9 @@
         } catch (_) {}
       });
     })();
-      <script>
+  </script>
+
+  <script>
     (function () {
       const K = "tg_last_bill_ref";
       let T = null;
@@ -2150,86 +2272,5 @@
       });
     })();
   </script>
-
-  </script>
-  <div id="tg-surcharge-panel" style="font-family: sans-serif; border: 1px solid #ddd; padding: 14px; border-radius: 10px; max-width: 420px; background: #fff;">
-  <h3 style="margin-top: 0;">الزيادات (Majorations)</h3>
-
-  <p id="tg-night-status">زيادة الليل (21:00 - 05:00): ...</p>
-
-  <label style="display: flex; align-items: center; gap: 8px; margin: 10px 0; cursor: pointer;">
-    <input type="checkbox" id="tg-condition-toggle" onchange="toggleConditionSurcharge(this.checked)">
-    <span>تفعيل زيادة المطر / السخانة / الذروة</span>
-  </label>
-
-  <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid #eee;">
-    <div>المبلغ الأساسي: <strong id="tg-base-display">10.000</strong> TND</div>
-    <div>مجموع الزيادات: <strong id="tg-extra-display">0.000</strong> TND</div>
-    <div style="font-size: 1.15em; margin-top: 6px;">المجموع النهائي: <strong id="tg-total-display">10.000</strong> TND</div>
-  </div>
-</div>
-
-<script>
-  const TG_NIGHT_FEE = 1.500;      // قيمة زيادة الليل (من 21:00 إلى 05:00)
-  const TG_CONDITION_FEE = 1.500;  // قيمة زيادة المطر / السخانة / الذروة
-
-  let tgBaseAmount = 10.000;       // المبلغ الأساسي (يُحدَّث حسب الطلب أو الفاتورة)
-  window.TG_EXTRA_FEE = false;     // تحكّم يدوي: true = مفعّلة، false = مطفية
-
-  function isNightTime(date = new Date()) {
-    const hour = date.getHours();
-    return hour >= 21 || hour < 5;
-  }
-
-  function calculateTotalWithSurcharges(baseAmount, date = new Date()) {
-    const base = Number(baseAmount) || 0;
-    const nightFee = isNightTime(date) ? TG_NIGHT_FEE : 0;
-    const conditionFee = window.TG_EXTRA_FEE ? TG_CONDITION_FEE : 0;
-    const totalSurcharge = Number((nightFee + conditionFee).toFixed(3));
-    const finalTotal = Number((base + totalSurcharge).toFixed(3));
-
-    return {
-      base: base.toFixed(3),
-      nightActive: isNightTime(date),
-      nightFee: nightFee.toFixed(3),
-      conditionActive: Boolean(window.TG_EXTRA_FEE),
-      conditionFee: conditionFee.toFixed(3),
-      totalSurcharge: totalSurcharge.toFixed(3),
-      finalTotal: finalTotal.toFixed(3)
-    };
-  }
-
-  function toggleConditionSurcharge(isChecked) {
-    window.TG_EXTRA_FEE = Boolean(isChecked);
-    refreshSurchargeUI();
-  }
-
-  function setBaseAmount(newAmount) {
-    tgBaseAmount = Number(newAmount) || 0;
-    refreshSurchargeUI();
-  }
-
-  function refreshSurchargeUI() {
-    const info = calculateTotalWithSurcharges(tgBaseAmount);
-    const nightEl = document.getElementById("tg-night-status");
-    const toggleEl = document.getElementById("tg-condition-toggle");
-    const baseEl = document.getElementById("tg-base-display");
-    const extraEl = document.getElementById("tg-extra-display");
-    const totalEl = document.getElementById("tg-total-display");
-
-    if (nightEl) {
-      nightEl.textContent = info.nightActive
-        ? `زيادة الليل (21:00 - 05:00): مفعّلة (+${info.nightFee} TND)`
-        : `زيادة الليل (21:00 - 05:00): غير مفعّلة الآن (0.000 TND)`;
-    }
-    if (toggleEl) toggleEl.checked = info.conditionActive;
-    if (baseEl) baseEl.textContent = info.base;
-    if (extraEl) extraEl.textContent = info.totalSurcharge;
-    if (totalEl) totalEl.textContent = info.finalTotal;
-  }
-
-  refreshSurchargeUI();
-</script>
-
 </body>
 </html>
